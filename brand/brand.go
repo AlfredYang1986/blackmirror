@@ -2,7 +2,7 @@ package brand
 
 import "fmt"
 
-type brand struct {
+type alfred struct {
 	name      string            `json:"name"`
 	slogan    string            `json:"slogan"`
 	highlight []string          `json:"highlight"`
