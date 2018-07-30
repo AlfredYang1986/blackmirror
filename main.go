@@ -1,13 +1,12 @@
 package main
 
 import (
-	_ "blackmirror/src/brand"
 	"fmt"
+	"github.com/alfredyang1986/blackmirror/brand"
 )
 
 func main() {
-	b := brand.alfred{
-		name: "alfred"}
-
-	fmt.Println(b)
+	a, _ := brand.GetAlfred()
+	fmt.Println(a)
+	fmt.Println(a.Name)
 }

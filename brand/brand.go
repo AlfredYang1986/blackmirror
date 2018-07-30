@@ -1,18 +1,27 @@
 package brand
 
-import "fmt"
+import (
+	"fmt"
+)
 
-type alfred struct {
-	name      string            `json:"name"`
-	slogan    string            `json:"slogan"`
-	highlight []string          `json:"highlight"`
-	about     string            `json:"about"`
-	awards    map[string]string `json:"awards"`
-	attends   map[string]string `json:attends`
-	qualifier map[string]string `json:"qualifier"`
+type Alfred struct {
+	Name      string            `json:"name"`
+	Slogan    string            `json:"slogan"`
+	Highlight []string          `json:"highlight"`
+	About     string            `json:"about"`
+	Awards    map[string]string `json:"awards"`
+	Attends   map[string]string `json:attends`
+	Qualifier map[string]string `json:"qualifier"`
 }
 
 func init() {
 	// initialization code here
 	fmt.Println("go lib")
+}
+
+func GetAlfred() (Alfred, error) {
+	rst := Alfred{
+		Name: "alfred"}
+
+	return rst, nil
 }
