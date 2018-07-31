@@ -57,6 +57,14 @@ func attrValue(v reflect.Value) (interface{}, error) {
 			rst = append(rst, tmp)
 		}
 		return rst, nil
+	case reflect.Map:
+		rst := make(map[string]interface{})
+		for _, key := range v.MapKeys() {
+			kv := v.MapIndex(key)
+			tmp, _ := attrValue(kv)
+			rst[key.String()] = tmp
+		}
+		return rst, nil
 	}
 
 	return NoPtr{}, errors.New("not implement")

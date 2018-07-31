@@ -3,17 +3,19 @@ package brand
 import (
 	"encoding/json"
 	"github.com/alfredyang1986/blackmirror/bmmodel"
+	"github.com/alfredyang1986/blackmirror/bmmodel/date"
 )
 
 type Brand struct {
-	Id        string            `json:"_id", mongo:"_id"`
-	Name      string            `json:"name", mongo:"name"`
-	Slogan    string            `json:"slogan", mongo:"slogan"`
-	Highlight []string          `json:"highlights", mongo:"heighlights"`
-	About     string            `json:"about", mongo:"about"`
-	Awards    map[string]string `json:"awards"`
-	Attends   map[string]string `json:"attends"`
-	Qualifier map[string]string `json:"qualifier"`
+	id        string            `json:"_id", mongo:"_id"`
+	name      string            `json:"name", mongo:"name"`
+	slogan    string            `json:"slogan", mongo:"slogan"`
+	highlight []string          `json:"highlights", mongo:"heighlights"`
+	about     string            `json:"about", mongo:"about"`
+	awards    map[string]string `json:"awards"`
+	attends   map[string]string `json:"attends"`
+	qualifier map[string]string `json:"qualifier"`
+	Found     date.DDTime       `json:"found"`
 }
 
 func FromJson(data string) (Brand, error) {
@@ -23,6 +25,15 @@ func FromJson(data string) (Brand, error) {
 	}
 
 	return rst, nil
+}
+
+func (bd *Brand) getMap(name string) map[string]string {
+	rst, _ := bmmodel.AttrWithName(bd, name, bmmodel.BMJson)
+	reval := make(map[string]string)
+	for k, v := range rst.(map[string]interface{}) {
+		reval[k] = v.(string)
+	}
+	return reval
 }
 
 func (bd *Brand) GetName() string {
@@ -42,4 +53,21 @@ func (bd *Brand) GetHighlights() []string {
 		reval = append(reval, item.(string))
 	}
 	return reval
+}
+
+func (bd *Brand) GetAbout() string {
+	rst, _ := bmmodel.AttrWithName(bd, "about", "")
+	return rst.(string)
+}
+
+func (bd *Brand) GetAwards() map[string]string {
+	return bd.getMap("awards")
+}
+
+func (bd *Brand) GetAttends() map[string]string {
+	return bd.getMap("attends")
+}
+
+func (bd *Brand) GetQualifier() map[string]string {
+	return bd.getMap("qualifier")
 }
