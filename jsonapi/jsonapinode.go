@@ -6,7 +6,9 @@ import (
 	"fmt"
 	"github.com/alfredyang1986/blackmirror/adt"
 	"github.com/alfredyang1986/blackmirror/bmmodel/brand"
+	"github.com/alfredyang1986/blackmirror/bmmodel/location"
 	"io"
+	"log"
 )
 
 const (
@@ -50,7 +52,7 @@ func (s *DDStm) DetailDecoder() (interface{}, error) {
 			break
 		}
 		if err != nil {
-			panic("some thing error with decode")
+			log.Fatal(err)
 		}
 
 		strType := fmt.Sprintf("%T", t)
@@ -59,6 +61,7 @@ func (s *DDStm) DetailDecoder() (interface{}, error) {
 
 		if IsMainResult(s, cur) && strValue == ATTRIBUTES {
 			rst[rst["type"].(string)], _ = s.mainResultParse(rst)
+			break
 		}
 
 		if IsLeftObjDelim(strType, strValue) {
@@ -78,7 +81,7 @@ func (s *DDStm) DetailDecoder() (interface{}, error) {
 			break
 
 		} else {
-			if odd%2 == 1 { // NOTE: indicate key value pair
+			if odd%2 == 1 && cur != "{" && cur != "[" { // NOTE: indicate key value pair
 				rst[cur] = strValue
 			}
 		}
@@ -163,6 +166,11 @@ func (s *DDStm) mainResultParse(rst map[string]interface{}) (interface{}, error)
 		s.doc.Decode(&bd)
 		bd.Id = nid
 		reval = bd
+	case "location":
+		var loc location.Location
+		s.doc.Decode(&loc)
+		loc.Id = nid
+		reval = loc
 	}
 
 	return reval, nil

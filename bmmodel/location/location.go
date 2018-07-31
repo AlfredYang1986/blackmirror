@@ -6,10 +6,10 @@ import (
 )
 
 type Location struct {
-	id       string   `json:"_id", mongo:"_id"`
-	title    string   `json:"title", mongo:"title"`
-	address  string   `json:"address", mongo:"address"`
-	district []string `json:"district", mongo:"district"`
+	Id       string `json:"_id", mongo:"_id"`
+	Title    string `json:"title", mongo:"title"`
+	Address  string `json:"address", mongo:"address"`
+	District string `json:"district", mongo:"district"`
 }
 
 func FromJson(data string) (Location, error) {

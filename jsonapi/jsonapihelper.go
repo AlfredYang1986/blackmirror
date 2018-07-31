@@ -22,7 +22,7 @@ func IsMainResult(s *DDStm, cur string) bool {
 	for i := 0; i < s.ddsk.Length(); i++ {
 		tmp := s.ddsk.ElemAtIndex(i).(*DDStm)
 		switch tmp.ct {
-		case INCLUDED, RELATIONSHIPS:
+		case RELATIONSHIPS:
 			rst = false
 		}
 	}
@@ -31,9 +31,29 @@ func IsMainResult(s *DDStm, cur string) bool {
 }
 
 func IsRelationShips(s *DDStm) bool {
-	return false
+
+	rst := false
+	for i := 0; i < s.ddsk.Length(); i++ {
+		tmp := s.ddsk.ElemAtIndex(i).(*DDStm)
+		switch tmp.ct {
+		case RELATIONSHIPS:
+			rst = true
+		}
+	}
+
+	return rst
 }
 
 func IsIncluded(s *DDStm) bool {
-	return false
+
+	rst := false
+	for i := 0; i < s.ddsk.Length(); i++ {
+		tmp := s.ddsk.ElemAtIndex(i).(*DDStm)
+		switch tmp.ct {
+		case INCLUDED:
+			rst = true
+		}
+	}
+
+	return rst
 }

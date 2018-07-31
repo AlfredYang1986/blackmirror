@@ -36,19 +36,22 @@ func FromJsonAPI(jsonStream string) (interface{}, error) {
 			sk.PopElement()
 			break
 		} else if IsLeftArrayDelim(strType, strValue) {
+			ma := STMInstance(&sk, dec)
+			ma.EnterStatusWithTag(cur)
+			rst[cur], _ = ma.DetailDecoderList()
 
 		} else if IsRightArrayDelim(strType, strValue) {
+			sk.PopElement()
 			break
 
 		} else {
-			if odd%2 == 1 {
+			if odd%2 == 1 && cur != "{" && cur != "[" { // NOTE: indicate key value pair
 				rst[cur] = strValue
 			}
 		}
 
 		odd++
 		cur = strValue
-		fmt.Printf("\n")
 	}
 
 	return rst, nil
