@@ -14,11 +14,13 @@ func StackInstance() Stack {
 }
 
 func (sk *Stack) PushElement(a interface{}) {
-	if sk.count+1 < cap(sk.elems) {
-		sk.elems[sk.count] = a
-	} else {
-		sk.elems = append(sk.elems, a)
-	}
+	/* if sk.count+1 < cap(sk.elems) {*/
+	//sk.elems[sk.count] = a
+	//} else {
+	//sk.elems = append(sk.elems, a)
+	/*}*/
+
+	sk.elems = append(sk.elems, a)
 	sk.count++
 }
 

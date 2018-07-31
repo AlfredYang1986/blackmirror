@@ -7,6 +7,7 @@ import (
 	"github.com/alfredyang1986/blackmirror/adt"
 	"io"
 	"log"
+	"reflect"
 	"strings"
 )
 
@@ -54,5 +55,25 @@ func FromJsonAPI(jsonStream string) (interface{}, error) {
 		cur = strValue
 	}
 
-	return rst, nil
+	//return rst, nil
+	return map2Object(rst)
+}
+
+func map2Object(m map[string]interface{}) (interface{}, error) {
+
+	rt := m[ROOT].(map[string]interface{})
+	dt := rt[DATA].(map[string]interface{})
+	rs := dt[RELATIONSHIPS].(map[string]interface{})
+	inc := rt[INCLUDED].([]interface{})
+	fmt.Println(rs)
+	fmt.Println(inc)
+
+	ty := reflect.TypeOf(dt)
+	if ty.Kind() == reflect.Map {
+		rst := dt[dt[TYPE].(string)]
+		fmt.Println(rst)
+		return rst, nil
+	}
+
+	return m, nil
 }

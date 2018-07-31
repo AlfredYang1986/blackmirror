@@ -16,6 +16,8 @@ type Brand struct {
 	Attends   map[string]string `json:"attends"`
 	Qualifier map[string]string `json:"qualifier"`
 	Found     date.DDTime       `json:"found"`
+
+	Relationships map[string]interface{}
 }
 
 func FromJson(data string) (Brand, error) {

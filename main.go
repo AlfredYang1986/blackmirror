@@ -21,17 +21,33 @@ var sjson string = `{
 				"qualifier": {"a": "1"}
 			},
 			"relationships": {
-				"location": {
-					"data": {
-						"id": "loc id",
+				"locations": {
+					"data": [
+					{
+						"id": "loc id 01",
+						"type": "location"
+					},
+					{
+						"id": "loc id 02",
 						"type": "location"
 					}
+					]
 				}
 			}
 		},
 		"included":[
 		{
-			"id": "loc id",
+			"id": "loc id 01",
+			"type": "location",
+			"attributes": {
+				"title": "loc title",
+				"address": "beijingshi, chinese",
+				"district": "fuck",
+				"a": "1"
+			}
+		},
+		{
+			"id": "loc id 02",
 			"type": "location",
 			"attributes": {
 				"title": "loc title",

@@ -61,10 +61,9 @@ func (s *DDStm) DetailDecoder() (interface{}, error) {
 
 		if IsMainResult(s, cur) && strValue == ATTRIBUTES {
 			rst[rst["type"].(string)], _ = s.mainResultParse(rst)
-			break
-		}
-
-		if IsLeftObjDelim(strType, strValue) {
+			odd++
+			//break
+		} else if IsLeftObjDelim(strType, strValue) {
 			ma := STMInstance(s.ddsk, s.doc)
 			ma.EnterStatusWithTag(cur)
 			rst[cur], _ = ma.DetailDecoder()
@@ -106,8 +105,7 @@ func (s *DDStm) DetailDecoderList() ([]interface{}, error) {
 			break
 		}
 		if err != nil {
-			//panic("some thing error with decode")
-			panic(err)
+			log.Fatal(err)
 		}
 
 		strType := fmt.Sprintf("%T", t)

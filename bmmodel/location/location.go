@@ -10,6 +10,8 @@ type Location struct {
 	Title    string `json:"title", mongo:"title"`
 	Address  string `json:"address", mongo:"address"`
 	District string `json:"district", mongo:"district"`
+
+	Relationships map[string]interface{}
 }
 
 func FromJson(data string) (Location, error) {

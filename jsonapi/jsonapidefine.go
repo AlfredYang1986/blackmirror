@@ -1,6 +1,7 @@
 package jsonapi
 
 const (
+	ROOT          = "root"
 	DATA          = "data"
 	LINKS         = "links"
 	TYPE          = "type"

@@ -18,16 +18,17 @@ func IsRightArrayDelim(st string, sv string) bool {
 
 func IsMainResult(s *DDStm, cur string) bool {
 
-	rst := true
-	for i := 0; i < s.ddsk.Length(); i++ {
-		tmp := s.ddsk.ElemAtIndex(i).(*DDStm)
-		switch tmp.ct {
-		case RELATIONSHIPS:
-			rst = false
-		}
-	}
+	/* rst := true*/
+	//for i := 0; i < s.ddsk.Length(); i++ {
+	//tmp := s.ddsk.ElemAtIndex(i).(*DDStm)
+	//switch tmp.ct {
+	//case RELATIONSHIPS:
+	//rst = false
+	//}
+	//}
 
-	return rst
+	//return rst
+	return true
 }
 
 func IsRelationShips(s *DDStm) bool {
