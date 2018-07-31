@@ -39,7 +39,7 @@ func (s *DDStm) LeaveStatus() (interface{}, error) {
 func (s *DDStm) DetailDecoder() (interface{}, error) {
 
 	cur := s.ct
-	rst := mke(map[string]interface{})
+	rst := make(map[string]interface{})
 	odd := 0
 
 	for {
@@ -76,8 +76,6 @@ func (s *DDStm) DetailDecoder() (interface{}, error) {
 		odd++
 		cur = strValue
 	}
-
-	fmt.Println(rst)
 
 	return rst, nil
 }
