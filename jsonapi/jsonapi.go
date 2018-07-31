@@ -48,16 +48,6 @@ func FromJsonAPI(jsonStream string) (interface{}, error) {
 
 		odd++
 		cur = strValue
-
-		if IsLeftObjDelim(strType, strValue) {
-			ma := STMInstance(&sk, dec)
-			ma.EnterStatusWithTag(cur)
-			ma.DetailDecoder()
-		} else if IsRightObjDelim(strType, strValue) {
-			sk.PopElement()
-		}
-
-		cur = strValue
 		fmt.Printf("\n")
 	}
 

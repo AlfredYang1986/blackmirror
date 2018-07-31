@@ -7,14 +7,14 @@ import (
 )
 
 type Brand struct {
-	id        string            `json:"_id", mongo:"_id"`
-	name      string            `json:"name", mongo:"name"`
-	slogan    string            `json:"slogan", mongo:"slogan"`
-	highlight []string          `json:"highlights", mongo:"heighlights"`
-	about     string            `json:"about", mongo:"about"`
-	awards    map[string]string `json:"awards"`
-	attends   map[string]string `json:"attends"`
-	qualifier map[string]string `json:"qualifier"`
+	Id        string            `json:"_id", mongo:"_id"`
+	Name      string            `json:"name", mongo:"name"`
+	Slogan    string            `json:"slogan", mongo:"slogan"`
+	Highlight []string          `json:"highlights", mongo:"heighlights"`
+	About     string            `json:"about", mongo:"about"`
+	Awards    map[string]string `json:"awards"`
+	Attends   map[string]string `json:"attends"`
+	Qualifier map[string]string `json:"qualifier"`
 	Found     date.DDTime       `json:"found"`
 }
 

@@ -36,3 +36,11 @@ func (sk *Stack) PopElement() (interface{}, error) {
 
 	return rst, nil
 }
+
+func (sk *Stack) Length() int {
+	return sk.count
+}
+
+func (sk *Stack) ElemAtIndex(i int) interface{} {
+	return sk.elems[i]
+}
