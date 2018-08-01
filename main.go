@@ -48,7 +48,7 @@ var sjson string = `{
 				"location": {
 					"data":
 					{
-						"id": "loc id 02",
+						"id": "loc id 03",
 						"type": "location"
 					}
 				}
@@ -80,6 +80,26 @@ var sjson string = `{
 						"type": "test"
 					}
 					]
+				}
+
+			}
+		},
+		{
+			"id": "loc id 03",
+			"type": "location",
+			"attributes": {
+				"title": "loc title",
+				"address": "beijingshi, chinese",
+				"district": "fuck",
+				"a": "1"
+			},
+			"relationships": {
+				"test": {
+					"data":
+					{
+						"id": "test id 01",
+						"type": "test"
+					}
 				}
 
 			}
