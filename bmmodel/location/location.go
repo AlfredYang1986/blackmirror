@@ -37,3 +37,15 @@ func (loc *Location) GetDistrict() string {
 	rst, _ := bmmodel.AttrWithName(loc, "district", "")
 	return rst.(string)
 }
+
+func (loc Location) SetConnect(tag string, v interface{}) interface{} {
+	if loc.Relationships == nil {
+		loc.Relationships = make(map[string]interface{})
+	}
+	loc.Relationships[tag] = v
+	return loc
+}
+
+func (loc Location) QueryConnect(tag string) interface{} {
+	return loc.Relationships[tag]
+}

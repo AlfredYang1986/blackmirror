@@ -2,8 +2,10 @@ package brand
 
 import (
 	"encoding/json"
+	//"fmt"
 	"github.com/alfredyang1986/blackmirror/bmmodel"
 	"github.com/alfredyang1986/blackmirror/bmmodel/date"
+	//"github.com/alfredyang1986/blackmirror/bmmodel/relationships"
 )
 
 type Brand struct {
@@ -72,4 +74,16 @@ func (bd *Brand) GetAttends() map[string]string {
 
 func (bd *Brand) GetQualifier() map[string]string {
 	return bd.getMap("qualifier")
+}
+
+func (bd Brand) SetConnect(tag string, v interface{}) interface{} {
+	if bd.Relationships == nil {
+		bd.Relationships = make(map[string]interface{})
+	}
+	bd.Relationships[tag] = v
+	return bd
+}
+
+func (bd Brand) QueryConnect(tag string) interface{} {
+	return bd.Relationships[tag]
 }

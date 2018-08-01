@@ -2,13 +2,11 @@ package main
 
 import (
 	"fmt"
-	//"github.com/alfredyang1986/blackmirror/bmmodel/brand"
-	//"github.com/alfredyang1986/blackmirror/adt"
 	"github.com/alfredyang1986/blackmirror/jsonapi"
 )
 
 var sjson string = `{
-	"data":
+	"data":[
 		{	"id": "i am id",
 			"type":"brand",
 			"attributes": {
@@ -35,7 +33,36 @@ var sjson string = `{
 				}
 			}
 		},
+		{	"id": "i am id 999",
+			"type":"brand",
+			"attributes": {
+				"name": "liuying",
+				"slogan": "i am slogan",
+				"about": "about brand",
+				"highlights": ["abc", "456", "789"],
+				"awards": {"a": "1"},
+				"attends": {"a": "1"},
+				"qualifier": {"a": "1"}
+			},
+			"relationships": {
+				"location": {
+					"data":
+					{
+						"id": "loc id 02",
+						"type": "location"
+					}
+				}
+			}
+		}
+		],
 		"included":[
+		{
+			"id": "test id 01",
+			"type": "test",
+			"attributes": {
+				"title": "test title"
+			}
+		},
 		{
 			"id": "loc id 01",
 			"type": "location",
@@ -44,6 +71,17 @@ var sjson string = `{
 				"address": "beijingshi, chinese",
 				"district": "fuck",
 				"a": "1"
+			},
+			"relationships": {
+				"test": {
+					"data": [
+					{
+						"id": "test id 01",
+						"type": "test"
+					}
+					]
+				}
+
 			}
 		},
 		{

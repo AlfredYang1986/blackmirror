@@ -7,6 +7,7 @@ import (
 	"github.com/alfredyang1986/blackmirror/adt"
 	"github.com/alfredyang1986/blackmirror/bmmodel/brand"
 	"github.com/alfredyang1986/blackmirror/bmmodel/location"
+	"github.com/alfredyang1986/blackmirror/bmmodel/test"
 	"io"
 	"log"
 )
@@ -169,6 +170,11 @@ func (s *DDStm) mainResultParse(rst map[string]interface{}) (interface{}, error)
 		s.doc.Decode(&loc)
 		loc.Id = nid
 		reval = loc
+	case "test":
+		var t test.Test
+		s.doc.Decode(&t)
+		t.Id = nid
+		reval = t
 	}
 
 	return reval, nil
