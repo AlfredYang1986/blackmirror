@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/alfredyang1986/blackmirror/adt"
+	//"github.com/alfredyang1986/blackmirror/bmmodel/brand"
+	"github.com/alfredyang1986/blackmirror/bmmodel/jsonapiobj"
 	"io"
 	"log"
 	"strings"
@@ -55,4 +57,10 @@ func FromJsonAPI(jsonStream string) (interface{}, error) {
 
 	//return rst, nil
 	return map2Object(rst)
+}
+
+func ToJsonAPI(bm interface{}) (string, error) {
+	tmp, err := jsonapiobj.FromObject(bm)
+	fmt.Println(tmp)
+	return "wo", err
 }

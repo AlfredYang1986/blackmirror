@@ -5,11 +5,12 @@ import (
 	//"fmt"
 	"github.com/alfredyang1986/blackmirror/bmmodel"
 	"github.com/alfredyang1986/blackmirror/bmmodel/date"
-	//"github.com/alfredyang1986/blackmirror/bmmodel/relationships"
+	"github.com/alfredyang1986/blackmirror/bmmodel/location"
+	//"reflect"
 )
 
 type Brand struct {
-	Id        string            `json:"_id", mongo:"_id"`
+	Id        string            `json:"id", mongo:"_id"`
 	Name      string            `json:"name", mongo:"name"`
 	Slogan    string            `json:"slogan", mongo:"slogan"`
 	Highlight []string          `json:"highlights", mongo:"heighlights"`
@@ -19,7 +20,7 @@ type Brand struct {
 	Qualifier map[string]string `json:"qualifier"`
 	Found     date.DDTime       `json:"found"`
 
-	Relationships map[string]interface{}
+	Locations []location.Location `json:"locations", jsonapi:"relationships"`
 }
 
 func FromJson(data string) (Brand, error) {
@@ -77,13 +78,21 @@ func (bd *Brand) GetQualifier() map[string]string {
 }
 
 func (bd Brand) SetConnect(tag string, v interface{}) interface{} {
-	if bd.Relationships == nil {
-		bd.Relationships = make(map[string]interface{})
+	switch tag {
+	case "locations":
+		var rst []location.Location
+		for _, item := range v.([]interface{}) {
+			rst = append(rst, item.(location.Location))
+		}
+		bd.Locations = rst
 	}
-	bd.Relationships[tag] = v
 	return bd
 }
 
 func (bd Brand) QueryConnect(tag string) interface{} {
-	return bd.Relationships[tag]
+	switch tag {
+	case "locations":
+		return bd.Locations
+	}
+	return bd
 }

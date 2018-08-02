@@ -16,3 +16,7 @@ func IsStruct(v interface{}) bool {
 func IsMap(v interface{}) bool {
 	return reflect.TypeOf(v).Kind() == reflect.Map
 }
+
+func IsRSInterface(v interface{}) bool {
+	return false //reflect.TypeOf(v).Kind() == reflect.in
+}

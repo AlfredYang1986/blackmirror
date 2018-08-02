@@ -1,47 +1,54 @@
-package bmmodel
+package jsonapiobj
 
 import (
 	"errors"
+	//"fmt"
+	"github.com/alfredyang1986/blackmirror/bmmodel"
 	"reflect"
 	"strings"
 )
 
-type NoPtr struct {
+type JsObject struct {
+	tag string
+	obj map[string]interface{}
 }
 
-const (
-	BMJson  string = "json"
-	BMMongo string = "mongo"
-)
-
-func AttrWithName(ptr interface{}, attr string, tagN string) (interface{}, error) {
+func FromObject(ptr interface{}) (interface{}, error) {
 	v := reflect.ValueOf(ptr).Elem()
+	return struct2jsonAcc(v)
+}
+
+func struct2jsonAcc(v reflect.Value) (interface{}, error) {
+	rst := make(map[string]interface{})
+
 	for i := 0; i < v.NumField(); i++ {
+
 		fieldInfo := v.Type().Field(i) // a.reflect.struct.field
 		fieldValue := v.Field(i)
 		tag := fieldInfo.Tag // a.reflect.tag
 
 		var name string
-		if tagN == BMJson {
-			name = tag.Get(BMJson)
-		} else if tagN == BMMongo {
-			name = tag.Get(BMMongo)
+		if tag.Get(bmmodel.BMJson) != "" {
+			name = tag.Get(bmmodel.BMJson)
 		} else {
 			name = strings.ToLower(fieldInfo.Name)
 		}
 
-		if name == attr {
-			return AttrValue(fieldValue)
+		if reval, err := value2jsonAcc(fieldValue); err == nil {
+			rst[name] = reval
 		}
 	}
 
-	return NoPtr{}, nil
+	return rst, nil
 }
 
-func AttrValue(v reflect.Value) (interface{}, error) {
+func value2jsonAcc(v reflect.Value) (interface{}, error) {
+
 	switch v.Kind() {
+	default:
+		return nil, errors.New("not implement")
 	case reflect.Invalid:
-		return nil, nil
+		return nil, errors.New("invalid")
 	case reflect.Int, reflect.Int8, reflect.Int16,
 		reflect.Int32, reflect.Int64:
 		return v.Int(), nil
@@ -53,7 +60,7 @@ func AttrValue(v reflect.Value) (interface{}, error) {
 	case reflect.Array, reflect.Slice:
 		var rst []interface{}
 		for i := 0; i < v.Len(); i++ {
-			tmp, _ := AttrValue(v.Index(i))
+			tmp, _ := value2jsonAcc(v.Index(i))
 			rst = append(rst, tmp)
 		}
 		return rst, nil
@@ -61,11 +68,14 @@ func AttrValue(v reflect.Value) (interface{}, error) {
 		rst := make(map[string]interface{})
 		for _, key := range v.MapKeys() {
 			kv := v.MapIndex(key)
-			tmp, _ := AttrValue(kv)
+			tmp, err := value2jsonAcc(kv)
+			if err != nil {
+				panic(err)
+			}
 			rst[key.String()] = tmp
 		}
 		return rst, nil
+	case reflect.Struct, reflect.Interface:
+		return struct2jsonAcc(v)
 	}
-
-	return NoPtr{}, errors.New("not implement")
 }

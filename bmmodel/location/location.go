@@ -1,8 +1,10 @@
 package location
 
 import (
+	//"reflect"
 	"encoding/json"
 	"github.com/alfredyang1986/blackmirror/bmmodel"
+	"github.com/alfredyang1986/blackmirror/bmmodel/test"
 )
 
 type Location struct {
@@ -11,7 +13,7 @@ type Location struct {
 	Address  string `json:"address", mongo:"address"`
 	District string `json:"district", mongo:"district"`
 
-	Relationships map[string]interface{}
+	Test test.Test `json:"test", jsonapi:"relationships"`
 }
 
 func FromJson(data string) (Location, error) {
@@ -39,13 +41,18 @@ func (loc *Location) GetDistrict() string {
 }
 
 func (loc Location) SetConnect(tag string, v interface{}) interface{} {
-	if loc.Relationships == nil {
-		loc.Relationships = make(map[string]interface{})
+	switch tag {
+	case "test":
+		loc.Test = v.(test.Test)
 	}
-	loc.Relationships[tag] = v
 	return loc
 }
 
 func (loc Location) QueryConnect(tag string) interface{} {
-	return loc.Relationships[tag]
+	//return loc.Relationships[tag]
+	switch tag {
+	case "test":
+		return loc.Test
+	}
+	return loc
 }
