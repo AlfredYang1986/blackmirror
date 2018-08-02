@@ -61,10 +61,12 @@ func FromJsonAPI(jsonStream string) (interface{}, error) {
 }
 
 func ToJsonAPI(bm interface{}) (string, error) {
-	tmp, err := jsonapiobj.FromObject(bm)
-	fmt.Println(tmp)
+	jso := jsonapiobj.JsResult{}
+
+	err := jso.FromObject(bm)
+	fmt.Println(jso.Obj)
 
 	enc := json.NewEncoder(os.Stdout)
-	enc.Encode(tmp)
+	enc.Encode(jso.Obj)
 	return "wo", err
 }

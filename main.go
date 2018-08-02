@@ -48,12 +48,13 @@ var sjson string = `{
 				"qualifier": {"a": "1"}
 			},
 			"relationships": {
-				"location": {
-					"data":
+				"locations": {
+					"data":[
 					{
 						"id": "loc id 03",
 						"type": "location"
 					}
+					]
 				}
 			}
 		}
@@ -125,9 +126,15 @@ func main() {
 
 	t := rst.([]interface{})
 	tmp := t[0].(brand.Brand)
-	//tmp1 := t[0].(brand.Brand)
 	reval, _ := jsonapi.ToJsonAPI(&tmp)
-	//reval, _ := jsonapi.ToJsonAPI([]brand.Brand{tmp0, tmp1})
 	fmt.Println(reval)
+
+	tmp0 := t[0].(brand.Brand)
+	tmp1 := t[1].(brand.Brand)
+	var tmlt []interface{}
+	tmlt = append(tmlt, &tmp0)
+	tmlt = append(tmlt, &tmp1)
+	result, _ := jsonapi.ToJsonAPI(tmlt)
+	fmt.Println(result)
 
 }

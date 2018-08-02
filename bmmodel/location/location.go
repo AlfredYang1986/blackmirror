@@ -8,12 +8,12 @@ import (
 )
 
 type Location struct {
-	Id       string `json:"id", mongo:"_id"`
-	Title    string `json:"title", mongo:"title"`
-	Address  string `json:"address", mongo:"address"`
-	District string `json:"district", mongo:"district"`
+	Id       string `json:"id" mongo:"_id"`
+	Title    string `json:"title" mongo:"title"`
+	Address  string `json:"address" mongo:"address"`
+	District string `json:"district" mongo:"district"`
 
-	Test test.Test `json:"test", jsonapi:"relationships"`
+	Test test.Test `json:"test" jsonapi:"relationships"`
 }
 
 func FromJson(data string) (Location, error) {

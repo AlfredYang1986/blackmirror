@@ -9,18 +9,33 @@ import (
 	"strings"
 )
 
-type JsObject struct {
-	tag string
-	obj map[string]interface{}
+type JsResult struct {
+	Obj map[string]interface{}
+	Inc []map[string]interface{}
 }
 
-func FromObject(ptr interface{}) (interface{}, error) {
-	v := reflect.ValueOf(ptr).Elem()
-	tmp, _ := struct2jsonAcc(v)
-	return map[string]interface{}{"data": tmp}, nil
+func (o *JsResult) FromObject(ptr interface{}) error {
+
+	if bmmate.IsSeq(ptr) {
+		ppr := ptr.([]interface{})
+		var rst []interface{}
+		for _, itm := range ppr {
+			fmt.Println(itm)
+			v := reflect.ValueOf(itm).Elem()
+			tmp, _ := o.struct2jsonAcc(v)
+			rst = append(rst, tmp)
+		}
+		o.Obj = map[string]interface{}{"data": rst, "relationships": o.Inc}
+	} else {
+		v := reflect.ValueOf(ptr).Elem()
+		tmp, _ := o.struct2jsonAcc(v)
+		o.Obj = map[string]interface{}{"data": tmp, "relationships": o.Inc}
+	}
+
+	return nil
 }
 
-func struct2jsonAcc(v reflect.Value) (interface{}, error) {
+func (o *JsResult) struct2jsonAcc(v reflect.Value) (interface{}, error) {
 	var rsl []string
 	var atr []string
 	attr := make(map[string]interface{})
@@ -47,7 +62,7 @@ func struct2jsonAcc(v reflect.Value) (interface{}, error) {
 			atr = append(atr, name)
 		}
 
-		if reval, err := value2jsonAcc(fieldValue); err == nil {
+		if reval, err := o.value2jsonAcc(fieldValue); err == nil {
 			rst[name] = reval
 		}
 	}
@@ -59,11 +74,8 @@ func struct2jsonAcc(v reflect.Value) (interface{}, error) {
 	}
 
 	for _, ky := range rsl {
-		fmt.Println(ky)
 		tmp := make(map[string]interface{})
 		val := rst[ky]
-		fmt.Println("vsl")
-		fmt.Println(val)
 		if bmmate.IsMap(val) {
 			tmp["data"] = val
 		} else if bmmate.IsSeq(val) {
@@ -81,15 +93,14 @@ func struct2jsonAcc(v reflect.Value) (interface{}, error) {
 	result["attributes"] = attr
 
 	if len(rships) > 0 {
+		rships, _ = o.remapRS2Included(rships)
 		result["relationships"] = rships
 	}
-
-	fmt.Println(result)
 
 	return result, nil
 }
 
-func value2jsonAcc(v reflect.Value) (interface{}, error) {
+func (o *JsResult) value2jsonAcc(v reflect.Value) (interface{}, error) {
 
 	switch v.Kind() {
 	default:
@@ -107,7 +118,7 @@ func value2jsonAcc(v reflect.Value) (interface{}, error) {
 	case reflect.Array, reflect.Slice:
 		var rst []interface{}
 		for i := 0; i < v.Len(); i++ {
-			tmp, _ := value2jsonAcc(v.Index(i))
+			tmp, _ := o.value2jsonAcc(v.Index(i))
 			rst = append(rst, tmp)
 		}
 		return rst, nil
@@ -115,7 +126,7 @@ func value2jsonAcc(v reflect.Value) (interface{}, error) {
 		rst := make(map[string]interface{})
 		for _, key := range v.MapKeys() {
 			kv := v.MapIndex(key)
-			tmp, err := value2jsonAcc(kv)
+			tmp, err := o.value2jsonAcc(kv)
 			if err != nil {
 				panic(err)
 			}
@@ -123,6 +134,57 @@ func value2jsonAcc(v reflect.Value) (interface{}, error) {
 		}
 		return rst, nil
 	case reflect.Struct, reflect.Interface:
-		return struct2jsonAcc(v)
+		return o.struct2jsonAcc(v)
 	}
+}
+
+func (o *JsResult) remapRS2Included(rships map[string]interface{}) (map[string]interface{}, error) {
+	rst := make(map[string]interface{})
+	for k, v := range rships {
+		vm := v.(map[string]interface{})
+		vmdat := vm["data"] //.(map[string]interface{})
+
+		if bmmate.IsSeq(vmdat) {
+			vml := vmdat.([]interface{})
+			var rev []map[string]interface{}
+			for _, itm := range vml {
+				tmp, _ := o.mapRS2IncludedAcc(itm.(map[string]interface{}))
+				rev = append(rev, tmp)
+			}
+			rst[k] = rev
+
+		} else if bmmate.IsMap(vmdat) {
+			tmp, _ := o.mapRS2IncludedAcc(vmdat.(map[string]interface{}))
+			rst[k] = tmp
+		}
+
+	}
+
+	return rst, nil
+}
+
+func (o *JsResult) mapRS2IncludedAcc(vmm map[string]interface{}) (map[string]interface{}, error) {
+	vid := vmm["id"].(string)
+	vtype := vmm["type"].(string)
+
+	rst := make(map[string]interface{})
+
+	bExist := false
+	for _, itm := range o.Inc {
+		incmid := itm["id"]
+		incmtp := itm["type"]
+
+		if vid == incmid && vtype == incmtp {
+			bExist = true
+		}
+	}
+
+	if !bExist {
+		o.Inc = append(o.Inc, vmm)
+	}
+
+	rst["id"] = vid
+	rst["type"] = vtype
+
+	return rst, nil
 }
