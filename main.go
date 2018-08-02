@@ -125,9 +125,9 @@ func main() {
 
 	t := rst.([]interface{})
 	tmp := t[0].(brand.Brand)
+	//tmp1 := t[0].(brand.Brand)
 	reval, _ := jsonapi.ToJsonAPI(&tmp)
+	//reval, _ := jsonapi.ToJsonAPI([]brand.Brand{tmp0, tmp1})
 	fmt.Println(reval)
 
-	//enc := json.NewEncoder(os.Stdout)
-	//enc.Encode(tmp)
 }

@@ -8,7 +8,7 @@ import (
 )
 
 type Location struct {
-	Id       string `json:"_id", mongo:"_id"`
+	Id       string `json:"id", mongo:"_id"`
 	Title    string `json:"title", mongo:"title"`
 	Address  string `json:"address", mongo:"address"`
 	District string `json:"district", mongo:"district"`

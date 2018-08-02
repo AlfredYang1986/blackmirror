@@ -10,17 +10,17 @@ import (
 )
 
 type Brand struct {
-	Id        string            `json:"id", mongo:"_id"`
-	Name      string            `json:"name", mongo:"name"`
-	Slogan    string            `json:"slogan", mongo:"slogan"`
-	Highlight []string          `json:"highlights", mongo:"heighlights"`
-	About     string            `json:"about", mongo:"about"`
+	Id        string            `json:"id" mongo:"_id"`
+	Name      string            `json:"name" mongo:"name"`
+	Slogan    string            `json:"slogan" mongo:"slogan"`
+	Highlight []string          `json:"highlights" mongo:"heighlights"`
+	About     string            `json:"about" mongo:"about"`
 	Awards    map[string]string `json:"awards"`
 	Attends   map[string]string `json:"attends"`
 	Qualifier map[string]string `json:"qualifier"`
 	Found     date.DDTime       `json:"found"`
 
-	Locations []location.Location `json:"locations", jsonapi:"relationships"`
+	Locations []location.Location `json:"locations" jsonapi:"relationships"`
 }
 
 func FromJson(data string) (Brand, error) {

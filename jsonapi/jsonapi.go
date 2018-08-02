@@ -8,6 +8,7 @@ import (
 	"github.com/alfredyang1986/blackmirror/bmmodel/jsonapiobj"
 	"io"
 	"log"
+	"os"
 	"strings"
 )
 
@@ -62,5 +63,8 @@ func FromJsonAPI(jsonStream string) (interface{}, error) {
 func ToJsonAPI(bm interface{}) (string, error) {
 	tmp, err := jsonapiobj.FromObject(bm)
 	fmt.Println(tmp)
+
+	enc := json.NewEncoder(os.Stdout)
+	enc.Encode(tmp)
 	return "wo", err
 }

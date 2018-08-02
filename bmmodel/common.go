@@ -10,8 +10,9 @@ type NoPtr struct {
 }
 
 const (
-	BMJson  string = "json"
-	BMMongo string = "mongo"
+	BMJson    string = "json"
+	BMJsonAPI string = "jsonapi"
+	BMMongo   string = "mongo"
 )
 
 func AttrWithName(ptr interface{}, attr string, tagN string) (interface{}, error) {
