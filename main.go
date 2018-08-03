@@ -4,6 +4,7 @@ import (
 	//"encoding/json"
 	"fmt"
 	"github.com/alfredyang1986/blackmirror/bmmodel/brand"
+	"github.com/alfredyang1986/blackmirror/bmmongo"
 	"github.com/alfredyang1986/blackmirror/jsonapi"
 	//"os"
 )
@@ -129,12 +130,16 @@ func main() {
 	reval, _ := jsonapi.ToJsonAPI(&tmp)
 	fmt.Println(reval)
 
-	tmp0 := t[0].(brand.Brand)
-	tmp1 := t[1].(brand.Brand)
-	var tmlt []interface{}
-	tmlt = append(tmlt, &tmp0)
-	tmlt = append(tmlt, &tmp1)
-	result, _ := jsonapi.ToJsonAPI(tmlt)
-	fmt.Println(result)
+	/* tmp0 := t[0].(brand.Brand)*/
+	//tmp1 := t[1].(brand.Brand)
+	//var tmlt []interface{}
+	//tmlt = append(tmlt, &tmp0)
+	//tmlt = append(tmlt, &tmp1)
+	//result, _ := jsonapi.ToJsonAPI(tmlt)
+	//fmt.Println(result)
 
+	err := bmmongo.InsertBMObject(&tmp)
+	if err != nil {
+		panic(err)
+	}
 }
