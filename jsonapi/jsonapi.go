@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"github.com/alfredyang1986/blackmirror/adt"
 	//"github.com/alfredyang1986/blackmirror/bmmodel/brand"
-	"github.com/alfredyang1986/blackmirror/bmmodel/jsonapiobj"
+	"github.com/alfredyang1986/blackmirror/jsonapi/jsonapiobj"
 	"io"
 	"log"
 	"os"

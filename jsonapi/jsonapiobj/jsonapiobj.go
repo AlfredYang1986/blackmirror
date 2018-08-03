@@ -2,7 +2,7 @@ package jsonapiobj
 
 import (
 	"errors"
-	"fmt"
+	//"fmt"
 	"github.com/alfredyang1986/blackmirror/bmmate"
 	"github.com/alfredyang1986/blackmirror/bmmodel"
 	"reflect"
@@ -20,16 +20,15 @@ func (o *JsResult) FromObject(ptr interface{}) error {
 		ppr := ptr.([]interface{})
 		var rst []interface{}
 		for _, itm := range ppr {
-			fmt.Println(itm)
 			v := reflect.ValueOf(itm).Elem()
 			tmp, _ := o.struct2jsonAcc(v)
 			rst = append(rst, tmp)
 		}
-		o.Obj = map[string]interface{}{"data": rst, "relationships": o.Inc}
+		o.Obj = map[string]interface{}{"data": rst, "included": o.Inc}
 	} else {
 		v := reflect.ValueOf(ptr).Elem()
 		tmp, _ := o.struct2jsonAcc(v)
-		o.Obj = map[string]interface{}{"data": tmp, "relationships": o.Inc}
+		o.Obj = map[string]interface{}{"data": tmp, "included": o.Inc}
 	}
 
 	return nil
