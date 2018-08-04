@@ -7,6 +7,7 @@ import (
 	"github.com/alfredyang1986/blackmirror/adt"
 	"github.com/alfredyang1986/blackmirror/bmmodel/brand"
 	"github.com/alfredyang1986/blackmirror/bmmodel/location"
+	"github.com/alfredyang1986/blackmirror/bmmodel/request"
 	"github.com/alfredyang1986/blackmirror/bmmodel/test"
 	"io"
 	"log"
@@ -37,7 +38,7 @@ func (s *DDStm) EnterStatusWithTag(tag string) {
 }
 
 func (s *DDStm) LeaveStatus() (interface{}, error) {
-	fmt.Println(s)
+	//fmt.Println(s)
 	return s.ddsk.PopElement()
 }
 
@@ -170,6 +171,16 @@ func (s *DDStm) mainResultParse(rst map[string]interface{}) (interface{}, error)
 		s.doc.Decode(&loc)
 		loc.Id = nid
 		reval = loc
+	case "request":
+		var req request.Request
+		s.doc.Decode(&req)
+		req.Id = nid
+		reval = req
+	case "eq_cond":
+		var eq request.EQCond
+		s.doc.Decode(&eq)
+		eq.Id = nid
+		reval = eq
 	case "test":
 		var t test.Test
 		s.doc.Decode(&t)
