@@ -1,7 +1,10 @@
 package request
 
 import (
-//"fmt"
+	//"fmt"
+	"gopkg.in/mgo.v2/bson"
 )
 
-type Condition interface{}
+type Condition interface {
+	Cond2QueryObj() bson.M
+}

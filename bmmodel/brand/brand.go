@@ -6,15 +6,17 @@ import (
 	"github.com/alfredyang1986/blackmirror/bmmodel"
 	"github.com/alfredyang1986/blackmirror/bmmodel/date"
 	"github.com/alfredyang1986/blackmirror/bmmodel/location"
+	"gopkg.in/mgo.v2/bson"
 	//"reflect"
 )
 
 type Brand struct {
-	Id        string            `json:"id" mongo:"_id"`
-	Name      string            `json:"name" mongo:"name"`
-	Slogan    string            `json:"slogan" mongo:"slogan"`
-	Highlight []string          `json:"highlights" mongo:"heighlights"`
-	About     string            `json:"about" mongo:"about"`
+	Id        string            `json:"id"`
+	Id_       bson.ObjectId     `bson:"_id"`
+	Name      string            `json:"name" bson:"name"`
+	Slogan    string            `json:"slogan" bson:"slogan"`
+	Highlight []string          `json:"highlights" bson:"heighlights"`
+	About     string            `json:"about" bson:"about"`
 	Awards    map[string]string `json:"awards"`
 	Attends   map[string]string `json:"attends"`
 	Qualifier map[string]string `json:"qualifier"`

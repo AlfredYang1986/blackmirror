@@ -1,8 +1,12 @@
 package request
 
+import (
+	"gopkg.in/mgo.v2/bson"
+)
+
 type Request struct {
 	Id   string      `json:"id"`
-	res  string      `json:"res"`
+	Res  string      `json:"res"`
 	Cond []Condition `json:"conditions" jsonapi:"relationships"`
 }
 
@@ -27,4 +31,14 @@ func (req Request) QueryConnect(tag string) interface{} {
 	}
 	return req
 
+}
+
+func (req Request) Cond2QueryObj() bson.M {
+	rst := make(map[string]interface{})
+	for _, cond := range req.Cond {
+		for k, v := range cond.Cond2QueryObj() {
+			rst[k] = v
+		}
+	}
+	return rst
 }

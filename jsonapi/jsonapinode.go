@@ -9,6 +9,7 @@ import (
 	"github.com/alfredyang1986/blackmirror/bmmodel/location"
 	"github.com/alfredyang1986/blackmirror/bmmodel/request"
 	"github.com/alfredyang1986/blackmirror/bmmodel/test"
+	"gopkg.in/mgo.v2/bson"
 	"io"
 	"log"
 )
@@ -162,15 +163,29 @@ func (s *DDStm) mainResultParse(rst map[string]interface{}) (interface{}, error)
 		err = errors.New("not implement")
 		return reval, err
 	case "brand":
-		var bd brand.Brand
-		s.doc.Decode(&bd)
-		bd.Id = nid
-		reval = bd
+		var itm brand.Brand
+		s.doc.Decode(&itm)
+		if bson.IsObjectIdHex(nid) {
+			itm.Id = nid
+			itm.Id_ = bson.ObjectIdHex(nid)
+		} else {
+			itm.Id_ = bson.NewObjectId()
+			itm.Id = itm.Id_.Hex()
+		}
+		//bd.Id = nid
+		reval = itm
 	case "location":
-		var loc location.Location
-		s.doc.Decode(&loc)
-		loc.Id = nid
-		reval = loc
+		var itm location.Location
+		s.doc.Decode(&itm)
+		if bson.IsObjectIdHex(nid) {
+			itm.Id = nid
+			itm.Id_ = bson.ObjectIdHex(nid)
+		} else {
+			itm.Id_ = bson.NewObjectId()
+			itm.Id = itm.Id_.Hex()
+		}
+		//loc.Id = nid
+		reval = itm
 	case "request":
 		var req request.Request
 		s.doc.Decode(&req)
@@ -182,10 +197,17 @@ func (s *DDStm) mainResultParse(rst map[string]interface{}) (interface{}, error)
 		eq.Id = nid
 		reval = eq
 	case "test":
-		var t test.Test
-		s.doc.Decode(&t)
-		t.Id = nid
-		reval = t
+		var itm test.Test
+		s.doc.Decode(&itm)
+		if bson.IsObjectIdHex(nid) {
+			itm.Id = nid
+			itm.Id_ = bson.ObjectIdHex(nid)
+		} else {
+			itm.Id_ = bson.NewObjectId()
+			itm.Id = itm.Id_.Hex()
+		}
+		//t.Id = nid
+		reval = itm
 	}
 
 	return reval, nil

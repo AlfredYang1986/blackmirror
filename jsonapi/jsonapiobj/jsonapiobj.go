@@ -67,7 +67,7 @@ func (o *JsResult) struct2jsonAcc(v reflect.Value) (interface{}, error) {
 	}
 
 	for _, ky := range atr {
-		if ky != "id" {
+		if ky != "id" && ky != "id_" {
 			attr[ky] = rst[ky]
 		}
 	}

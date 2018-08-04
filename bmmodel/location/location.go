@@ -5,13 +5,15 @@ import (
 	"encoding/json"
 	"github.com/alfredyang1986/blackmirror/bmmodel"
 	"github.com/alfredyang1986/blackmirror/bmmodel/test"
+	"gopkg.in/mgo.v2/bson"
 )
 
 type Location struct {
-	Id       string `json:"id" mongo:"_id"`
-	Title    string `json:"title" mongo:"title"`
-	Address  string `json:"address" mongo:"address"`
-	District string `json:"district" mongo:"district"`
+	Id       string        `json:"id"`
+	Id_      bson.ObjectId `bson:"_id"`
+	Title    string        `json:"title" bson:"title"`
+	Address  string        `json:"address" bson:"address"`
+	District string        `json:"district" bson:"district"`
 
 	Test test.Test `json:"test" jsonapi:"relationships"`
 }

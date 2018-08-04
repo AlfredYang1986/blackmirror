@@ -7,6 +7,8 @@ import (
 	//"log"
 	"errors"
 	"github.com/alfredyang1986/blackmirror/bmmodel"
+	"github.com/alfredyang1986/blackmirror/bmmodel/brand"
+	"github.com/alfredyang1986/blackmirror/bmmodel/request"
 	"reflect"
 	"strings"
 )
@@ -47,9 +49,11 @@ func UpdateBMObject(ptr interface{}, nc []string) error {
 
 	v := reflect.ValueOf(ptr).Elem()
 	cn := v.Type().Name()
-	c := session.DB("test").C(cn)
 
 	rst, err := struct2map(v)
+	fmt.Println(9999)
+	fmt.Println(rst)
+	//oid := rst["_id"].(string)
 	var oid bson.ObjectId
 	if bson.IsObjectIdHex(rst["_id"].(string)) {
 		oid = bson.ObjectIdHex(rst["_id"].(string))
@@ -59,6 +63,7 @@ func UpdateBMObject(ptr interface{}, nc []string) error {
 	}
 
 	m := make(map[string]interface{})
+	c := session.DB("test").C(cn)
 	err = c.Find(bson.M{"_id": oid}).One(&m)
 	//err = c.Find(bson.M{"name": "alfredyang"}).One(&m)
 	if err != nil {
@@ -77,6 +82,28 @@ func UpdateBMObject(ptr interface{}, nc []string) error {
 	}
 
 	return nil
+}
+
+func FindOne(req request.Request) (interface{}, error) {
+	session, err := mgo.Dial("localhost:27017")
+	if err != nil {
+		panic(err)
+	}
+	defer session.Close()
+
+	c := session.DB("test").C(req.Res)
+
+	reval := brand.Brand{}
+	//reflect.New(t).Elem().Interface()
+	err = c.Find(req.Cond2QueryObj()).One(&reval)
+	reval.Id = reval.Id_.Hex()
+	if err != nil {
+		panic(err)
+		return 0, nil
+	}
+	fmt.Println(reval)
+
+	return reval, nil
 }
 
 func attrValue(v reflect.Value) (interface{}, error) {
@@ -124,6 +151,10 @@ func struct2map(v reflect.Value) (map[string]interface{}, error) {
 			name = tag.Get(bmmodel.BMMongo)
 		} else {
 			name = strings.ToLower(fieldInfo.Name)
+		}
+
+		if name == "id" {
+			continue
 		}
 
 		ja, ok := tag.Lookup(bmmodel.BMJsonAPI)

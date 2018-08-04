@@ -4,7 +4,7 @@ import (
 	//"encoding/json"
 	"fmt"
 	"github.com/alfredyang1986/blackmirror/bmmodel/brand"
-	"github.com/alfredyang1986/blackmirror/bmmongo"
+	//"github.com/alfredyang1986/blackmirror/bmmongo"
 	"github.com/alfredyang1986/blackmirror/jsonapi"
 	//"os"
 )
@@ -121,7 +121,7 @@ var sjson string = `{
 		]
 	}`
 
-func bkmain() {
+func main() {
 	rst, _ := jsonapi.FromJsonAPI(sjson)
 	fmt.Println(rst)
 
@@ -139,10 +139,10 @@ func bkmain() {
 	//fmt.Println(result)
 
 	//err := bmmongo.InsertBMObject(&tmp)
-	an := []string{"name"}
-	tmp.Name = "liuying"
-	err := bmmongo.UpdateBMObject(&tmp, an)
-	if err != nil {
-		panic(err)
-	}
+	/* an := []string{"name"}*/
+	//tmp.Name = "liuying"
+	//err := bmmongo.UpdateBMObject(&tmp, an)
+	//if err != nil {
+	//panic(err)
+	/*}*/
 }

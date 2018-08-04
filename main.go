@@ -2,8 +2,11 @@ package main
 
 import (
 	"fmt"
+	"github.com/alfredyang1986/blackmirror/bmmodel/brand"
 	"github.com/alfredyang1986/blackmirror/bmmodel/request"
+	"github.com/alfredyang1986/blackmirror/bmmongo"
 	"github.com/alfredyang1986/blackmirror/jsonapi"
+	//"gopkg.in/mgo.v2/bson"
 )
 
 var req string = `{
@@ -51,6 +54,7 @@ var req string = `{
 func main() {
 	rst, _ := jsonapi.FromJsonAPI(req)
 	t := rst.(request.Request)
+	fmt.Println(t.Res)
 	for _, itm := range t.Cond {
 		fmt.Println(itm)
 		eq := itm.(request.EQCond)
@@ -59,4 +63,11 @@ func main() {
 		fmt.Println(eq.Vy)
 	}
 	fmt.Println(rst)
+
+	re, _ := bmmongo.FindOne(t)
+	bd := re.(brand.Brand)
+	//oid := bd.Id
+	fmt.Println(bd)
+	//fmt.Println(oid.Hex())
+	fmt.Println(bd.Name)
 }
