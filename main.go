@@ -138,7 +138,10 @@ func main() {
 	//result, _ := jsonapi.ToJsonAPI(tmlt)
 	//fmt.Println(result)
 
-	err := bmmongo.InsertBMObject(&tmp)
+	//err := bmmongo.InsertBMObject(&tmp)
+	an := []string{"name"}
+	tmp.Name = "liuying"
+	err := bmmongo.UpdateBMObject(&tmp, an)
 	if err != nil {
 		panic(err)
 	}

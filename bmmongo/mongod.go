@@ -19,45 +19,67 @@ func InsertBMObject(ptr interface{}) error {
 	defer session.Close()
 
 	v := reflect.ValueOf(ptr).Elem()
-
-	rst := make(map[string]interface{})
-	for i := 0; i < v.NumField(); i++ {
-
-		fieldInfo := v.Type().Field(i) // a.reflect.struct.field
-		fieldValue := v.Field(i)
-		tag := fieldInfo.Tag // a.reflect.tag
-
-		var name string
-		if tag.Get(bmmodel.BMMongo) != "" {
-			name = tag.Get(bmmodel.BMMongo)
-		} else {
-			name = strings.ToLower(fieldInfo.Name)
-		}
-
-		if name == "_id" {
-			oid := bson.NewObjectId()
-			rst[name] = oid
-			continue
-		} else if name == "found" {
-			continue
-		} else if name == "locations" {
-			continue
-		} else {
-			tmp, _ := AttrValue(fieldValue)
-			rst[name] = tmp
-		}
-
-	}
-	fmt.Println(rst)
+	rst, err := struct2map(v)
 
 	cn := v.Type().Name()
 	c := session.DB("test").C(cn)
-	c.Insert(rst)
 
-	return err
+	nExist, _ := c.FindId(rst["_id"]).Count()
+	if nExist == 0 {
+		rst["_id"] = bson.NewObjectId()
+		fmt.Println(rst)
+		err := c.Insert(rst)
+		if err != nil {
+			panic(err)
+		}
+		return nil
+	} else {
+		return errors.New("Only can instert not existed doc")
+	}
 }
 
-func AttrValue(v reflect.Value) (interface{}, error) {
+func UpdateBMObject(ptr interface{}, nc []string) error {
+	session, err := mgo.Dial("localhost:27017")
+	if err != nil {
+		panic(err)
+	}
+	defer session.Close()
+
+	v := reflect.ValueOf(ptr).Elem()
+	cn := v.Type().Name()
+	c := session.DB("test").C(cn)
+
+	rst, err := struct2map(v)
+	var oid bson.ObjectId
+	if bson.IsObjectIdHex(rst["_id"].(string)) {
+		oid = bson.ObjectIdHex(rst["_id"].(string))
+		fmt.Println(oid)
+	} else {
+		err = errors.New("need ObjectId to continue")
+	}
+
+	m := make(map[string]interface{})
+	err = c.Find(bson.M{"_id": oid}).One(&m)
+	//err = c.Find(bson.M{"name": "alfredyang"}).One(&m)
+	if err != nil {
+		return err
+	}
+	fmt.Println(m)
+
+	for _, prop := range nc {
+		m[prop] = rst[prop]
+	}
+
+	err = c.Update(bson.M{"_id": oid}, m)
+	//err = c.Update(bson.M{"name": "alfredyang"}, m)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func attrValue(v reflect.Value) (interface{}, error) {
 	switch v.Kind() {
 	case reflect.Invalid:
 		return nil, nil
@@ -72,7 +94,7 @@ func AttrValue(v reflect.Value) (interface{}, error) {
 	case reflect.Array, reflect.Slice:
 		var rst []interface{}
 		for i := 0; i < v.Len(); i++ {
-			tmp, _ := AttrValue(v.Index(i))
+			tmp, _ := attrValue(v.Index(i))
 			rst = append(rst, tmp)
 		}
 		return rst, nil
@@ -80,11 +102,41 @@ func AttrValue(v reflect.Value) (interface{}, error) {
 		rst := make(map[string]interface{})
 		for _, key := range v.MapKeys() {
 			kv := v.MapIndex(key)
-			tmp, _ := AttrValue(kv)
+			tmp, _ := attrValue(kv)
 			rst[key.String()] = tmp
 		}
 		return rst, nil
 	}
 
 	return 0, errors.New("not implement")
+}
+
+func struct2map(v reflect.Value) (map[string]interface{}, error) {
+	rst := make(map[string]interface{})
+	for i := 0; i < v.NumField(); i++ {
+
+		fieldInfo := v.Type().Field(i) // a.reflect.struct.field
+		fieldValue := v.Field(i)
+		tag := fieldInfo.Tag // a.reflect.tag
+
+		var name string
+		if tag.Get(bmmodel.BMMongo) != "" {
+			name = tag.Get(bmmodel.BMMongo)
+		} else {
+			name = strings.ToLower(fieldInfo.Name)
+		}
+
+		ja, ok := tag.Lookup(bmmodel.BMJsonAPI)
+		if ok && ja == "relationships" {
+			//NOTE: relationships
+			//rst[name] = "TODO"
+			continue
+		}
+
+		tmp, _ := attrValue(fieldValue)
+		rst[name] = tmp
+	}
+	fmt.Println(rst)
+
+	return rst, nil
 }
