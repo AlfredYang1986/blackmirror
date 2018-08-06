@@ -121,7 +121,7 @@ var sjson string = `{
 		]
 	}`
 
-func main() {
+func bkmain() {
 	rst, _ := jsonapi.FromJsonAPI(sjson)
 	fmt.Println(rst)
 
@@ -145,4 +145,7 @@ func main() {
 	//if err != nil {
 	//panic(err)
 	/*}*/
+
+	err := tmp.InsertBMObject()
+	fmt.Println(err)
 }

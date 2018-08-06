@@ -1,13 +1,17 @@
 package brand
 
 import (
-	"encoding/json"
-	//"fmt"
+	//"encoding/json"
+	"errors"
+	"fmt"
 	"github.com/alfredyang1986/blackmirror/bmmodel"
 	"github.com/alfredyang1986/blackmirror/bmmodel/date"
 	"github.com/alfredyang1986/blackmirror/bmmodel/location"
+	"github.com/alfredyang1986/blackmirror/bmmodel/request"
+	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
-	//"reflect"
+	"reflect"
+	"strings"
 )
 
 type Brand struct {
@@ -25,60 +29,37 @@ type Brand struct {
 	Locations []location.Location `json:"locations" jsonapi:"relationships"`
 }
 
-func FromJson(data string) (Brand, error) {
-	var rst Brand
-	if err := json.Unmarshal([]byte(data), &rst); err != nil {
-		panic(err)
+/*------------------------------------------------
+ * bm object interface
+ *------------------------------------------------*/
+
+func (bd *Brand) resetIdWithId_() {
+	if bd.Id != "" {
+		return
 	}
 
-	return rst, nil
-}
-
-func (bd *Brand) getMap(name string) map[string]string {
-	rst, _ := bmmodel.AttrWithName(bd, name, bmmodel.BMJson)
-	reval := make(map[string]string)
-	for k, v := range rst.(map[string]interface{}) {
-		reval[k] = v.(string)
+	if bd.Id_.Valid() {
+		bd.Id = bd.Id_.Hex()
+	} else {
+		panic("no id with this object")
 	}
-	return reval
 }
 
-func (bd *Brand) GetName() string {
-	rst, _ := bmmodel.AttrWithName(bd, "name", "")
-	return rst.(string)
-}
-
-func (bd *Brand) GetSlogan() string {
-	rst, _ := bmmodel.AttrWithName(bd, "slogan", "")
-	return rst.(string)
-}
-
-func (bd *Brand) GetHighlights() []string {
-	rst, _ := bmmodel.AttrWithName(bd, "highlights", bmmodel.BMJson)
-	var reval []string
-	for _, item := range rst.([]interface{}) {
-		reval = append(reval, item.(string))
+func (bd *Brand) resetId_WithID() {
+	if bd.Id_ != "" {
+		return
 	}
-	return reval
+
+	if bson.IsObjectIdHex(bd.Id) {
+		bd.Id_ = bson.ObjectIdHex(bd.Id)
+	} else {
+		panic("no id with this object")
+	}
 }
 
-func (bd *Brand) GetAbout() string {
-	rst, _ := bmmodel.AttrWithName(bd, "about", "")
-	return rst.(string)
-}
-
-func (bd *Brand) GetAwards() map[string]string {
-	return bd.getMap("awards")
-}
-
-func (bd *Brand) GetAttends() map[string]string {
-	return bd.getMap("attends")
-}
-
-func (bd *Brand) GetQualifier() map[string]string {
-	return bd.getMap("qualifier")
-}
-
+/*------------------------------------------------
+ * relationships interface
+ *------------------------------------------------*/
 func (bd Brand) SetConnect(tag string, v interface{}) interface{} {
 	switch tag {
 	case "locations":
@@ -97,4 +78,114 @@ func (bd Brand) QueryConnect(tag string) interface{} {
 		return bd.Locations
 	}
 	return bd
+}
+
+/*------------------------------------------------
+ * mongo interface
+ *------------------------------------------------*/
+
+func (bd *Brand) InsertBMObject() error {
+	session, err := mgo.Dial("localhost:27017")
+	if err != nil {
+		return errors.New("dial db error")
+	}
+	defer session.Close()
+
+	c := session.DB("test").C("Brand")
+	bd.resetId_WithID()
+
+	nExist, _ := c.FindId(bd.Id_).Count()
+	if nExist == 0 {
+		v := reflect.ValueOf(bd).Elem()
+		rst, err := struct2map(v)
+		rst["_id"] = bd.Id
+		err = c.Insert(rst)
+		return err
+	} else {
+		return errors.New("Only can instert not existed doc")
+	}
+}
+
+//UpdateBMObject(req)
+func (bd *Brand) FindOne(req request.Request) error {
+	session, err := mgo.Dial("localhost:27017")
+	if err != nil {
+		return errors.New("dial db error")
+	}
+	defer session.Close()
+
+	c := session.DB("test").C(req.Res)
+	err = c.Find(req.Cond2QueryObj()).One(bd)
+	if err != nil {
+		panic(err)
+	}
+	bd.resetIdWithId_()
+
+	return nil
+}
+
+func attrValue(v reflect.Value) (interface{}, error) {
+	switch v.Kind() {
+	case reflect.Invalid:
+		return nil, nil
+	case reflect.Int, reflect.Int8, reflect.Int16,
+		reflect.Int32, reflect.Int64:
+		return v.Int(), nil
+	case reflect.Uint, reflect.Uint8, reflect.Uint16,
+		reflect.Uint32, reflect.Uint64, reflect.Uintptr:
+		return v.Uint(), nil
+	case reflect.String:
+		return v.String(), nil
+	case reflect.Array, reflect.Slice:
+		var rst []interface{}
+		for i := 0; i < v.Len(); i++ {
+			tmp, _ := attrValue(v.Index(i))
+			rst = append(rst, tmp)
+		}
+		return rst, nil
+	case reflect.Map:
+		rst := make(map[string]interface{})
+		for _, key := range v.MapKeys() {
+			kv := v.MapIndex(key)
+			tmp, _ := attrValue(kv)
+			rst[key.String()] = tmp
+		}
+		return rst, nil
+	}
+
+	return 0, errors.New("not implement")
+}
+
+func struct2map(v reflect.Value) (map[string]interface{}, error) {
+	rst := make(map[string]interface{})
+	for i := 0; i < v.NumField(); i++ {
+
+		fieldInfo := v.Type().Field(i) // a.reflect.struct.field
+		fieldValue := v.Field(i)
+		tag := fieldInfo.Tag // a.reflect.tag
+
+		var name string
+		if tag.Get(bmmodel.BMMongo) != "" {
+			name = tag.Get(bmmodel.BMMongo)
+		} else {
+			name = strings.ToLower(fieldInfo.Name)
+		}
+
+		if name == "id" || name == "_id" {
+			continue
+		}
+
+		ja, ok := tag.Lookup(bmmodel.BMJsonAPI)
+		if ok && ja == "relationships" {
+			//NOTE: relationships
+			//rst[name] = "TODO"
+			continue
+		}
+
+		tmp, _ := attrValue(fieldValue)
+		rst[name] = tmp
+	}
+	fmt.Println(rst)
+
+	return rst, nil
 }

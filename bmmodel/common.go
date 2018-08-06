@@ -6,6 +6,11 @@ import (
 	"strings"
 )
 
+type BMObject interface {
+	resetIdWithId_()
+	resetId_WithID()
+}
+
 type NoPtr struct {
 }
 

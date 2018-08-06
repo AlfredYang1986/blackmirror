@@ -2,9 +2,10 @@ package main
 
 import (
 	"fmt"
+	"github.com/alfredyang1986/blackmirror/bmcommon/bmsingleton"
 	"github.com/alfredyang1986/blackmirror/bmmodel/brand"
 	"github.com/alfredyang1986/blackmirror/bmmodel/request"
-	"github.com/alfredyang1986/blackmirror/bmmongo"
+	//"github.com/alfredyang1986/blackmirror/bmmongo"
 	"github.com/alfredyang1986/blackmirror/jsonapi"
 	//"gopkg.in/mgo.v2/bson"
 )
@@ -52,6 +53,10 @@ var req string = `{
 	}`
 
 func main() {
+
+	fac := bmsingleton.GetFactoryInstance()
+	fac.RegisterModel("Brand", &brand.Brand{})
+
 	rst, _ := jsonapi.FromJsonAPI(req)
 	t := rst.(request.Request)
 	fmt.Println(t.Res)
@@ -64,10 +69,17 @@ func main() {
 	}
 	fmt.Println(rst)
 
-	re, _ := bmmongo.FindOne(t)
-	bd := re.(brand.Brand)
-	//oid := bd.Id
-	fmt.Println(bd)
-	//fmt.Println(oid.Hex())
-	fmt.Println(bd.Name)
+	tmp := brand.Brand{}
+	tmp.FindOne(t)
+	fmt.Println(tmp)
+
+	/* re, _ := bmmongo.FindOne(t)*/
+	//bd := re.(brand.Brand)
+	////oid := bd.Id
+	//fmt.Println(bd)
+	////fmt.Println(oid.Hex())
+	//fmt.Println(bd.Name)
+
+	//reval, _ := jsonapi.ToJsonAPI(&bd)
+	/*fmt.Println(reval)*/
 }
