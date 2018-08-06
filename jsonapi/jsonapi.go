@@ -8,7 +8,7 @@ import (
 	"github.com/alfredyang1986/blackmirror/jsonapi/jsonapiobj"
 	"io"
 	"log"
-	"os"
+	//"os"
 	"strings"
 )
 
@@ -60,13 +60,13 @@ func FromJsonAPI(jsonStream string) (interface{}, error) {
 	return map2Object(rst)
 }
 
-func ToJsonAPI(bm interface{}) (string, error) {
+func ToJsonAPI(bm interface{}, w io.Writer) error {
 	jso := jsonapiobj.JsResult{}
 
 	err := jso.FromObject(bm)
 	fmt.Println(jso.Obj)
 
-	enc := json.NewEncoder(os.Stdout)
+	enc := json.NewEncoder(w)
 	enc.Encode(jso.Obj)
-	return "wo", err
+	return err
 }

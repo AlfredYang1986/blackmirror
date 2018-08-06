@@ -1,14 +1,14 @@
 package location
 
 import (
-	"errors"
+	//"errors"
 	//"fmt"
-	"reflect"
+	//"reflect"
 	//"strings"
 	"github.com/alfredyang1986/blackmirror/bmmodel"
 	"github.com/alfredyang1986/blackmirror/bmmodel/request"
 	"github.com/alfredyang1986/blackmirror/bmmodel/test"
-	"gopkg.in/mgo.v2"
+	//"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 )
 
@@ -26,28 +26,32 @@ type Location struct {
  * bm object interface
  *------------------------------------------------*/
 
-func (loc *Location) resetIdWithId_() {
-	if loc.Id != "" {
-		return
-	}
-
-	if loc.Id_.Valid() {
-		loc.Id = loc.Id_.Hex()
-	} else {
-		panic("no id with this object")
-	}
+func (loc *Location) ResetIdWithId_() {
+	bmmodel.ResetIdWithId_(loc)
 }
 
-func (loc *Location) resetId_WithID() {
-	if loc.Id_ != "" {
-		return
-	}
+func (loc *Location) ResetId_WithID() {
+	bmmodel.ResetId_WithID(loc)
+}
 
-	if bson.IsObjectIdHex(loc.Id) {
-		loc.Id_ = bson.ObjectIdHex(loc.Id)
-	} else {
-		panic("no id with this object")
-	}
+/*------------------------------------------------
+ * bmobject interface
+ *------------------------------------------------*/
+
+func (bd *Location) QueryObjectId() bson.ObjectId {
+	return bd.Id_
+}
+
+func (bd *Location) QueryId() string {
+	return bd.Id
+}
+
+func (bd *Location) SetObjectId(id_ bson.ObjectId) {
+	bd.Id_ = id_
+}
+
+func (bd *Location) SetId(id string) {
+	bd.Id = id
 }
 
 /*------------------------------------------------
@@ -76,40 +80,9 @@ func (loc Location) QueryConnect(tag string) interface{} {
  *------------------------------------------------*/
 
 func (loc *Location) InsertBMObject() error {
-	session, err := mgo.Dial("localhost:27017")
-	if err != nil {
-		return errors.New("dial db error")
-	}
-	defer session.Close()
-
-	c := session.DB("test").C("Brand")
-	loc.resetId_WithID()
-
-	nExist, _ := c.FindId(loc.Id_).Count()
-	if nExist == 0 {
-		v := reflect.ValueOf(loc).Elem()
-		rst, err := bmmodel.Struct2map(v)
-		rst["_id"] = loc.Id
-		err = c.Insert(rst)
-		return err
-	} else {
-		return errors.New("Only can instert not existed doc")
-	}
+	return bmmodel.InsertBMObject(loc)
 }
 
 func (loc *Location) FindOne(req request.Request) error {
-	session, err := mgo.Dial("localhost:27017")
-	if err != nil {
-		return errors.New("dial db error")
-	}
-	defer session.Close()
-
-	c := session.DB("test").C(req.Res)
-	err = c.Find(req.Cond2QueryObj()).One(loc)
-	if err != nil {
-		panic(err)
-	}
-	loc.resetIdWithId_()
-
-	return nil
+	return bmmodel.FindOne(req, loc)
 }

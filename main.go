@@ -52,7 +52,7 @@ var req string = `{
 		]
 	}`
 
-func main() {
+func bkmain() {
 
 	fac := bmsingleton.GetFactoryInstance()
 	fac.RegisterModel("Brand", &brand.Brand{})

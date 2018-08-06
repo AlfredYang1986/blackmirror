@@ -12,7 +12,10 @@ func map2Object(m map[string]interface{}) (interface{}, error) {
 
 	rt := m[ROOT].(map[string]interface{})
 	tdt := rt[DATA]
-	inc := rt[INCLUDED].([]interface{})
+	var inc []interface{}
+	if rt[INCLUDED] != nil {
+		inc = rt[INCLUDED].([]interface{})
+	}
 
 	remapIncluded(inc)
 
@@ -31,10 +34,14 @@ func map2Object(m map[string]interface{}) (interface{}, error) {
 	} else if bmmate.IsMap(tdt) {
 		dt := tdt.(map[string]interface{})
 		rst := dt[dt[TYPE].(string)].(relationships.Relationships)
-		rs := dt[RELATIONSHIPS].(map[string]interface{})
-		reval, _ := queryRelationships(rs, inc, rst)
-		fmt.Println(reval)
-		return reval, nil
+		if dt[RELATIONSHIPS] != nil {
+			rs := dt[RELATIONSHIPS].(map[string]interface{})
+			reval, _ := queryRelationships(rs, inc, rst)
+			fmt.Println(reval)
+			return reval, nil
+		} else {
+			return rst, nil
+		}
 	}
 
 	return m, errors.New("something wrong")

@@ -3,13 +3,24 @@ package bmmodel
 import (
 	"errors"
 	"fmt"
+	"github.com/alfredyang1986/blackmirror/bmmodel/bmmongo"
+	"github.com/alfredyang1986/blackmirror/bmmodel/request"
+	"gopkg.in/mgo.v2"
+	"gopkg.in/mgo.v2/bson"
 	"reflect"
 	"strings"
 )
 
 type BMObject interface {
-	resetIdWithId_()
-	resetId_WithID()
+	ResetIdWithId_()
+	ResetId_WithID()
+
+	QueryObjectId() bson.ObjectId
+	QueryId() string
+	SetObjectId(bson.ObjectId)
+	SetId(string)
+
+	bmmongo.BMMongo
 }
 
 type NoPtr struct {
@@ -20,6 +31,73 @@ const (
 	BMJsonAPI string = "jsonapi"
 	BMMongo   string = "bson"
 )
+
+func ResetIdWithId_(ptr BMObject) {
+	if ptr.QueryId() != "" {
+		return
+	}
+
+	tmp := ptr.QueryObjectId()
+	if tmp.Valid() {
+		ptr.SetId(tmp.Hex())
+	} else {
+		panic("no id with this object")
+	}
+}
+
+func ResetId_WithID(ptr BMObject) {
+	if ptr.QueryObjectId() != "" {
+		return
+	}
+
+	tmp := ptr.QueryId()
+	if bson.IsObjectIdHex(tmp) {
+		ptr.SetObjectId(bson.ObjectIdHex(tmp))
+	} else {
+		panic("no id with this object")
+	}
+}
+
+func InsertBMObject(ptr BMObject) error {
+	session, err := mgo.Dial("localhost:27017")
+	if err != nil {
+		return errors.New("dial db error")
+	}
+	defer session.Close()
+
+	v := reflect.ValueOf(ptr).Elem()
+	cn := v.Type().Name()
+	c := session.DB("test").C(cn)
+	ptr.ResetId_WithID()
+
+	//nExist, _ := c.FindId(ptr.Id_).Count()
+	nExist, _ := c.FindId(ptr.QueryObjectId).Count()
+	if nExist == 0 {
+		rst, err := Struct2map(v)
+		rst["_id"] = ptr.QueryObjectId()
+		err = c.Insert(rst)
+		return err
+	} else {
+		return errors.New("Only can instert not existed doc")
+	}
+}
+
+func FindOne(req request.Request, ptr BMObject) error {
+	session, err := mgo.Dial("localhost:27017")
+	if err != nil {
+		return errors.New("dial db error")
+	}
+	defer session.Close()
+
+	c := session.DB("test").C(req.Res)
+	err = c.Find(req.Cond2QueryObj()).One(ptr)
+	if err != nil {
+		panic(err)
+	}
+	ptr.ResetIdWithId_()
+
+	return nil
+}
 
 func AttrWithName(ptr interface{}, attr string, tagN string) (interface{}, error) {
 	v := reflect.ValueOf(ptr).Elem()
