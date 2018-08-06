@@ -2,6 +2,7 @@ package bmmodel
 
 import (
 	"errors"
+	"fmt"
 	"reflect"
 	"strings"
 )
@@ -74,4 +75,38 @@ func AttrValue(v reflect.Value) (interface{}, error) {
 	}
 
 	return NoPtr{}, errors.New("not implement")
+}
+
+func Struct2map(v reflect.Value) (map[string]interface{}, error) {
+	rst := make(map[string]interface{})
+	for i := 0; i < v.NumField(); i++ {
+
+		fieldInfo := v.Type().Field(i) // a.reflect.struct.field
+		fieldValue := v.Field(i)
+		tag := fieldInfo.Tag // a.reflect.tag
+
+		var name string
+		if tag.Get(BMMongo) != "" {
+			name = tag.Get(BMMongo)
+		} else {
+			name = strings.ToLower(fieldInfo.Name)
+		}
+
+		if name == "id" || name == "_id" {
+			continue
+		}
+
+		ja, ok := tag.Lookup(BMJsonAPI)
+		if ok && ja == "relationships" {
+			//NOTE: relationships
+			//rst[name] = "TODO"
+			continue
+		}
+
+		tmp, _ := AttrValue(fieldValue)
+		rst[name] = tmp
+	}
+	fmt.Println(rst)
+
+	return rst, nil
 }

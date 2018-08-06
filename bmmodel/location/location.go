@@ -1,10 +1,14 @@
 package location
 
 import (
-	//"reflect"
-	"encoding/json"
+	"errors"
+	//"fmt"
+	"reflect"
+	//"strings"
 	"github.com/alfredyang1986/blackmirror/bmmodel"
+	"github.com/alfredyang1986/blackmirror/bmmodel/request"
 	"github.com/alfredyang1986/blackmirror/bmmodel/test"
+	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 )
 
@@ -18,29 +22,37 @@ type Location struct {
 	Test test.Test `json:"test" jsonapi:"relationships"`
 }
 
-func FromJson(data string) (Location, error) {
-	var rst Location
-	if err := json.Unmarshal([]byte(data), &rst); err != nil {
-		panic(err)
+/*------------------------------------------------
+ * bm object interface
+ *------------------------------------------------*/
+
+func (loc *Location) resetIdWithId_() {
+	if loc.Id != "" {
+		return
 	}
 
-	return rst, nil
+	if loc.Id_.Valid() {
+		loc.Id = loc.Id_.Hex()
+	} else {
+		panic("no id with this object")
+	}
 }
 
-func (loc *Location) GetTitle() string {
-	rst, _ := bmmodel.AttrWithName(loc, "title", "")
-	return rst.(string)
+func (loc *Location) resetId_WithID() {
+	if loc.Id_ != "" {
+		return
+	}
+
+	if bson.IsObjectIdHex(loc.Id) {
+		loc.Id_ = bson.ObjectIdHex(loc.Id)
+	} else {
+		panic("no id with this object")
+	}
 }
 
-func (loc *Location) GetAddress() string {
-	rst, _ := bmmodel.AttrWithName(loc, "address", "")
-	return rst.(string)
-}
-
-func (loc *Location) GetDistrict() string {
-	rst, _ := bmmodel.AttrWithName(loc, "district", "")
-	return rst.(string)
-}
+/*------------------------------------------------
+ * relationships interface
+ *------------------------------------------------*/
 
 func (loc Location) SetConnect(tag string, v interface{}) interface{} {
 	switch tag {
@@ -57,4 +69,47 @@ func (loc Location) QueryConnect(tag string) interface{} {
 		return loc.Test
 	}
 	return loc
+}
+
+/*------------------------------------------------
+ * mongo interface
+ *------------------------------------------------*/
+
+func (loc *Location) InsertBMObject() error {
+	session, err := mgo.Dial("localhost:27017")
+	if err != nil {
+		return errors.New("dial db error")
+	}
+	defer session.Close()
+
+	c := session.DB("test").C("Brand")
+	loc.resetId_WithID()
+
+	nExist, _ := c.FindId(loc.Id_).Count()
+	if nExist == 0 {
+		v := reflect.ValueOf(loc).Elem()
+		rst, err := bmmodel.Struct2map(v)
+		rst["_id"] = loc.Id
+		err = c.Insert(rst)
+		return err
+	} else {
+		return errors.New("Only can instert not existed doc")
+	}
+}
+
+func (loc *Location) FindOne(req request.Request) error {
+	session, err := mgo.Dial("localhost:27017")
+	if err != nil {
+		return errors.New("dial db error")
+	}
+	defer session.Close()
+
+	c := session.DB("test").C(req.Res)
+	err = c.Find(req.Cond2QueryObj()).One(loc)
+	if err != nil {
+		panic(err)
+	}
+	loc.resetIdWithId_()
+
+	return nil
 }
