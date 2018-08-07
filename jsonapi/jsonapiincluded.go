@@ -1,6 +1,7 @@
 package jsonapi
 
 import (
+	"fmt"
 	"github.com/alfredyang1986/blackmirror/bmmodel/relationships"
 )
 
@@ -10,6 +11,7 @@ func remapIncluded(inc []interface{}) ([]interface{}, error) {
 	//increl := 0
 	for _, item := range inc {
 		itm := item.(map[string]interface{})
+		fmt.Println(itm)
 		rst := itm[itm[TYPE].(string)].(relationships.Relationships)
 		for k, _ := range itm {
 			if k == ATTRIBUTES {

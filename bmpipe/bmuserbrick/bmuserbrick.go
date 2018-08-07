@@ -26,7 +26,7 @@ func UserBricks() *BMUserBrick {
 				Next: nil,
 				Pr:   nil,
 				Req:  nil,
-				Err:  nil,
+				Err:  0,
 			},
 		}
 	})
@@ -53,7 +53,7 @@ func (b *BMUserBrick) Prepare(pr interface{}) error {
 
 func (b *BMUserBrick) Done(w http.ResponseWriter) error {
 	fmt.Println(b.bk.Pr)
-	if b.bk.Err != nil {
+	if b.bk.Err != 0 {
 		// TODO: 错误处理
 	} else {
 		jsonapi.ToJsonAPI(b.bk.Pr, w)

@@ -6,7 +6,7 @@ import (
 	"github.com/alfredyang1986/blackmirror/bmmodel/brand"
 	//"github.com/alfredyang1986/blackmirror/bmmongo"
 	"github.com/alfredyang1986/blackmirror/jsonapi"
-	//"os"
+	"os"
 )
 
 var sjson string = `{
@@ -127,7 +127,7 @@ func bkmain() {
 
 	t := rst.([]interface{})
 	tmp := t[0].(brand.Brand)
-	reval, _ := jsonapi.ToJsonAPI(&tmp)
+	reval, _ := jsonapi.ToJsonAPI(&tmp, os.Stdout)
 	fmt.Println(reval)
 
 	/* tmp0 := t[0].(brand.Brand)*/

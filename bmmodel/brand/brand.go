@@ -94,18 +94,4 @@ func (bd *Brand) InsertBMObject() error {
 
 func (bd *Brand) FindOne(req request.Request) error {
 	return bmmodel.FindOne(req, bd)
-	/* session, err := mgo.Dial("localhost:27017")*/
-	//if err != nil {
-	//return errors.New("dial db error")
-	//}
-	//defer session.Close()
-
-	//c := session.DB("test").C(req.Res)
-	//err = c.Find(req.Cond2QueryObj()).One(bd)
-	//if err != nil {
-	//panic(err)
-	//}
-	//bd.ResetIdWithId_()
-
-	/*return nil*/
 }

@@ -5,10 +5,10 @@ import (
 	"errors"
 	"fmt"
 	"github.com/alfredyang1986/blackmirror/adt"
+	"github.com/alfredyang1986/blackmirror/bmmodel/auth"
 	"github.com/alfredyang1986/blackmirror/bmmodel/brand"
 	"github.com/alfredyang1986/blackmirror/bmmodel/location"
 	"github.com/alfredyang1986/blackmirror/bmmodel/request"
-	"github.com/alfredyang1986/blackmirror/bmmodel/test"
 	"gopkg.in/mgo.v2/bson"
 	"io"
 	"log"
@@ -196,8 +196,8 @@ func (s *DDStm) mainResultParse(rst map[string]interface{}) (interface{}, error)
 		s.doc.Decode(&eq)
 		eq.Id = nid
 		reval = eq
-	case "test":
-		var itm test.Test
+	case "auth":
+		var itm auth.BMAuth
 		s.doc.Decode(&itm)
 		if bson.IsObjectIdHex(nid) {
 			itm.Id = nid
@@ -206,7 +206,28 @@ func (s *DDStm) mainResultParse(rst map[string]interface{}) (interface{}, error)
 			itm.Id_ = bson.NewObjectId()
 			itm.Id = itm.Id_.Hex()
 		}
-		//t.Id = nid
+		reval = itm
+	case "phone":
+		var itm auth.BMPhone
+		s.doc.Decode(&itm)
+		if bson.IsObjectIdHex(nid) {
+			itm.Id = nid
+			itm.Id_ = bson.ObjectIdHex(nid)
+		} else {
+			itm.Id_ = bson.NewObjectId()
+			itm.Id = itm.Id_.Hex()
+		}
+		reval = itm
+	case "wechat":
+		var itm auth.BMWechat
+		s.doc.Decode(&itm)
+		if bson.IsObjectIdHex(nid) {
+			itm.Id = nid
+			itm.Id_ = bson.ObjectIdHex(nid)
+		} else {
+			itm.Id_ = bson.NewObjectId()
+			itm.Id = itm.Id_.Hex()
+		}
 		reval = itm
 	}
 

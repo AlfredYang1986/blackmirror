@@ -48,7 +48,7 @@ func map2Object(m map[string]interface{}) (interface{}, error) {
 }
 
 func queryRelationships(rs map[string]interface{}, inc []interface{}, m relationships.Relationships) (interface{}, error) {
-	var rst interface{}
+	var rst relationships.Relationships = m
 
 	for k, v := range rs {
 		tmp := v.(map[string]interface{})
@@ -58,8 +58,9 @@ func queryRelationships(rs map[string]interface{}, inc []interface{}, m relation
 			vid := vdm[ID].(string)
 			vtype := vdm[TYPE].(string)
 			incv, _ := qRIObj(vid, vtype, inc)
-			//fmt.Println(incv)
-			rst = m.SetConnect(k, incv)
+			rst = rst.SetConnect(k, incv).(relationships.Relationships)
+			fmt.Println("rst")
+			fmt.Println(rst)
 		} else if bmmate.IsSeq(vd) {
 			vdl := vd.([]interface{})
 			var ritem []interface{}
@@ -71,7 +72,8 @@ func queryRelationships(rs map[string]interface{}, inc []interface{}, m relation
 				//fmt.Println(incv)
 				ritem = append(ritem, incv)
 			}
-			rst = m.SetConnect(k, ritem)
+			//rst = rst.SetConnect(k, ritem)
+			rst = rst.SetConnect(k, ritem).(relationships.Relationships)
 		}
 	}
 	return rst, nil

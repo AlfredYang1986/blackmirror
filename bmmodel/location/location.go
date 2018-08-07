@@ -7,7 +7,6 @@ import (
 	//"strings"
 	"github.com/alfredyang1986/blackmirror/bmmodel"
 	"github.com/alfredyang1986/blackmirror/bmmodel/request"
-	"github.com/alfredyang1986/blackmirror/bmmodel/test"
 	//"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 )
@@ -19,7 +18,7 @@ type Location struct {
 	Address  string        `json:"address" bson:"address"`
 	District string        `json:"district" bson:"district"`
 
-	Test test.Test `json:"test" jsonapi:"relationships"`
+	//Test test.Test `json:"test" jsonapi:"relationships"`
 }
 
 /*------------------------------------------------
@@ -59,19 +58,18 @@ func (bd *Location) SetId(id string) {
  *------------------------------------------------*/
 
 func (loc Location) SetConnect(tag string, v interface{}) interface{} {
-	switch tag {
-	case "test":
-		loc.Test = v.(test.Test)
-	}
+	/* switch tag {*/
+	//case "test":
+	//loc.Test = v.(test.Test)
+	/*}*/
 	return loc
 }
 
 func (loc Location) QueryConnect(tag string) interface{} {
-	//return loc.Relationships[tag]
-	switch tag {
-	case "test":
-		return loc.Test
-	}
+	/* switch tag {*/
+	//case "test":
+	//return loc.Test
+	/*}*/
 	return loc
 }
 

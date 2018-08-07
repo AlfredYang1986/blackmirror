@@ -9,18 +9,18 @@ type BMBrick struct {
 	Host string
 	Port int
 
-	Next *BMBrickFace
+	Next BMBrickFace
 
 	Req  *request.Request
 	Name string
 	Pr   interface{}
 
-	Err error
+	Err int
 }
 
 type BMBrickFace interface {
 	BrickInstance() *BMBrick
-	Prepare() error
+	Prepare(ptr interface{}) error
 	Exec() error
 	Done(http.ResponseWriter) error
 }

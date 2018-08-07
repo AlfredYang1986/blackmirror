@@ -14,7 +14,7 @@ import (
 	"net/http"
 )
 
-func main() {
+func bkmain() {
 	r := mux.NewRouter()
 	r.HandleFunc("/insert", func(w http.ResponseWriter, r *http.Request) {
 

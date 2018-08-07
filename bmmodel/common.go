@@ -92,7 +92,7 @@ func FindOne(req request.Request, ptr BMObject) error {
 	c := session.DB("test").C(req.Res)
 	err = c.Find(req.Cond2QueryObj()).One(ptr)
 	if err != nil {
-		panic(err)
+		return err
 	}
 	ptr.ResetIdWithId_()
 
