@@ -50,3 +50,22 @@ func (f *modelFactory) ReflectInstance(name string) (interface{}, error) {
 		return 0, errors.New("not register class")
 	}
 }
+
+func (f *modelFactory) ReflectValue(name string) (reflect.Value, error) {
+	var tp reflect.Type
+	b := false
+	for k, v := range f.bm {
+		if k == name {
+			tp = v
+			b = true
+		}
+	}
+
+	if b == true {
+		reval := reflect.New(tp).Elem()
+		return reval, nil
+	} else {
+		panic("not register class")
+		//return nil, errors.New("not register class")
+	}
+}

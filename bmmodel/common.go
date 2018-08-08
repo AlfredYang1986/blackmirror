@@ -133,6 +133,8 @@ func AttrValue(v reflect.Value) (interface{}, error) {
 	case reflect.Uint, reflect.Uint8, reflect.Uint16,
 		reflect.Uint32, reflect.Uint64, reflect.Uintptr:
 		return v.Uint(), nil
+	case reflect.Float32, reflect.Float64:
+		return v.Float(), nil
 	case reflect.String:
 		return v.String(), nil
 	case reflect.Array, reflect.Slice:

@@ -2,16 +2,15 @@ package jsonapi
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"github.com/alfredyang1986/blackmirror/adt"
-	"github.com/alfredyang1986/blackmirror/bmmodel/auth"
-	"github.com/alfredyang1986/blackmirror/bmmodel/brand"
-	"github.com/alfredyang1986/blackmirror/bmmodel/location"
-	"github.com/alfredyang1986/blackmirror/bmmodel/request"
+	"github.com/alfredyang1986/blackmirror/bmcommon/bmsingleton"
+	"github.com/alfredyang1986/blackmirror/bmmodel"
 	"gopkg.in/mgo.v2/bson"
 	"io"
 	"log"
+	"reflect"
+	"strings"
 )
 
 const (
@@ -63,7 +62,8 @@ func (s *DDStm) DetailDecoder() (interface{}, error) {
 		//fmt.Printf("%s : %s ==> %s\n", s.ct, strType, strValue)
 
 		if IsMainResult(s, cur) && strValue == ATTRIBUTES {
-			rst[rst["type"].(string)], _ = s.mainResultParse(rst)
+			//rst[rst["type"].(string)], _ = s.mainResultParse(rst)
+			rst["ronaldo"], _ = s.mainResultParse(rst)
 			odd++
 			//break
 		} else if IsLeftObjDelim(strType, strValue) {
@@ -90,6 +90,11 @@ func (s *DDStm) DetailDecoder() (interface{}, error) {
 
 		odd++
 		cur = strValue
+	}
+
+	ronaldo := rst["ronaldo"]
+	if ronaldo != nil {
+		rst[rst["type"].(string)], _ = s.map2Instance(rst["id"].(string), rst["type"].(string), ronaldo.(map[string]interface{}))
 	}
 
 	return rst, nil
@@ -151,85 +156,67 @@ func (s *DDStm) DetailDecoderList() ([]interface{}, error) {
 
 }
 
-func (s *DDStm) mainResultParse(rst map[string]interface{}) (interface{}, error) {
+func (s *DDStm) mainResultParse(rst map[string]interface{}) (map[string]interface{}, error) {
+	var reval map[string]interface{}
+	err := s.doc.Decode(&reval)
+	return reval, err
+}
 
-	nid := rst["id"].(string)
-	ntype := rst["type"].(string)
-	var err error
-	var reval interface{}
+func (s *DDStm) map2Instance(id string, tp string, m map[string]interface{}) (interface{}, error) {
 
-	switch ntype {
-	default:
-		err = errors.New("not implement")
-		return reval, err
-	case "brand":
-		var itm brand.Brand
-		s.doc.Decode(&itm)
-		if bson.IsObjectIdHex(nid) {
-			itm.Id = nid
-			itm.Id_ = bson.ObjectIdHex(nid)
-		} else {
-			itm.Id_ = bson.NewObjectId()
-			itm.Id = itm.Id_.Hex()
-		}
-		//bd.Id = nid
-		reval = itm
-	case "location":
-		var itm location.Location
-		s.doc.Decode(&itm)
-		if bson.IsObjectIdHex(nid) {
-			itm.Id = nid
-			itm.Id_ = bson.ObjectIdHex(nid)
-		} else {
-			itm.Id_ = bson.NewObjectId()
-			itm.Id = itm.Id_.Hex()
-		}
-		//loc.Id = nid
-		reval = itm
-	case "request":
-		var req request.Request
-		s.doc.Decode(&req)
-		req.Id = nid
-		reval = req
-	case "eq_cond":
-		var eq request.EQCond
-		s.doc.Decode(&eq)
-		eq.Id = nid
-		reval = eq
-	case "auth":
-		var itm auth.BMAuth
-		s.doc.Decode(&itm)
-		if bson.IsObjectIdHex(nid) {
-			itm.Id = nid
-			itm.Id_ = bson.ObjectIdHex(nid)
-		} else {
-			itm.Id_ = bson.NewObjectId()
-			itm.Id = itm.Id_.Hex()
-		}
-		reval = itm
-	case "phone":
-		var itm auth.BMPhone
-		s.doc.Decode(&itm)
-		if bson.IsObjectIdHex(nid) {
-			itm.Id = nid
-			itm.Id_ = bson.ObjectIdHex(nid)
-		} else {
-			itm.Id_ = bson.NewObjectId()
-			itm.Id = itm.Id_.Hex()
-		}
-		reval = itm
-	case "wechat":
-		var itm auth.BMWechat
-		s.doc.Decode(&itm)
-		if bson.IsObjectIdHex(nid) {
-			itm.Id = nid
-			itm.Id_ = bson.ObjectIdHex(nid)
-		} else {
-			itm.Id_ = bson.NewObjectId()
-			itm.Id = itm.Id_.Hex()
-		}
-		reval = itm
+	var nid string
+	var oid bson.ObjectId
+	if bson.IsObjectIdHex(id) {
+		nid = id
+		oid = bson.ObjectIdHex(id)
+	} else {
+		oid = bson.NewObjectId()
+		nid = oid.Hex()
 	}
 
-	return reval, nil
+	fac := bmsingleton.GetFactoryInstance()
+	v, _ := fac.ReflectValue(tp)
+
+	for i := 0; i < v.NumField(); i++ {
+
+		fieldInfo := v.Type().Field(i) // a.reflect.struct.field
+		fieldValue := v.Field(i)
+		tag := fieldInfo.Tag // a.reflect.tag
+
+		var name string
+		if tag.Get(bmmodel.BMJson) != "" {
+			name = tag.Get(bmmodel.BMJson)
+		} else {
+			name = strings.ToLower(fieldInfo.Name)
+		}
+
+		if name == "id" {
+			fieldValue.SetString(nid)
+		} else if name == "id_" {
+			fieldValue.Set(reflect.ValueOf(oid))
+		} else if name == "type" {
+			fieldValue.SetString(tp)
+		} else if m[name] != nil {
+			vp := reflect.ValueOf(m[name]) //.Elem()
+			switch fieldValue.Type().Kind() {
+			default:
+				fieldValue.Set(vp)
+			case reflect.Int, reflect.Int8, reflect.Int16,
+				reflect.Int32, reflect.Int64:
+				var f float64 = m[name].(float64)
+				tmp := int64(f)
+				fieldValue.SetInt(tmp)
+			case reflect.Uint, reflect.Uint8, reflect.Uint16,
+				reflect.Uint32, reflect.Uint64, reflect.Uintptr:
+				var f float64 = m[name].(float64)
+				tmp := int64(f)
+				fieldValue.SetInt(tmp)
+			case reflect.Float32, reflect.Float64:
+				fieldValue.SetFloat(vp.Float())
+			}
+		}
+	}
+	tmp := v.Interface()
+
+	return tmp, nil
 }

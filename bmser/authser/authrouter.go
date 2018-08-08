@@ -11,7 +11,9 @@ var o sync.Once
 func GetRouter() *mux.Router {
 	o.Do(func() {
 		r = mux.NewRouter()
-		r.HandleFunc("/push", PushAuth)
+		r.HandleFunc("/auth/push", PushAuth)
+		r.HandleFunc("/auth/phone/push", PushPhone)
+		r.HandleFunc("/auth/wechat/push", PushWechat)
 	})
 
 	return r

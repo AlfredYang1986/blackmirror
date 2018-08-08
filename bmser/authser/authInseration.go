@@ -1,8 +1,10 @@
 package authser
 
 import (
-	"fmt"
+	//"fmt"
+	"github.com/alfredyang1986/blackmirror/bmerror"
 	"github.com/alfredyang1986/blackmirror/bmmodel/auth"
+	"github.com/alfredyang1986/blackmirror/bmpipe"
 	"github.com/alfredyang1986/blackmirror/bmpipe/bmauthbricks"
 	"github.com/alfredyang1986/blackmirror/jsonapi"
 	"io/ioutil"
@@ -10,7 +12,7 @@ import (
 	"net/http"
 )
 
-func PushAuth(w http.ResponseWriter, r *http.Request) {
+func authPushSkeleton(w http.ResponseWriter, r *http.Request, bks bmpipe.BMBrickFace) {
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		log.Printf("Error reading body: %v", err)
@@ -18,26 +20,42 @@ func PushAuth(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	sjson := string(body)
-	fmt.Println(sjson)
 
 	rst, _ := jsonapi.FromJsonAPI(sjson)
-	println(rst)
-
 	t := rst.(auth.BMAuth)
-	//fmt.Println(t)
 
 	w.Header().Add("Content-Type", "application/json")
 
-	tmp :=
-		bmauthbricks.AuthPushBrick(
-			bmauthbricks.PhonePushBrick(
-				bmauthbricks.WechatPushBrick(nil),
-			))
+	bks.Prepare(t)
+	bks.Exec()
+	bks.Done()
 
-	tmp.Prepare(t)
-	tmp.Exec()
-	tmp.Done(w)
+	ec := bks.BrickInstance().Err
+	if ec != 0 {
+		bmerror.ErrInstance().ErrorReval(ec, w)
+	} else {
+		var reval auth.BMAuth = bks.BrickInstance().Pr.(auth.BMAuth)
+		jsonapi.ToJsonAPI(&reval, w)
+	}
+}
 
-	//err = t.InsertBMObject()
-	//fmt.Fprintf(w, "Welcome to my website!")
+func PushAuth(w http.ResponseWriter, r *http.Request) {
+	/* tmp :=*/
+	//bmauthbricks.PhonePushBrick(
+	//bmauthbricks.WechatPushBrick(
+	//bmauthbricks.AuthPushBrick(nil),
+	/*))*/
+
+	tmp := bmauthbricks.AuthPushBrick(bmauthbricks.PhonePushBrick(nil))
+	authPushSkeleton(w, r, tmp)
+}
+
+func PushPhone(w http.ResponseWriter, r *http.Request) {
+	tmp := bmauthbricks.PhonePushBrick(nil)
+	authPushSkeleton(w, r, tmp)
+}
+
+func PushWechat(w http.ResponseWriter, r *http.Request) {
+	tmp := bmauthbricks.WechatPushBrick(nil)
+	authPushSkeleton(w, r, tmp)
 }

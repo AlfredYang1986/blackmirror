@@ -2,7 +2,7 @@ package jsonapi
 
 import (
 	"errors"
-	"fmt"
+	//"fmt"
 	"github.com/alfredyang1986/blackmirror/bmmate"
 	//"github.com/alfredyang1986/blackmirror/bmmodel/brand"
 	"github.com/alfredyang1986/blackmirror/bmmodel/relationships"
@@ -13,7 +13,7 @@ func map2Object(m map[string]interface{}) (interface{}, error) {
 	rt := m[ROOT].(map[string]interface{})
 	tdt := rt[DATA]
 	var inc []interface{}
-	if rt[INCLUDED] != nil {
+	if rt[INCLUDED] != nil && bmmate.IsSeq(rt[INCLUDED]) {
 		inc = rt[INCLUDED].([]interface{})
 	}
 
@@ -27,7 +27,6 @@ func map2Object(m map[string]interface{}) (interface{}, error) {
 			rst := dt[dt[TYPE].(string)].(relationships.Relationships)
 			rs := dt[RELATIONSHIPS].(map[string]interface{})
 			reval, _ := queryRelationships(rs, inc, rst)
-			fmt.Println(reval)
 			result = append(result, reval)
 		}
 		return result, nil
@@ -37,7 +36,6 @@ func map2Object(m map[string]interface{}) (interface{}, error) {
 		if dt[RELATIONSHIPS] != nil {
 			rs := dt[RELATIONSHIPS].(map[string]interface{})
 			reval, _ := queryRelationships(rs, inc, rst)
-			fmt.Println(reval)
 			return reval, nil
 		} else {
 			return rst, nil
@@ -59,8 +57,6 @@ func queryRelationships(rs map[string]interface{}, inc []interface{}, m relation
 			vtype := vdm[TYPE].(string)
 			incv, _ := qRIObj(vid, vtype, inc)
 			rst = rst.SetConnect(k, incv).(relationships.Relationships)
-			fmt.Println("rst")
-			fmt.Println(rst)
 		} else if bmmate.IsSeq(vd) {
 			vdl := vd.([]interface{})
 			var ritem []interface{}

@@ -112,6 +112,8 @@ func (o *JsResult) value2jsonAcc(v reflect.Value) (interface{}, error) {
 	case reflect.Uint, reflect.Uint8, reflect.Uint16,
 		reflect.Uint32, reflect.Uint64, reflect.Uintptr:
 		return v.Uint(), nil
+	case reflect.Float32, reflect.Float64:
+		return v.Float(), nil
 	case reflect.String:
 		return v.String(), nil
 	case reflect.Array, reflect.Slice:
@@ -150,11 +152,16 @@ func (o *JsResult) remapRS2Included(rships map[string]interface{}) (map[string]i
 				tmp, _ := o.mapRS2IncludedAcc(itm.(map[string]interface{}))
 				rev = append(rev, tmp)
 			}
-			rst[k] = rev
+			dt := make(map[string]interface{})
+			dt["data"] = rev
+			rst[k] = dt
+			//rst[k] = rev
 
 		} else if bmmate.IsMap(vmdat) {
 			tmp, _ := o.mapRS2IncludedAcc(vmdat.(map[string]interface{}))
-			rst[k] = tmp
+			dt := make(map[string]interface{})
+			dt["data"] = tmp
+			rst[k] = dt
 		}
 
 	}

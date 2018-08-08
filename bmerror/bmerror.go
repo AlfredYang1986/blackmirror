@@ -7,12 +7,23 @@ import (
 )
 
 type tBMError struct {
-	m map[int]tBMErrorNode
+	m map[int]BMErrorNode
 }
 
-type tBMErrorNode struct {
-	code    int    `json:"id"`
-	message string `json:"message"`
+type BMErrorNode struct {
+	Code    int    `json:"code"`
+	Message string `json:"message"`
+}
+
+/*------------------------------------------------
+ * relationships interface
+ *------------------------------------------------*/
+func (bd BMErrorNode) SetConnect(tag string, v interface{}) interface{} {
+	return bd
+}
+
+func (bd BMErrorNode) QueryConnect(tag string) interface{} {
+	return bd
 }
 
 var e *tBMError
@@ -21,10 +32,10 @@ var o sync.Once
 func ErrInstance() *tBMError {
 	o.Do(func() {
 		e = &tBMError{
-			m: map[int]tBMErrorNode{
-				-9999: tBMErrorNode{code: -9999, message: "unknown error"},
-				-1:    tBMErrorNode{code: -1, message: "phone already regisated"},
-				-2:    tBMErrorNode{code: -2, message: "wechat already regisated"},
+			m: map[int]BMErrorNode{
+				-9999: BMErrorNode{Code: -9999, Message: "unknown error"},
+				-1:    BMErrorNode{Code: -1, Message: "phone already regisated"},
+				-2:    BMErrorNode{Code: -2, Message: "wechat already regisated"},
 			},
 		}
 	})
