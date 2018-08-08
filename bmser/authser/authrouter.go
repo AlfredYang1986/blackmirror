@@ -14,6 +14,7 @@ func GetRouter() *mux.Router {
 		r.HandleFunc("/auth/push", PushAuth)
 		r.HandleFunc("/auth/phone/push", PushPhone)
 		r.HandleFunc("/auth/wechat/push", PushWechat)
+		r.HandleFunc("/auth/rs/push", PushAuthRS)
 	})
 
 	return r

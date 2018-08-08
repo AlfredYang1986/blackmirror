@@ -1,7 +1,7 @@
 package bmauthbricks
 
 import (
-	"fmt"
+	//"fmt"
 	"github.com/alfredyang1986/blackmirror/bmmodel/auth"
 	"github.com/alfredyang1986/blackmirror/bmpipe"
 	"sync"
@@ -38,7 +38,6 @@ func PhonePushBrick(n bmpipe.BMBrickFace) bmpipe.BMBrickFace {
 func (b *tBMPhonePushBrick) Exec() error {
 	var tmp auth.BMAuth = b.bk.Pr.(auth.BMAuth)
 	ap := tmp.Phone
-	fmt.Println(ap)
 	if ap.Id != "" && ap.Id_.Valid() {
 		if ap.IsPhoneRegisted() {
 			b.bk.Err = -1

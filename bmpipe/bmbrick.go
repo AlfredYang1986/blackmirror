@@ -2,7 +2,7 @@ package bmpipe
 
 import (
 	"bytes"
-	"fmt"
+	//"fmt"
 	"github.com/alfredyang1986/blackmirror/bmerror"
 	"github.com/alfredyang1986/blackmirror/bmmodel/auth"
 	"github.com/alfredyang1986/blackmirror/bmmodel/request"
@@ -42,15 +42,14 @@ type BMBrickFace interface {
 
 func HttpPost(b BMBrickFace) {
 
-	bm := b.BrickInstance().Next
-	if b.BrickInstance().Err != 0 || bm == nil {
+	nxt := b.BrickInstance().Next
+	if b.BrickInstance().Err != 0 || nxt == nil {
 		return
 	}
 
-	host := bm.BrickInstance().Host
-	port := strconv.Itoa(bm.BrickInstance().Port)
-	fmt.Println(port)
-	router := bm.BrickInstance().Router
+	host := nxt.BrickInstance().Host
+	port := strconv.Itoa(nxt.BrickInstance().Port)
+	router := nxt.BrickInstance().Router
 
 	url := strings.Join([]string{"http://", host, ":", port, router}, "")
 	contentType := "application/json;charset=utf-8"
@@ -69,15 +68,13 @@ func HttpPost(b BMBrickFace) {
 		log.Println("Post failed:", err)
 		return
 	}
-	defer resp.Body.Close()
 
 	content, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		log.Println("Read failed:", err)
 		return
 	}
-
-	log.Println("content:", string(content))
+	resp.Body.Close()
 
 	res, err := jsonapi.FromJsonAPI(string(content))
 	v := reflect.ValueOf(res)

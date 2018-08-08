@@ -1,7 +1,7 @@
 package bmauthbricks
 
 import (
-	"fmt"
+	//"fmt"
 	"github.com/alfredyang1986/blackmirror/bmmodel/auth"
 	"github.com/alfredyang1986/blackmirror/bmpipe"
 	"sync"
@@ -38,7 +38,6 @@ func WechatPushBrick(n bmpipe.BMBrickFace) bmpipe.BMBrickFace {
 func (b *tBMWechatPushBrick) Exec() error {
 	var tmp auth.BMAuth = b.bk.Pr.(auth.BMAuth)
 	aw := tmp.Wechat
-	fmt.Println(aw)
 	if aw.Id != "" && aw.Id_.Valid() {
 		if aw.IsWechatRegisted() {
 			b.bk.Err = -2

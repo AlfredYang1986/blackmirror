@@ -9,9 +9,9 @@ import (
 type BMAuthProp struct {
 	Id        string        `json:"Id"`
 	Id_       bson.ObjectId `bson:"_id"`
-	auth_id   string        `json:"auth_id" bson:"auth_id"`
-	phone_id  string        `json:"phone_id" bson:"phone_id"`
-	wechat_id string        `json:"wechat_id" bson:"wechat_id"`
+	Auth_id   string        `json:"auth_id" bson:"auth_id"`
+	Phone_id  string        `json:"phone_id" bson:"phone_id"`
+	Wechat_id string        `json:"wechat_id" bson:"wechat_id"`
 }
 
 /*------------------------------------------------

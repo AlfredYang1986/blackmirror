@@ -43,7 +43,8 @@ func PushAuth(w http.ResponseWriter, r *http.Request) {
 	tmp :=
 		bmauthbricks.PhonePushBrick(
 			bmauthbricks.WechatPushBrick(
-				bmauthbricks.AuthPushBrick(nil)))
+				bmauthbricks.AuthRelationshipPushBrick(nil)))
+		//bmauthbricks.AuthPushBrick(nil))))
 	authPushSkeleton(w, r, tmp)
 }
 
@@ -54,5 +55,10 @@ func PushPhone(w http.ResponseWriter, r *http.Request) {
 
 func PushWechat(w http.ResponseWriter, r *http.Request) {
 	tmp := bmauthbricks.WechatPushBrick(nil)
+	authPushSkeleton(w, r, tmp)
+}
+
+func PushAuthRS(w http.ResponseWriter, r *http.Request) {
+	tmp := bmauthbricks.AuthRelationshipPushBrick(nil)
 	authPushSkeleton(w, r, tmp)
 }
