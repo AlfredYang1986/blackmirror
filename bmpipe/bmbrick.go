@@ -43,6 +43,10 @@ type BMBrickFace interface {
 func HttpPost(b BMBrickFace) {
 
 	bm := b.BrickInstance().Next
+	if b.BrickInstance().Err != 0 || bm == nil {
+		return
+	}
+
 	host := bm.BrickInstance().Host
 	port := strconv.Itoa(bm.BrickInstance().Port)
 	fmt.Println(port)
@@ -76,12 +80,10 @@ func HttpPost(b BMBrickFace) {
 	log.Println("content:", string(content))
 
 	res, err := jsonapi.FromJsonAPI(string(content))
-	fmt.Println("res")
-	fmt.Println(res)
 	v := reflect.ValueOf(res)
 	if v.Type().Name() == "BMErrorNode" {
 		en := res.(bmerror.BMErrorNode)
 		b.BrickInstance().Err = en.Code
-		b.BrickInstance().Pr = res
 	}
+	b.BrickInstance().Pr = res
 }

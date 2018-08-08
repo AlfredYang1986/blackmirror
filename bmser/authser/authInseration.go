@@ -40,13 +40,10 @@ func authPushSkeleton(w http.ResponseWriter, r *http.Request, bks bmpipe.BMBrick
 }
 
 func PushAuth(w http.ResponseWriter, r *http.Request) {
-	/* tmp :=*/
-	//bmauthbricks.PhonePushBrick(
-	//bmauthbricks.WechatPushBrick(
-	//bmauthbricks.AuthPushBrick(nil),
-	/*))*/
-
-	tmp := bmauthbricks.AuthPushBrick(bmauthbricks.PhonePushBrick(nil))
+	tmp :=
+		bmauthbricks.PhonePushBrick(
+			bmauthbricks.WechatPushBrick(
+				bmauthbricks.AuthPushBrick(nil)))
 	authPushSkeleton(w, r, tmp)
 }
 
