@@ -1,33 +1,29 @@
-package bmauthbricks
+package authpush
 
 import (
 	//"fmt"
 	"github.com/alfredyang1986/blackmirror/bmmodel/auth"
 	"github.com/alfredyang1986/blackmirror/bmpipe"
-	"sync"
+	"github.com/alfredyang1986/blackmirror/jsonapi"
+	"io"
 )
 
 type tBMPhonePushBrick struct {
 	bk *bmpipe.BMBrick
 }
 
-var appb *tBMPhonePushBrick
-var appbo sync.Once
-
 func PhonePushBrick(n bmpipe.BMBrickFace) bmpipe.BMBrickFace {
-	appbo.Do(func() {
-		appb = &tBMPhonePushBrick{
-			bk: &bmpipe.BMBrick{
-				Host:   "localhost",
-				Port:   8080,
-				Router: "/auth/phone/push",
-				Next:   n,
-				Pr:     nil,
-				Req:    nil,
-				Err:    0,
-			},
-		}
-	})
+	appb := &tBMPhonePushBrick{
+		bk: &bmpipe.BMBrick{
+			Host:   "localhost",
+			Port:   8080,
+			Router: "/auth/phone/push",
+			Next:   n,
+			Pr:     nil,
+			Req:    nil,
+			Err:    0,
+		},
+	}
 	return appb
 }
 
@@ -35,7 +31,7 @@ func PhonePushBrick(n bmpipe.BMBrickFace) bmpipe.BMBrickFace {
  * brick interface
  *------------------------------------------------*/
 
-func (b *tBMPhonePushBrick) Exec() error {
+func (b *tBMPhonePushBrick) Exec(f func(error)) error {
 	var tmp auth.BMAuth = b.bk.Pr.(auth.BMAuth)
 	ap := tmp.Phone
 	if ap.Id != "" && ap.Id_.Valid() {
@@ -55,10 +51,17 @@ func (b *tBMPhonePushBrick) Prepare(pr interface{}) error {
 }
 
 func (b *tBMPhonePushBrick) Done() error {
-	bmpipe.HttpPost(b)
+	bmpipe.NextBrickRemote(b)
 	return nil
 }
 
 func (b *tBMPhonePushBrick) BrickInstance() *bmpipe.BMBrick {
 	return b.bk
+}
+
+func (b *tBMPhonePushBrick) ResultTo(w io.Writer) error {
+	pr := b.BrickInstance().Pr
+	tmp := pr.(auth.BMAuth)
+	err := jsonapi.ToJsonAPI(&tmp, w)
+	return err
 }

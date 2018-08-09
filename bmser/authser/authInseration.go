@@ -5,7 +5,7 @@ import (
 	"github.com/alfredyang1986/blackmirror/bmerror"
 	"github.com/alfredyang1986/blackmirror/bmmodel/auth"
 	"github.com/alfredyang1986/blackmirror/bmpipe"
-	"github.com/alfredyang1986/blackmirror/bmpipe/bmauthbricks"
+	"github.com/alfredyang1986/blackmirror/bmpipe/bmauthbricks/push"
 	"github.com/alfredyang1986/blackmirror/jsonapi"
 	"io/ioutil"
 	"log"
@@ -27,7 +27,7 @@ func authPushSkeleton(w http.ResponseWriter, r *http.Request, bks bmpipe.BMBrick
 	w.Header().Add("Content-Type", "application/json")
 
 	bks.Prepare(t)
-	bks.Exec()
+	bks.Exec(nil)
 	bks.Done()
 
 	ec := bks.BrickInstance().Err
@@ -40,25 +40,22 @@ func authPushSkeleton(w http.ResponseWriter, r *http.Request, bks bmpipe.BMBrick
 }
 
 func PushAuth(w http.ResponseWriter, r *http.Request) {
-	tmp :=
-		bmauthbricks.PhonePushBrick(
-			bmauthbricks.WechatPushBrick(
-				bmauthbricks.AuthRelationshipPushBrick(nil)))
-		//bmauthbricks.AuthPushBrick(nil))))
+	tmp := authpush.AuthPushBrick(nil)
 	authPushSkeleton(w, r, tmp)
 }
 
 func PushPhone(w http.ResponseWriter, r *http.Request) {
-	tmp := bmauthbricks.PhonePushBrick(nil)
+	//tmp := authpush.PhonePushBrick(authpush.AuthRelationshipPushBrick(nil))
+	tmp := authpush.PhonePushBrick(authpush.WechatPushBrick(nil))
 	authPushSkeleton(w, r, tmp)
 }
 
 func PushWechat(w http.ResponseWriter, r *http.Request) {
-	tmp := bmauthbricks.WechatPushBrick(nil)
+	tmp := authpush.WechatPushBrick(authpush.AuthRelationshipPushBrick(nil))
 	authPushSkeleton(w, r, tmp)
 }
 
 func PushAuthRS(w http.ResponseWriter, r *http.Request) {
-	tmp := bmauthbricks.AuthRelationshipPushBrick(nil)
+	tmp := authpush.AuthRelationshipPushBrick(authpush.AuthPushBrick(nil))
 	authPushSkeleton(w, r, tmp)
 }

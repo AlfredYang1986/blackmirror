@@ -2,11 +2,12 @@ package bmpipe
 
 import (
 	"bytes"
-	//"fmt"
+	"fmt"
 	"github.com/alfredyang1986/blackmirror/bmerror"
-	"github.com/alfredyang1986/blackmirror/bmmodel/auth"
+	//"github.com/alfredyang1986/blackmirror/bmmodel/auth"
 	"github.com/alfredyang1986/blackmirror/bmmodel/request"
 	"github.com/alfredyang1986/blackmirror/jsonapi"
+	"io"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -32,17 +33,29 @@ type BMBrick struct {
 type BMBrickFace interface {
 	BrickInstance() *BMBrick
 	Prepare(ptr interface{}) error
-	Exec() error
+	Exec(func(error)) error
 	Done() error
+	ResultTo(w io.Writer) error
 }
 
 /*------------------------------------------------
  * brick interface
  *------------------------------------------------*/
 
-func HttpPost(b BMBrickFace) {
+func NextBrickLocal(b BMBrickFace) {
+	nxt := b.BrickInstance().Next
+	nxt.Prepare(b.BrickInstance().Pr)
+	nxt.Exec(nil)
+	nxt.Done()
+	b.BrickInstance().Err = nxt.BrickInstance().Err
+	b.BrickInstance().Pr = nxt.BrickInstance().Pr
+}
+
+func NextBrickRemote(b BMBrickFace) {
 
 	nxt := b.BrickInstance().Next
+	fmt.Println("next")
+	fmt.Println(nxt)
 	if b.BrickInstance().Err != 0 || nxt == nil {
 		return
 	}
@@ -54,11 +67,8 @@ func HttpPost(b BMBrickFace) {
 	url := strings.Join([]string{"http://", host, ":", port, router}, "")
 	contentType := "application/json;charset=utf-8"
 
-	pr := b.BrickInstance().Pr
-	tmp := pr.(auth.BMAuth)
-
 	sb := strings.Builder{}
-	jsonapi.ToJsonAPI(&tmp, &sb)
+	b.ResultTo(&sb)
 
 	bs := []byte(sb.String())
 	body := bytes.NewBuffer(bs)

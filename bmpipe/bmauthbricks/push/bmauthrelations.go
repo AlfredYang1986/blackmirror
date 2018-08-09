@@ -1,44 +1,39 @@
-package bmauthbricks
+package authpush
 
 import (
 	"fmt"
 	"github.com/alfredyang1986/blackmirror/bmmodel/auth"
 	"github.com/alfredyang1986/blackmirror/bmmodel/request"
 	"github.com/alfredyang1986/blackmirror/bmpipe"
+	"github.com/alfredyang1986/blackmirror/jsonapi"
 	"gopkg.in/mgo.v2/bson"
-	"sync"
+	"io"
 )
 
 type tBMAuthRSPushBrick struct {
 	bk *bmpipe.BMBrick
 }
 
-var arsb *tBMAuthRSPushBrick
-var arsbo sync.Once
-
 func AuthRelationshipPushBrick(n bmpipe.BMBrickFace) bmpipe.BMBrickFace {
-	arsbo.Do(func() {
-		arsb = &tBMAuthRSPushBrick{
-			bk: &bmpipe.BMBrick{
-				Host:   "localhost",
-				Port:   8080,
-				Router: "/auth/rs/push",
-				Next:   n,
-				Pr:     nil,
-				Req:    nil,
-				Err:    0,
-			},
-		}
-	})
+	arsb := &tBMAuthRSPushBrick{
+		bk: &bmpipe.BMBrick{
+			Host:   "localhost",
+			Port:   8080,
+			Router: "/auth/rs/push",
+			Next:   n,
+			Pr:     nil,
+			Req:    nil,
+			Err:    0,
+		},
+	}
 	return arsb
-
 }
 
 /*------------------------------------------------
  * brick interface
  *------------------------------------------------*/
 
-func (b *tBMAuthRSPushBrick) Exec() error {
+func (b *tBMAuthRSPushBrick) Exec(f func(error)) error {
 	var tmp auth.BMAuth = b.bk.Pr.(auth.BMAuth)
 	eq := request.EQCond{}
 	eq.Ky = "auth_id"
@@ -73,10 +68,17 @@ func (b *tBMAuthRSPushBrick) Prepare(pr interface{}) error {
 }
 
 func (b *tBMAuthRSPushBrick) Done() error {
-	bmpipe.HttpPost(b)
+	bmpipe.NextBrickRemote(b)
 	return nil
 }
 
 func (b *tBMAuthRSPushBrick) BrickInstance() *bmpipe.BMBrick {
 	return b.bk
+}
+
+func (b *tBMAuthRSPushBrick) ResultTo(w io.Writer) error {
+	pr := b.BrickInstance().Pr
+	tmp := pr.(auth.BMAuth)
+	err := jsonapi.ToJsonAPI(&tmp, w)
+	return err
 }
