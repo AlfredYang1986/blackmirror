@@ -56,3 +56,16 @@ func (req Request) Cond2UpdateObj() bson.M {
 	}
 	return rst
 }
+
+func (req Request) CondiQueryVal(ky string) interface{} {
+	for _, cond := range req.Cond {
+		if cond.IsQueryCondi() {
+			for k, v := range cond.Cond2QueryObj() {
+				if k == ky {
+					return v
+				}
+			}
+		}
+	}
+	return nil
+}

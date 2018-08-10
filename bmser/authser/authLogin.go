@@ -2,7 +2,8 @@ package authser
 
 import (
 	"github.com/alfredyang1986/blackmirror/bmmodel/auth"
-	"github.com/alfredyang1986/blackmirror/bmmodel/request"
+	//"github.com/alfredyang1986/blackmirror/bmmodel/request"
+	//"fmt"
 	"github.com/alfredyang1986/blackmirror/bmpipe/bmauthbricks/find"
 	"github.com/alfredyang1986/blackmirror/bmpipe/bmauthbricks/push"
 	"github.com/alfredyang1986/blackmirror/bmser"
@@ -16,7 +17,7 @@ func LoginWithPhone(w http.ResponseWriter, r *http.Request) {
 			tmp := authpush.PhonePushBrick(nil)
 			reval := auth.BMAuth{}
 			reval.Phone = auth.BMPhone{}
-			reval.Phone.Phone = bks.BrickInstance().Req.Cond[0].(request.EQCond).Vy.(string)
+			reval.Phone.Phone = bks.BrickInstance().Req.CondiQueryVal("phone").(string)
 			bks.BrickInstance().Pr = reval
 			bks.BrickInstance().Next = tmp
 		} else {

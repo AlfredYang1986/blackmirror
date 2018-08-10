@@ -48,7 +48,7 @@ func (b *tBMAuthPhoneUpdateBrick) Exec(f func(error)) error {
 
 func (b *tBMAuthPhoneUpdateBrick) Prepare(pr interface{}) error {
 	req := pr.(request.Request)
-	b.bk.Pr = req
+	b.bk.Req = &req
 	return nil
 }
 
@@ -73,7 +73,7 @@ func (b *tBMAuthPhoneUpdateBrick) Return(w http.ResponseWriter) {
 	if ec != 0 {
 		bmerror.ErrInstance().ErrorReval(ec, w)
 	} else {
-		var reval auth.BMAuth = b.BrickInstance().Pr.(auth.BMAuth)
+		var reval auth.BMPhone = b.BrickInstance().Pr.(auth.BMPhone)
 		jsonapi.ToJsonAPI(&reval, w)
 	}
 }

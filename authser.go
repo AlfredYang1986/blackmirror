@@ -19,6 +19,7 @@ func main() {
 	fac.RegisterModel("BMErrorNode", &bmerror.BMErrorNode{})
 	fac.RegisterModel("request", &request.Request{})
 	fac.RegisterModel("eq_condi", &request.EQCond{})
+	fac.RegisterModel("up_condi", &request.UPCond{})
 
 	r := authser.GetRouter()
 	http.ListenAndServe(":8080", r)

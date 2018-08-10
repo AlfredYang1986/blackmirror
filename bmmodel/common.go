@@ -131,7 +131,10 @@ func UpdateOne(req request.Request, ptr BMObject) error {
 		}
 
 	}
-	err = c.Update(bson.M{"_id": ptr.QueryObjectId}, ptr)
+	ptr.ResetIdWithId_()
+	err = c.Update(bson.M{"_id": ptr.QueryObjectId()}, ptr)
+	fmt.Println(ptr)
+	fmt.Println(err)
 
 	return err
 
