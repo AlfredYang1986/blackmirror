@@ -68,6 +68,10 @@ func (bd *BMPhone) FindOne(req request.Request) error {
 	return bmmodel.FindOne(req, bd)
 }
 
+func (bd *BMPhone) UpdateBMObject(req request.Request) error {
+	return bmmodel.UpdateOne(req, bd)
+}
+
 /*------------------------------------------------
  * phone interface
  *------------------------------------------------*/

@@ -2,10 +2,13 @@ package authpush
 
 import (
 	//"fmt"
+	"github.com/alfredyang1986/blackmirror/bmcommon/bmsingleton/bmconf"
+	"github.com/alfredyang1986/blackmirror/bmerror"
 	"github.com/alfredyang1986/blackmirror/bmmodel/auth"
 	"github.com/alfredyang1986/blackmirror/bmpipe"
 	"github.com/alfredyang1986/blackmirror/jsonapi"
 	"io"
+	"net/http"
 )
 
 type tBMWechatPushBrick struct {
@@ -13,11 +16,13 @@ type tBMWechatPushBrick struct {
 }
 
 func WechatPushBrick(n bmpipe.BMBrickFace) bmpipe.BMBrickFace {
+	conf := bmconf.GetBMBrickConf("tBMWechatPushBrick")
+
 	wpb := &tBMWechatPushBrick{
 		bk: &bmpipe.BMBrick{
-			Host:   "localhost",
-			Port:   8080,
-			Router: "/auth/wechat/push",
+			Host:   conf.Host,
+			Port:   conf.Port,
+			Router: conf.Router, //"/auth/wechat/push",
 			Next:   n,
 			Pr:     nil,
 			Req:    nil,
@@ -64,4 +69,14 @@ func (b *tBMWechatPushBrick) ResultTo(w io.Writer) error {
 	tmp := pr.(auth.BMAuth)
 	err := jsonapi.ToJsonAPI(&tmp, w)
 	return err
+}
+
+func (b *tBMWechatPushBrick) Return(w http.ResponseWriter) {
+	ec := b.BrickInstance().Err
+	if ec != 0 {
+		bmerror.ErrInstance().ErrorReval(ec, w)
+	} else {
+		var reval auth.BMAuth = b.BrickInstance().Pr.(auth.BMAuth)
+		jsonapi.ToJsonAPI(&reval, w)
+	}
 }

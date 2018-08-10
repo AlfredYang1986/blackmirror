@@ -6,7 +6,7 @@ import (
 
 type BMMongo interface {
 	InsertBMObject() error
-	//UpdateBMObject(req)
-	FindOne(req request.Request) error
+	UpdateBMObject(request.Request) error
+	FindOne(request.Request) error
 	//FindMulti(req request.Request) ([]interface{}, error)
 }

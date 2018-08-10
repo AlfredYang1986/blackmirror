@@ -84,3 +84,7 @@ func (loc *Location) InsertBMObject() error {
 func (loc *Location) FindOne(req request.Request) error {
 	return bmmodel.FindOne(req, loc)
 }
+
+func (loc *Location) UpdateBMObject(req request.Request) error {
+	return bmmodel.UpdateOne(req, bd)
+}

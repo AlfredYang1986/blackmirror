@@ -1,4 +1,4 @@
-package authfind
+package authupdate
 
 import (
 	//"fmt"
@@ -8,23 +8,23 @@ import (
 	"github.com/alfredyang1986/blackmirror/bmmodel/request"
 	"github.com/alfredyang1986/blackmirror/bmpipe"
 	"github.com/alfredyang1986/blackmirror/jsonapi"
+	//"gopkg.in/mgo.v2/bson"
 	"io"
 	"net/http"
-	"reflect"
 )
 
-type tBMAuthPhoneFindBrick struct {
+type tBMAuthPhoneUpdateBrick struct {
 	bk *bmpipe.BMBrick
 }
 
-func PhoneFindBrick(n bmpipe.BMBrickFace) bmpipe.BMBrickFace {
-	conf := bmconf.GetBMBrickConf("tBMAuthPhoneFindBrick")
+func AuthRSUpdate(n bmpipe.BMBrickFace) bmpipe.BMBrickFace {
+	conf := bmconf.GetBMBrickConf("tBMAuthPhoneUpdateBrick")
 
-	pfb := &tBMAuthPhoneFindBrick{
+	pfb := &tBMAuthPhoneUpdateBrick{
 		bk: &bmpipe.BMBrick{
 			Host:   conf.Host,
 			Port:   conf.Port,
-			Router: conf.Router, //"/auth/phone/find",
+			Router: conf.Router, //"/find/rs/2/auth",
 			Next:   n,
 			Pr:     nil,
 			Req:    nil,
@@ -32,51 +32,43 @@ func PhoneFindBrick(n bmpipe.BMBrickFace) bmpipe.BMBrickFace {
 		},
 	}
 	return pfb
+
 }
 
 /*------------------------------------------------
  * brick interface
  *------------------------------------------------*/
 
-func (b *tBMAuthPhoneFindBrick) Exec(f func(error)) error {
-	var tmp auth.BMPhone
-	err := tmp.FindOne(*b.bk.Req)
+func (b *tBMAuthPhoneUpdateBrick) Exec(f func(error)) error {
+	tmp := auth.BMPhone{}
+	tmp.UpdateBMObject(*b.bk.Req)
 	b.bk.Pr = tmp
-	if f != nil {
-		f(err)
-	}
-	return err
-}
-
-func (b *tBMAuthPhoneFindBrick) Prepare(pr interface{}) error {
-	req := pr.(request.Request)
-	b.bk.Req = &req
 	return nil
 }
 
-func (b *tBMAuthPhoneFindBrick) Done() error {
+func (b *tBMAuthPhoneUpdateBrick) Prepare(pr interface{}) error {
+	req := pr.(request.Request)
+	b.bk.Pr = req
+	return nil
+}
+
+func (b *tBMAuthPhoneUpdateBrick) Done() error {
 	bmpipe.NextBrickRemote(b)
 	return nil
 }
 
-func (b *tBMAuthPhoneFindBrick) BrickInstance() *bmpipe.BMBrick {
+func (b *tBMAuthPhoneUpdateBrick) BrickInstance() *bmpipe.BMBrick {
 	return b.bk
 }
 
-func (b *tBMAuthPhoneFindBrick) ResultTo(w io.Writer) error {
+func (b *tBMAuthPhoneUpdateBrick) ResultTo(w io.Writer) error {
 	pr := b.BrickInstance().Pr
-	if reflect.ValueOf(pr).Type().Name() == "BMPhone" {
-		tmp := pr.(auth.BMPhone)
-		err := jsonapi.ToJsonAPI(&tmp, w)
-		return err
-	} else {
-		tmp := pr.(auth.BMAuth)
-		err := jsonapi.ToJsonAPI(&tmp, w)
-		return err
-	}
+	tmp := pr.(auth.BMPhone)
+	err := jsonapi.ToJsonAPI(&tmp, w)
+	return err
 }
 
-func (b *tBMAuthPhoneFindBrick) Return(w http.ResponseWriter) {
+func (b *tBMAuthPhoneUpdateBrick) Return(w http.ResponseWriter) {
 	ec := b.BrickInstance().Err
 	if ec != 0 {
 		bmerror.ErrInstance().ErrorReval(ec, w)

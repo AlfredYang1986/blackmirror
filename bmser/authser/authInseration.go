@@ -1,61 +1,28 @@
 package authser
 
 import (
-	//"fmt"
-	"github.com/alfredyang1986/blackmirror/bmerror"
-	"github.com/alfredyang1986/blackmirror/bmmodel/auth"
-	"github.com/alfredyang1986/blackmirror/bmpipe"
 	"github.com/alfredyang1986/blackmirror/bmpipe/bmauthbricks/push"
-	"github.com/alfredyang1986/blackmirror/jsonapi"
-	"io/ioutil"
-	"log"
+	"github.com/alfredyang1986/blackmirror/bmser"
 	"net/http"
 )
 
-func authPushSkeleton(w http.ResponseWriter, r *http.Request, bks bmpipe.BMBrickFace) {
-	body, err := ioutil.ReadAll(r.Body)
-	if err != nil {
-		log.Printf("Error reading body: %v", err)
-		http.Error(w, "can't read body", http.StatusBadRequest)
-		return
-	}
-	sjson := string(body)
-
-	rst, _ := jsonapi.FromJsonAPI(sjson)
-	t := rst.(auth.BMAuth)
-
-	w.Header().Add("Content-Type", "application/json")
-
-	bks.Prepare(t)
-	bks.Exec(nil)
-	bks.Done()
-
-	ec := bks.BrickInstance().Err
-	if ec != 0 {
-		bmerror.ErrInstance().ErrorReval(ec, w)
-	} else {
-		var reval auth.BMAuth = bks.BrickInstance().Pr.(auth.BMAuth)
-		jsonapi.ToJsonAPI(&reval, w)
-	}
-}
-
 func PushAuth(w http.ResponseWriter, r *http.Request) {
 	tmp := authpush.AuthPushBrick(nil)
-	authPushSkeleton(w, r, tmp)
+	bmser.InvokeSkeleton(w, r, tmp, nil)
 }
 
 func PushPhone(w http.ResponseWriter, r *http.Request) {
 	//tmp := authpush.PhonePushBrick(authpush.AuthRelationshipPushBrick(nil))
 	tmp := authpush.PhonePushBrick(authpush.WechatPushBrick(nil))
-	authPushSkeleton(w, r, tmp)
+	bmser.InvokeSkeleton(w, r, tmp, nil)
 }
 
 func PushWechat(w http.ResponseWriter, r *http.Request) {
 	tmp := authpush.WechatPushBrick(authpush.AuthRelationshipPushBrick(nil))
-	authPushSkeleton(w, r, tmp)
+	bmser.InvokeSkeleton(w, r, tmp, nil)
 }
 
 func PushAuthRS(w http.ResponseWriter, r *http.Request) {
 	tmp := authpush.AuthRelationshipPushBrick(authpush.AuthPushBrick(nil))
-	authPushSkeleton(w, r, tmp)
+	bmser.InvokeSkeleton(w, r, tmp, nil)
 }

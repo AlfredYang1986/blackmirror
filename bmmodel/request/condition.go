@@ -6,5 +6,9 @@ import (
 )
 
 type Condition interface {
+	IsQueryCondi() bool
 	Cond2QueryObj() bson.M
+
+	IsUpdateCondi() bool
+	Cond2UpdateObj() bson.M
 }

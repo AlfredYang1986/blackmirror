@@ -36,8 +36,22 @@ func (req Request) QueryConnect(tag string) interface{} {
 func (req Request) Cond2QueryObj() bson.M {
 	rst := make(map[string]interface{})
 	for _, cond := range req.Cond {
-		for k, v := range cond.Cond2QueryObj() {
-			rst[k] = v
+		if cond.IsQueryCondi() {
+			for k, v := range cond.Cond2QueryObj() {
+				rst[k] = v
+			}
+		}
+	}
+	return rst
+}
+
+func (req Request) Cond2UpdateObj() bson.M {
+	rst := make(map[string]interface{})
+	for _, cond := range req.Cond {
+		if cond.IsUpdateCondi() {
+			for k, v := range cond.Cond2UpdateObj() {
+				rst[k] = v
+			}
 		}
 	}
 	return rst

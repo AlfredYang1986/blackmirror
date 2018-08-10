@@ -31,11 +31,13 @@ type BMBrick struct {
 }
 
 type BMBrickFace interface {
+	//FromJsonToInstance() interface{}
 	BrickInstance() *BMBrick
 	Prepare(ptr interface{}) error
 	Exec(func(error)) error
 	Done() error
 	ResultTo(w io.Writer) error
+	Return(w http.ResponseWriter)
 }
 
 /*------------------------------------------------

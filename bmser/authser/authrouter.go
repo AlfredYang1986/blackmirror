@@ -26,6 +26,9 @@ func GetRouter() *mux.Router {
 		r.HandleFunc("/find/phone/2/rs", PhoneToAuthRS)
 		r.HandleFunc("/find/rs/2/auth", AuthRS2Auth)
 
+		//r.HandleFunc("/auth/rs/update", UpdateAuthRS)
+		r.HandleFunc("/auth/phone/update", UpdateAuthPhone)
+
 		r.HandleFunc("/login/phone", LoginWithPhone)
 	})
 

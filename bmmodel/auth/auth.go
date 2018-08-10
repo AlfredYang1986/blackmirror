@@ -80,3 +80,7 @@ func (bd *BMAuth) InsertBMObject() error {
 func (bd *BMAuth) FindOne(req request.Request) error {
 	return bmmodel.FindOne(req, bd)
 }
+
+func (bd *BMAuth) UpdateBMObject(req request.Request) error {
+	return bmmodel.UpdateOne(req, bd)
+}

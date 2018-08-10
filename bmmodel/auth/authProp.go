@@ -68,3 +68,7 @@ func (bd *BMAuthProp) InsertBMObject() error {
 func (bd *BMAuthProp) FindOne(req request.Request) error {
 	return bmmodel.FindOne(req, bd)
 }
+
+func (bd *BMAuthProp) UpdateBMObject(req request.Request) error {
+	return bmmodel.UpdateOne(req, bd)
+}

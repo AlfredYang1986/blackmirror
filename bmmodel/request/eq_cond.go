@@ -21,3 +21,15 @@ func (t EQCond) QueryConnect(tag string) interface{} {
 func (cond EQCond) Cond2QueryObj() bson.M {
 	return bson.M{cond.Ky: cond.Vy}
 }
+
+func (cond EQCond) Cond2UpdateObj() bson.M {
+	return make(map[string]interface{})
+}
+
+func (cond EQCond) IsQueryCondi() bool {
+	return true
+}
+
+func (cond EQCond) IsUpdateCondi() bool {
+	return false
+}

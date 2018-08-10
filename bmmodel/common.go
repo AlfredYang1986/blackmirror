@@ -99,6 +99,44 @@ func FindOne(req request.Request, ptr BMObject) error {
 	return nil
 }
 
+func UpdateOne(req request.Request, ptr BMObject) error {
+	session, err := mgo.Dial("localhost:27017")
+	if err != nil {
+		return errors.New("dial db error")
+	}
+	defer session.Close()
+
+	c := session.DB("test").C(req.Res)
+	err = c.Find(req.Cond2QueryObj()).One(ptr)
+	if err != nil {
+		return err
+	}
+
+	up := req.Cond2UpdateObj()
+	v := reflect.ValueOf(ptr).Elem()
+	for i := 0; i < v.NumField(); i++ {
+		fieldInfo := v.Type().Field(i) // a.reflect.struct.field
+		fieldValue := v.Field(i)
+		tag := fieldInfo.Tag // a.reflect.tag
+
+		var name string
+		if tag.Get(BMMongo) != "" {
+			name = tag.Get(BMMongo)
+		} else {
+			name = strings.ToLower(fieldInfo.Name)
+		}
+
+		if up[name] != nil {
+			fieldValue.Set(reflect.ValueOf(up[name]))
+		}
+
+	}
+	err = c.Update(bson.M{"_id": ptr.QueryObjectId}, ptr)
+
+	return err
+
+}
+
 func AttrWithName(ptr interface{}, attr string, tagN string) (interface{}, error) {
 	v := reflect.ValueOf(ptr).Elem()
 	for i := 0; i < v.NumField(); i++ {

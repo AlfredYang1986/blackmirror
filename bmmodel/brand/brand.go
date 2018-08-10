@@ -95,3 +95,7 @@ func (bd *Brand) InsertBMObject() error {
 func (bd *Brand) FindOne(req request.Request) error {
 	return bmmodel.FindOne(req, bd)
 }
+
+func (bd *Brand) UpdateBMObject(req request.Request) error {
+	return bmmodel.UpdateOne(req, bd)
+}

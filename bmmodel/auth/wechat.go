@@ -72,6 +72,10 @@ func (bd *BMWechat) FindOne(req request.Request) error {
 	return bmmodel.FindOne(req, bd)
 }
 
+func (bd *BMWechat) UpdateBMObject(req request.Request) error {
+	return bmmodel.UpdateOne(req, bd)
+}
+
 /*------------------------------------------------
  * wechat interface
  *------------------------------------------------*/

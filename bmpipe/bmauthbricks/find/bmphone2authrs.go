@@ -2,11 +2,14 @@ package authfind
 
 import (
 	"fmt"
+	"github.com/alfredyang1986/blackmirror/bmcommon/bmsingleton/bmconf"
+	"github.com/alfredyang1986/blackmirror/bmerror"
 	"github.com/alfredyang1986/blackmirror/bmmodel/auth"
 	"github.com/alfredyang1986/blackmirror/bmmodel/request"
 	"github.com/alfredyang1986/blackmirror/bmpipe"
 	"github.com/alfredyang1986/blackmirror/jsonapi"
 	"io"
+	"net/http"
 )
 
 type tBMPhone2AuthRSBrick struct {
@@ -14,11 +17,13 @@ type tBMPhone2AuthRSBrick struct {
 }
 
 func Phone2AuthRSBrick(n bmpipe.BMBrickFace) bmpipe.BMBrickFace {
+	conf := bmconf.GetBMBrickConf("tBMPhone2AuthRSBrick")
+
 	pfb := &tBMPhone2AuthRSBrick{
 		bk: &bmpipe.BMBrick{
-			Host:   "localhost",
-			Port:   8080,
-			Router: "/find/phone/2/rs",
+			Host:   conf.Host,
+			Port:   conf.Port,
+			Router: conf.Router, //"/find/phone/2/rs",
 			Next:   n,
 			Pr:     nil,
 			Req:    nil,
@@ -70,4 +75,15 @@ func (b *tBMPhone2AuthRSBrick) ResultTo(w io.Writer) error {
 	tmp := pr.(auth.BMAuthProp)
 	err := jsonapi.ToJsonAPI(&tmp, w)
 	return err
+}
+
+func (b *tBMPhone2AuthRSBrick) Return(w http.ResponseWriter) {
+	ec := b.BrickInstance().Err
+	if ec != 0 {
+		bmerror.ErrInstance().ErrorReval(ec, w)
+	} else {
+		var reval auth.BMAuth = b.BrickInstance().Pr.(auth.BMAuth)
+		//var reval auth.BMAuthProp = bks.BrickInstance().Pr.(auth.BMAuthProp)
+		jsonapi.ToJsonAPI(&reval, w)
+	}
 }
