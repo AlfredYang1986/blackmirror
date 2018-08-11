@@ -8,6 +8,11 @@ import (
 )
 
 func UpdateAuthPhone(w http.ResponseWriter, r *http.Request) {
-	bks := authupdate.AuthRSUpdate(nil)
+	bks := authupdate.AuthPhoneUpdate(nil)
+	bmser.InvokeSkeleton(w, r, bks, nil)
+}
+
+func UpdateWechatPhone(w http.ResponseWriter, r *http.Request) {
+	bks := authupdate.AuthWechatUpdate(nil)
 	bmser.InvokeSkeleton(w, r, bks, nil)
 }

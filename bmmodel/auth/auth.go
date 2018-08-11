@@ -2,6 +2,7 @@ package auth
 
 import (
 	"github.com/alfredyang1986/blackmirror/bmmodel"
+	"github.com/alfredyang1986/blackmirror/bmmodel/profile"
 	"github.com/alfredyang1986/blackmirror/bmmodel/request"
 	"gopkg.in/mgo.v2/bson"
 )
@@ -10,8 +11,9 @@ type BMAuth struct {
 	Id  string        `json:"id"`
 	Id_ bson.ObjectId `bson:"_id"`
 
-	Phone  BMPhone  `json:"phone" jsonapi:"relationships"`
-	Wechat BMWechat `json:"wechat" jsonapi:"relationships"`
+	Phone   BMPhone           `json:"phone" jsonapi:"relationships"`
+	Wechat  BMWechat          `json:"wechat" jsonapi:"relationships"`
+	Profile profile.BMProfile `json:"profile" jsonapi:"relationships"`
 }
 
 /*------------------------------------------------
@@ -55,6 +57,8 @@ func (bd BMAuth) SetConnect(tag string, v interface{}) interface{} {
 		bd.Phone = v.(BMPhone)
 	case "wechat":
 		bd.Wechat = v.(BMWechat)
+	case "profile":
+		bd.Profile = v.(profile.BMProfile)
 	}
 	return bd
 }
@@ -65,6 +69,8 @@ func (bd BMAuth) QueryConnect(tag string) interface{} {
 		return bd.Phone
 	case "wechat":
 		return bd.Wechat
+	case "profile":
+		return bd.Profile
 	}
 	return bd
 }

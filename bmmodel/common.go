@@ -90,7 +90,7 @@ func FindOne(req request.Request, ptr BMObject) error {
 	defer session.Close()
 
 	c := session.DB("test").C(req.Res)
-	err = c.Find(req.Cond2QueryObj()).One(ptr)
+	err = c.Find(req.Cond2QueryObj(req.Res)).One(ptr)
 	if err != nil {
 		return err
 	}
@@ -107,7 +107,7 @@ func UpdateOne(req request.Request, ptr BMObject) error {
 	defer session.Close()
 
 	c := session.DB("test").C(req.Res)
-	err = c.Find(req.Cond2QueryObj()).One(ptr)
+	err = c.Find(req.Cond2QueryObj(req.Res)).One(ptr)
 	if err != nil {
 		return err
 	}
@@ -129,12 +129,9 @@ func UpdateOne(req request.Request, ptr BMObject) error {
 		if up[name] != nil {
 			fieldValue.Set(reflect.ValueOf(up[name]))
 		}
-
 	}
 	ptr.ResetIdWithId_()
 	err = c.Update(bson.M{"_id": ptr.QueryObjectId()}, ptr)
-	fmt.Println(ptr)
-	fmt.Println(err)
 
 	return err
 

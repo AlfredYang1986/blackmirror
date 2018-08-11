@@ -8,6 +8,7 @@ type EQCond struct {
 	Id string      `json:"id"`
 	Ky string      `json:"key"`
 	Vy interface{} `json:"val"`
+	Ct string      `json:"category"`
 }
 
 func (t EQCond) SetConnect(tag string, v interface{}) interface{} {
@@ -18,12 +19,17 @@ func (t EQCond) QueryConnect(tag string) interface{} {
 	return nil
 }
 
-func (cond EQCond) Cond2QueryObj() bson.M {
-	return bson.M{cond.Ky: cond.Vy}
+func (cond EQCond) Cond2QueryObj(cate string) bson.M {
+	tmp := len(cond.Ct) > 0 && cond.Ct == cate
+	if tmp || len(cond.Ct) == 0 {
+		return bson.M{cond.Ky: cond.Vy}
+	} else {
+		return bson.M{}
+	}
 }
 
 func (cond EQCond) Cond2UpdateObj() bson.M {
-	return make(map[string]interface{})
+	return bson.M{}
 }
 
 func (cond EQCond) IsQueryCondi() bool {

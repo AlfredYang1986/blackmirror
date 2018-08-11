@@ -13,14 +13,14 @@ import (
 	"net/http"
 )
 
-type tBMAuthPhoneUpdateBrick struct {
+type tBMAuthWechatUpdateBrick struct {
 	bk *bmpipe.BMBrick
 }
 
-func AuthPhoneUpdate(n bmpipe.BMBrickFace) bmpipe.BMBrickFace {
-	conf := bmconf.GetBMBrickConf("tBMAuthPhoneUpdateBrick")
+func AuthWechatUpdate(n bmpipe.BMBrickFace) bmpipe.BMBrickFace {
+	conf := bmconf.GetBMBrickConf("tBMAuthWechatUpdateBrick")
 
-	pfb := &tBMAuthPhoneUpdateBrick{
+	pfb := &tBMAuthWechatUpdateBrick{
 		bk: &bmpipe.BMBrick{
 			Host:   conf.Host,
 			Port:   conf.Port,
@@ -32,43 +32,42 @@ func AuthPhoneUpdate(n bmpipe.BMBrickFace) bmpipe.BMBrickFace {
 		},
 	}
 	return pfb
-
 }
 
 /*------------------------------------------------
  * brick interface
  *------------------------------------------------*/
 
-func (b *tBMAuthPhoneUpdateBrick) Exec(f func(error)) error {
+func (b *tBMAuthWechatUpdateBrick) Exec(f func(error)) error {
 	tmp := auth.BMPhone{}
 	tmp.UpdateBMObject(*b.bk.Req)
 	b.bk.Pr = tmp
 	return nil
 }
 
-func (b *tBMAuthPhoneUpdateBrick) Prepare(pr interface{}) error {
+func (b *tBMAuthWechatUpdateBrick) Prepare(pr interface{}) error {
 	req := pr.(request.Request)
 	b.bk.Req = &req
 	return nil
 }
 
-func (b *tBMAuthPhoneUpdateBrick) Done() error {
+func (b *tBMAuthWechatUpdateBrick) Done() error {
 	bmpipe.NextBrickRemote(b)
 	return nil
 }
 
-func (b *tBMAuthPhoneUpdateBrick) BrickInstance() *bmpipe.BMBrick {
+func (b *tBMAuthWechatUpdateBrick) BrickInstance() *bmpipe.BMBrick {
 	return b.bk
 }
 
-func (b *tBMAuthPhoneUpdateBrick) ResultTo(w io.Writer) error {
+func (b *tBMAuthWechatUpdateBrick) ResultTo(w io.Writer) error {
 	pr := b.BrickInstance().Pr
 	tmp := pr.(auth.BMPhone)
 	err := jsonapi.ToJsonAPI(&tmp, w)
 	return err
 }
 
-func (b *tBMAuthPhoneUpdateBrick) Return(w http.ResponseWriter) {
+func (b *tBMAuthWechatUpdateBrick) Return(w http.ResponseWriter) {
 	ec := b.BrickInstance().Err
 	if ec != 0 {
 		bmerror.ErrInstance().ErrorReval(ec, w)

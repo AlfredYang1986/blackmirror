@@ -18,7 +18,12 @@ func PushPhone(w http.ResponseWriter, r *http.Request) {
 }
 
 func PushWechat(w http.ResponseWriter, r *http.Request) {
-	tmp := authpush.WechatPushBrick(authpush.AuthRelationshipPushBrick(nil))
+	tmp := authpush.WechatPushBrick(authpush.ProfilePushBrick(nil))
+	bmser.InvokeSkeleton(w, r, tmp, nil)
+}
+
+func PushProfile(w http.ResponseWriter, r *http.Request) {
+	tmp := authpush.ProfilePushBrick(authpush.AuthRelationshipPushBrick(nil))
 	bmser.InvokeSkeleton(w, r, tmp, nil)
 }
 

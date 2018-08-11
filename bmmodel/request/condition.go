@@ -7,7 +7,7 @@ import (
 
 type Condition interface {
 	IsQueryCondi() bool
-	Cond2QueryObj() bson.M
+	Cond2QueryObj(cate string) bson.M
 
 	IsUpdateCondi() bool
 	Cond2UpdateObj() bson.M

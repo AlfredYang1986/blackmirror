@@ -17,7 +17,7 @@ func LoginWithPhone(w http.ResponseWriter, r *http.Request) {
 			tmp := authpush.PhonePushBrick(nil)
 			reval := auth.BMAuth{}
 			reval.Phone = auth.BMPhone{}
-			reval.Phone.Phone = bks.BrickInstance().Req.CondiQueryVal("phone").(string)
+			reval.Phone.Phone = bks.BrickInstance().Req.CondiQueryVal("phone", "BMPhone").(string)
 			bks.BrickInstance().Pr = reval
 			bks.BrickInstance().Next = tmp
 		} else {

@@ -48,9 +48,33 @@
         "router":"/auth/wechat/push"
     },
     {
-        "name":"tBMAuthRSUpdateBrick",
+        "name":"tBMAuthPhoneUpdateBrick",
         "host":"localhost",
         "port":8080,
-        "router":"/auth/rs/update"
+        "router":"/auth/phone/update"
+    },
+    {
+        "name":"tBMAuthWechatUpdateBrick",
+        "host":"localhost",
+        "port":8080,
+        "router":"/auth/wchat/update"
+    },
+    {
+        "name":"tBMProfilePushBrick",
+        "host":"localhost",
+        "port":8080,
+        "router":"/auth/profile/push"
+    },
+    {
+        "name":"tBMFindProfileBrick",
+        "host":"localhost",
+        "port":8080,
+        "router":"/auth/profile/find"
+    },
+    {
+        "name":"tBMCompanyPushBrick",
+        "host":"localhost",
+        "port":8080,
+        "router":"/profile/company/push"
     }
 ]

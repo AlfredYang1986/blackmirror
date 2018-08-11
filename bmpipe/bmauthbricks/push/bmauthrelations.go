@@ -59,6 +59,7 @@ func (b *tBMAuthRSPushBrick) Exec(f func(error)) error {
 		qr.Auth_id = tmp.Id
 		qr.Phone_id = tmp.Phone.Id
 		qr.Wechat_id = tmp.Wechat.Id
+		qr.Profile_id = tmp.Profile.Id
 		qr.InsertBMObject()
 	}
 	fmt.Println(qr)

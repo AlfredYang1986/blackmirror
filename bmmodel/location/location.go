@@ -86,5 +86,5 @@ func (loc *Location) FindOne(req request.Request) error {
 }
 
 func (loc *Location) UpdateBMObject(req request.Request) error {
-	return bmmodel.UpdateOne(req, bd)
+	return bmmodel.UpdateOne(req, loc)
 }

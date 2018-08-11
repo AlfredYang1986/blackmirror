@@ -2,7 +2,7 @@ package bmconf
 
 import (
 	"encoding/json"
-	//"fmt"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"strings"
@@ -25,6 +25,7 @@ func GetBMBrickConf(n string) BMBrickConf {
 }
 
 func initedConf() {
+	fmt.Println("start of init conf")
 	b, _ := ioutil.ReadFile("resource/conf.json")
 	jsonStream := string(b)
 	dec := json.NewDecoder(strings.NewReader(jsonStream))
@@ -47,4 +48,5 @@ func initedConf() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	fmt.Println("init conf success")
 }

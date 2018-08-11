@@ -5,6 +5,7 @@ import (
 	"github.com/alfredyang1986/blackmirror/bmcommon/bmsingleton/bmconf"
 	"github.com/alfredyang1986/blackmirror/bmerror"
 	"github.com/alfredyang1986/blackmirror/bmmodel/auth"
+	"github.com/alfredyang1986/blackmirror/bmmodel/profile"
 	"github.com/alfredyang1986/blackmirror/bmmodel/request"
 	"github.com/alfredyang1986/blackmirror/bmpipe"
 	"github.com/alfredyang1986/blackmirror/jsonapi"
@@ -44,8 +45,10 @@ func (b *tBMAuthRS2AuthBrick) Exec(f func(error)) error {
 	reval, err := findAuth(prop)
 	phone, err := findPhone(prop)
 	wechat, err := findWechat(prop)
+	profile, err := findProfile(prop)
 	reval.Phone = phone
 	reval.Wechat = wechat
+	reval.Profile = profile
 	b.bk.Pr = reval
 	return err
 }
@@ -132,6 +135,24 @@ func findAuth(prop auth.BMAuthProp) (auth.BMAuth, error) {
 	fmt.Println(c)
 
 	reval := auth.BMAuth{}
+	err := reval.FindOne(c.(request.Request))
+
+	return reval, err
+
+}
+
+func findProfile(prop auth.BMAuthProp) (profile.BMProfile, error) {
+	eq := request.EQCond{}
+	eq.Ky = "_id"
+	eq.Vy = bson.ObjectIdHex(prop.Auth_id)
+	req := request.Request{}
+	req.Res = "BMPfile"
+	var condi []interface{}
+	condi = append(condi, eq)
+	c := req.SetConnect("conditions", condi)
+	fmt.Println(c)
+
+	reval := profile.BMProfile{}
 	err := reval.FindOne(c.(request.Request))
 
 	return reval, err

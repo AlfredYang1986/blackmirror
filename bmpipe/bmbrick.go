@@ -2,7 +2,7 @@ package bmpipe
 
 import (
 	"bytes"
-	"fmt"
+	//"fmt"
 	"github.com/alfredyang1986/blackmirror/bmerror"
 	//"github.com/alfredyang1986/blackmirror/bmmodel/auth"
 	"github.com/alfredyang1986/blackmirror/bmmodel/request"
@@ -56,8 +56,6 @@ func NextBrickLocal(b BMBrickFace) {
 func NextBrickRemote(b BMBrickFace) {
 
 	nxt := b.BrickInstance().Next
-	fmt.Println("next")
-	fmt.Println(nxt)
 	if b.BrickInstance().Err != 0 || nxt == nil {
 		return
 	}

@@ -200,6 +200,9 @@ func (s *DDStm) map2Instance(id string, tp string, m map[string]interface{}) (in
 			vp := reflect.ValueOf(m[name]) //.Elem()
 			switch fieldValue.Type().Kind() {
 			default:
+				//fmt.Println(1234)
+				//fmt.Println(name)
+				//fmt.Println(vp)
 				fieldValue.Set(vp)
 			case reflect.Int, reflect.Int8, reflect.Int16,
 				reflect.Int32, reflect.Int64:

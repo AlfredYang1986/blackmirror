@@ -33,11 +33,11 @@ func (req Request) QueryConnect(tag string) interface{} {
 
 }
 
-func (req Request) Cond2QueryObj() bson.M {
+func (req Request) Cond2QueryObj(cat string) bson.M {
 	rst := make(map[string]interface{})
 	for _, cond := range req.Cond {
 		if cond.IsQueryCondi() {
-			for k, v := range cond.Cond2QueryObj() {
+			for k, v := range cond.Cond2QueryObj(cat) {
 				rst[k] = v
 			}
 		}
@@ -57,10 +57,10 @@ func (req Request) Cond2UpdateObj() bson.M {
 	return rst
 }
 
-func (req Request) CondiQueryVal(ky string) interface{} {
+func (req Request) CondiQueryVal(ky string, cat string) interface{} {
 	for _, cond := range req.Cond {
 		if cond.IsQueryCondi() {
-			for k, v := range cond.Cond2QueryObj() {
+			for k, v := range cond.Cond2QueryObj(cat) {
 				if k == ky {
 					return v
 				}

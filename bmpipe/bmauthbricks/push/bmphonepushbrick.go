@@ -40,7 +40,7 @@ func (b *tBMPhonePushBrick) Exec(f func(error)) error {
 	var tmp auth.BMAuth = b.bk.Pr.(auth.BMAuth)
 	ap := tmp.Phone
 	if ap.Id != "" && ap.Id_.Valid() {
-		if ap.IsPhoneRegisted() {
+		if ap.Valid() && ap.IsPhoneRegisted() {
 			b.bk.Err = -1
 		} else {
 			ap.InsertBMObject()
