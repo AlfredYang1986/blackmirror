@@ -2,72 +2,63 @@ package authupdate
 
 import (
 	//"fmt"
-	"github.com/alfredyang1986/blackmirror/bmcommon/bmsingleton/bmconf"
+	"github.com/alfredyang1986/blackmirror/bmcommon/bmsingleton/bmpkg"
 	"github.com/alfredyang1986/blackmirror/bmerror"
 	"github.com/alfredyang1986/blackmirror/bmmodel/auth"
 	"github.com/alfredyang1986/blackmirror/bmmodel/request"
 	"github.com/alfredyang1986/blackmirror/bmpipe"
+	"github.com/alfredyang1986/blackmirror/bmrouter"
 	"github.com/alfredyang1986/blackmirror/jsonapi"
 	//"gopkg.in/mgo.v2/bson"
 	"io"
 	"net/http"
 )
 
-type tBMAuthWechatUpdateBrick struct {
+type BMAuthWechatUpdateBrick struct {
 	bk *bmpipe.BMBrick
-}
-
-func AuthWechatUpdate(n bmpipe.BMBrickFace) bmpipe.BMBrickFace {
-	conf := bmconf.GetBMBrickConf("tBMAuthWechatUpdateBrick")
-
-	pfb := &tBMAuthWechatUpdateBrick{
-		bk: &bmpipe.BMBrick{
-			Host:   conf.Host,
-			Port:   conf.Port,
-			Router: conf.Router, //"/find/rs/2/auth",
-			Next:   n,
-			Pr:     nil,
-			Req:    nil,
-			Err:    0,
-		},
-	}
-	return pfb
 }
 
 /*------------------------------------------------
  * brick interface
  *------------------------------------------------*/
 
-func (b *tBMAuthWechatUpdateBrick) Exec(f func(error)) error {
+func (b *BMAuthWechatUpdateBrick) Exec() error {
 	tmp := auth.BMPhone{}
 	tmp.UpdateBMObject(*b.bk.Req)
 	b.bk.Pr = tmp
 	return nil
 }
 
-func (b *tBMAuthWechatUpdateBrick) Prepare(pr interface{}) error {
+func (b *BMAuthWechatUpdateBrick) Prepare(pr interface{}) error {
 	req := pr.(request.Request)
-	b.bk.Req = &req
+	//b.bk.Req = &req
+	b.BrickInstance().Req = &req
 	return nil
 }
 
-func (b *tBMAuthWechatUpdateBrick) Done() error {
-	bmpipe.NextBrickRemote(b)
+func (b *BMAuthWechatUpdateBrick) Done(pkg string, idx int64, e error) error {
+	tmp, _ := bmpkg.GetPkgLen(pkg)
+	if int(idx) < tmp-1 {
+		bmrouter.NextBrickRemote(pkg, idx+1, b)
+	}
 	return nil
 }
 
-func (b *tBMAuthWechatUpdateBrick) BrickInstance() *bmpipe.BMBrick {
+func (b *BMAuthWechatUpdateBrick) BrickInstance() *bmpipe.BMBrick {
+	if b.bk == nil {
+		b.bk = &bmpipe.BMBrick{}
+	}
 	return b.bk
 }
 
-func (b *tBMAuthWechatUpdateBrick) ResultTo(w io.Writer) error {
+func (b *BMAuthWechatUpdateBrick) ResultTo(w io.Writer) error {
 	pr := b.BrickInstance().Pr
 	tmp := pr.(auth.BMPhone)
 	err := jsonapi.ToJsonAPI(&tmp, w)
 	return err
 }
 
-func (b *tBMAuthWechatUpdateBrick) Return(w http.ResponseWriter) {
+func (b *BMAuthWechatUpdateBrick) Return(w http.ResponseWriter) {
 	ec := b.BrickInstance().Err
 	if ec != 0 {
 		bmerror.ErrInstance().ErrorReval(ec, w)

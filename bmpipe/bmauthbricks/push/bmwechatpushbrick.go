@@ -2,41 +2,25 @@ package authpush
 
 import (
 	//"fmt"
-	"github.com/alfredyang1986/blackmirror/bmcommon/bmsingleton/bmconf"
+	"github.com/alfredyang1986/blackmirror/bmcommon/bmsingleton/bmpkg"
 	"github.com/alfredyang1986/blackmirror/bmerror"
 	"github.com/alfredyang1986/blackmirror/bmmodel/auth"
 	"github.com/alfredyang1986/blackmirror/bmpipe"
+	"github.com/alfredyang1986/blackmirror/bmrouter"
 	"github.com/alfredyang1986/blackmirror/jsonapi"
 	"io"
 	"net/http"
 )
 
-type tBMWechatPushBrick struct {
+type BMWechatPushBrick struct {
 	bk *bmpipe.BMBrick
-}
-
-func WechatPushBrick(n bmpipe.BMBrickFace) bmpipe.BMBrickFace {
-	conf := bmconf.GetBMBrickConf("tBMWechatPushBrick")
-
-	wpb := &tBMWechatPushBrick{
-		bk: &bmpipe.BMBrick{
-			Host:   conf.Host,
-			Port:   conf.Port,
-			Router: conf.Router, //"/auth/wechat/push",
-			Next:   n,
-			Pr:     nil,
-			Req:    nil,
-			Err:    0,
-		},
-	}
-	return wpb
 }
 
 /*------------------------------------------------
  * brick interface
  *------------------------------------------------*/
 
-func (b *tBMWechatPushBrick) Exec(f func(error)) error {
+func (b *BMWechatPushBrick) Exec() error {
 	var tmp auth.BMAuth = b.bk.Pr.(auth.BMAuth)
 	aw := tmp.Wechat
 	if aw.Id != "" && aw.Id_.Valid() {
@@ -49,29 +33,36 @@ func (b *tBMWechatPushBrick) Exec(f func(error)) error {
 	return nil
 }
 
-func (b *tBMWechatPushBrick) Prepare(pr interface{}) error {
+func (b *BMWechatPushBrick) Prepare(pr interface{}) error {
 	req := pr.(auth.BMAuth)
-	b.bk.Pr = req
+	//b.bk.Pr = req
+	b.BrickInstance().Pr = req
 	return nil
 }
 
-func (b *tBMWechatPushBrick) Done() error {
-	bmpipe.NextBrickRemote(b)
+func (b *BMWechatPushBrick) Done(pkg string, idx int64, e error) error {
+	tmp, _ := bmpkg.GetPkgLen(pkg)
+	if int(idx) < tmp-1 {
+		bmrouter.NextBrickRemote(pkg, idx+1, b)
+	}
 	return nil
 }
 
-func (b *tBMWechatPushBrick) BrickInstance() *bmpipe.BMBrick {
+func (b *BMWechatPushBrick) BrickInstance() *bmpipe.BMBrick {
+	if b.bk == nil {
+		b.bk = &bmpipe.BMBrick{}
+	}
 	return b.bk
 }
 
-func (b *tBMWechatPushBrick) ResultTo(w io.Writer) error {
+func (b *BMWechatPushBrick) ResultTo(w io.Writer) error {
 	pr := b.BrickInstance().Pr
 	tmp := pr.(auth.BMAuth)
 	err := jsonapi.ToJsonAPI(&tmp, w)
 	return err
 }
 
-func (b *tBMWechatPushBrick) Return(w http.ResponseWriter) {
+func (b *BMWechatPushBrick) Return(w http.ResponseWriter) {
 	ec := b.BrickInstance().Err
 	if ec != 0 {
 		bmerror.ErrInstance().ErrorReval(ec, w)

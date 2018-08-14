@@ -2,12 +2,13 @@ package authfind
 
 import (
 	//"fmt"
-	"github.com/alfredyang1986/blackmirror/bmcommon/bmsingleton/bmconf"
+	"github.com/alfredyang1986/blackmirror/bmcommon/bmsingleton/bmpkg"
 	"github.com/alfredyang1986/blackmirror/bmerror"
 	"github.com/alfredyang1986/blackmirror/bmmodel/auth"
 	"github.com/alfredyang1986/blackmirror/bmmodel/profile"
 	"github.com/alfredyang1986/blackmirror/bmmodel/request"
 	"github.com/alfredyang1986/blackmirror/bmpipe"
+	"github.com/alfredyang1986/blackmirror/bmrouter"
 	"github.com/alfredyang1986/blackmirror/jsonapi"
 	//"gopkg.in/mgo.v2/bson"
 	"io"
@@ -18,28 +19,11 @@ type tBMFindProfileBrick struct {
 	bk *bmpipe.BMBrick
 }
 
-func FindProfileBrick(n bmpipe.BMBrickFace) bmpipe.BMBrickFace {
-	conf := bmconf.GetBMBrickConf("tBMFindProfileBrick")
-
-	pfb := &tBMFindProfileBrick{
-		bk: &bmpipe.BMBrick{
-			Host:   conf.Host,
-			Port:   conf.Port,
-			Router: conf.Router, //"/find/rs/2/auth",
-			Next:   n,
-			Pr:     nil,
-			Req:    nil,
-			Err:    0,
-		},
-	}
-	return pfb
-}
-
 /*------------------------------------------------
  * brick interface
  *------------------------------------------------*/
 
-func (b *tBMFindProfileBrick) Exec(f func(error)) error {
+func (b *tBMFindProfileBrick) Exec() error {
 	var tmp profile.BMProfile
 	err := tmp.FindOne(*b.bk.Req)
 	b.bk.Pr = tmp
@@ -48,16 +32,23 @@ func (b *tBMFindProfileBrick) Exec(f func(error)) error {
 
 func (b *tBMFindProfileBrick) Prepare(pr interface{}) error {
 	req := pr.(request.Request)
-	b.bk.Req = &req
+	//b.bk.Req = &req
+	b.BrickInstance().Req = &req
 	return nil
 }
 
-func (b *tBMFindProfileBrick) Done() error {
-	bmpipe.NextBrickRemote(b)
+func (b *tBMFindProfileBrick) Done(pkg string, idx int64, e error) error {
+	tmp, _ := bmpkg.GetPkgLen(pkg)
+	if int(idx) < tmp-1 {
+		bmrouter.NextBrickRemote(pkg, idx+1, b)
+	}
 	return nil
 }
 
 func (b *tBMFindProfileBrick) BrickInstance() *bmpipe.BMBrick {
+	if b.bk == nil {
+		b.bk = &bmpipe.BMBrick{}
+	}
 	return b.bk
 }
 

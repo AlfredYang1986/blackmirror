@@ -2,41 +2,25 @@ package authpush
 
 import (
 	//"fmt"
-	"github.com/alfredyang1986/blackmirror/bmcommon/bmsingleton/bmconf"
+	"github.com/alfredyang1986/blackmirror/bmcommon/bmsingleton/bmpkg"
 	"github.com/alfredyang1986/blackmirror/bmerror"
 	"github.com/alfredyang1986/blackmirror/bmmodel/auth"
 	"github.com/alfredyang1986/blackmirror/bmpipe"
+	"github.com/alfredyang1986/blackmirror/bmrouter"
 	"github.com/alfredyang1986/blackmirror/jsonapi"
 	"io"
 	"net/http"
 )
 
-type tBMPhonePushBrick struct {
+type BMPhonePushBrick struct {
 	bk *bmpipe.BMBrick
-}
-
-func PhonePushBrick(n bmpipe.BMBrickFace) bmpipe.BMBrickFace {
-	conf := bmconf.GetBMBrickConf("tBMPhonePushBrick")
-
-	appb := &tBMPhonePushBrick{
-		bk: &bmpipe.BMBrick{
-			Host:   conf.Host,
-			Port:   conf.Port,
-			Router: conf.Router, //"/auth/phone/push",
-			Next:   n,
-			Pr:     nil,
-			Req:    nil,
-			Err:    0,
-		},
-	}
-	return appb
 }
 
 /*------------------------------------------------
  * brick interface
  *------------------------------------------------*/
 
-func (b *tBMPhonePushBrick) Exec(f func(error)) error {
+func (b *BMPhonePushBrick) Exec() error {
 	var tmp auth.BMAuth = b.bk.Pr.(auth.BMAuth)
 	ap := tmp.Phone
 	if ap.Id != "" && ap.Id_.Valid() {
@@ -49,29 +33,36 @@ func (b *tBMPhonePushBrick) Exec(f func(error)) error {
 	return nil
 }
 
-func (b *tBMPhonePushBrick) Prepare(pr interface{}) error {
+func (b *BMPhonePushBrick) Prepare(pr interface{}) error {
 	req := pr.(auth.BMAuth)
-	b.bk.Pr = req
+	//b.bk.Pr = req
+	b.BrickInstance().Pr = req
 	return nil
 }
 
-func (b *tBMPhonePushBrick) Done() error {
-	bmpipe.NextBrickRemote(b)
+func (b *BMPhonePushBrick) Done(pkg string, idx int64, e error) error {
+	tmp, _ := bmpkg.GetPkgLen(pkg)
+	if int(idx) < tmp-1 {
+		bmrouter.NextBrickRemote(pkg, idx+1, b)
+	}
 	return nil
 }
 
-func (b *tBMPhonePushBrick) BrickInstance() *bmpipe.BMBrick {
+func (b *BMPhonePushBrick) BrickInstance() *bmpipe.BMBrick {
+	if b.bk == nil {
+		b.bk = &bmpipe.BMBrick{}
+	}
 	return b.bk
 }
 
-func (b *tBMPhonePushBrick) ResultTo(w io.Writer) error {
+func (b *BMPhonePushBrick) ResultTo(w io.Writer) error {
 	pr := b.BrickInstance().Pr
 	tmp := pr.(auth.BMAuth)
 	err := jsonapi.ToJsonAPI(&tmp, w)
 	return err
 }
 
-func (b *tBMPhonePushBrick) Return(w http.ResponseWriter) {
+func (b *BMPhonePushBrick) Return(w http.ResponseWriter) {
 	ec := b.BrickInstance().Err
 	if ec != 0 {
 		bmerror.ErrInstance().ErrorReval(ec, w)

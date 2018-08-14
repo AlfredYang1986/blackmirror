@@ -1,10 +1,11 @@
 package profilepush
 
 import (
-	"github.com/alfredyang1986/blackmirror/bmcommon/bmsingleton/bmconf"
+	"github.com/alfredyang1986/blackmirror/bmcommon/bmsingleton/bmpkg"
 	"github.com/alfredyang1986/blackmirror/bmerror"
 	"github.com/alfredyang1986/blackmirror/bmmodel/profile"
 	"github.com/alfredyang1986/blackmirror/bmpipe"
+	"github.com/alfredyang1986/blackmirror/bmrouter"
 	"github.com/alfredyang1986/blackmirror/jsonapi"
 	"io"
 	"net/http"
@@ -14,29 +15,11 @@ type tBMCompanyPushBrick struct {
 	bk *bmpipe.BMBrick
 }
 
-func CompanyPushBrick(n bmpipe.BMBrickFace) bmpipe.BMBrickFace {
-	conf := bmconf.GetBMBrickConf("tBMCompanyPushBrick")
-
-	apb := &tBMCompanyPushBrick{
-		bk: &bmpipe.BMBrick{
-			Host:   conf.Host,
-			Port:   conf.Port,
-			Router: conf.Router, //"/auth/push",
-			Next:   n,
-			Pr:     nil,
-			Req:    nil,
-			Err:    0,
-		},
-	}
-	return apb
-
-}
-
 /*------------------------------------------------
  * brick interface
  *------------------------------------------------*/
 
-func (b *tBMCompanyPushBrick) Exec(f func(error)) error {
+func (b *tBMCompanyPushBrick) Exec() error {
 	var tmp profile.BMCompany = b.bk.Pr.(profile.BMCompany)
 	tmp.InsertBMObject()
 	b.bk.Pr = tmp
@@ -49,12 +32,18 @@ func (b *tBMCompanyPushBrick) Prepare(pr interface{}) error {
 	return nil
 }
 
-func (b *tBMCompanyPushBrick) Done() error {
-	bmpipe.NextBrickRemote(b)
+func (b *tBMCompanyPushBrick) Done(pkg string, idx int64, e error) error {
+	tmp, _ := bmpkg.GetPkgLen(pkg)
+	if int(idx) < tmp-1 {
+		bmrouter.NextBrickRemote(pkg, idx+1, b)
+	}
 	return nil
 }
 
 func (b *tBMCompanyPushBrick) BrickInstance() *bmpipe.BMBrick {
+	if b.bk == nil {
+		b.bk = &bmpipe.BMBrick{}
+	}
 	return b.bk
 }
 

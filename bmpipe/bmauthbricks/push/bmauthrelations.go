@@ -2,43 +2,27 @@ package authpush
 
 import (
 	"fmt"
-	"github.com/alfredyang1986/blackmirror/bmcommon/bmsingleton/bmconf"
+	"github.com/alfredyang1986/blackmirror/bmcommon/bmsingleton/bmpkg"
 	"github.com/alfredyang1986/blackmirror/bmerror"
 	"github.com/alfredyang1986/blackmirror/bmmodel/auth"
 	"github.com/alfredyang1986/blackmirror/bmmodel/request"
 	"github.com/alfredyang1986/blackmirror/bmpipe"
+	"github.com/alfredyang1986/blackmirror/bmrouter"
 	"github.com/alfredyang1986/blackmirror/jsonapi"
 	"gopkg.in/mgo.v2/bson"
 	"io"
 	"net/http"
 )
 
-type tBMAuthRSPushBrick struct {
+type BMAuthRSPushBrick struct {
 	bk *bmpipe.BMBrick
-}
-
-func AuthRelationshipPushBrick(n bmpipe.BMBrickFace) bmpipe.BMBrickFace {
-	conf := bmconf.GetBMBrickConf("tBMAuthRSPushBrick")
-
-	arsb := &tBMAuthRSPushBrick{
-		bk: &bmpipe.BMBrick{
-			Host:   conf.Host,
-			Port:   conf.Port,
-			Router: conf.Router, //"/auth/rs/push",
-			Next:   n,
-			Pr:     nil,
-			Req:    nil,
-			Err:    0,
-		},
-	}
-	return arsb
 }
 
 /*------------------------------------------------
  * brick interface
  *------------------------------------------------*/
 
-func (b *tBMAuthRSPushBrick) Exec(f func(error)) error {
+func (b *BMAuthRSPushBrick) Exec() error {
 	var tmp auth.BMAuth = b.bk.Pr.(auth.BMAuth)
 	eq := request.EQCond{}
 	eq.Ky = "auth_id"
@@ -67,29 +51,36 @@ func (b *tBMAuthRSPushBrick) Exec(f func(error)) error {
 	return nil
 }
 
-func (b *tBMAuthRSPushBrick) Prepare(pr interface{}) error {
+func (b *BMAuthRSPushBrick) Prepare(pr interface{}) error {
 	req := pr.(auth.BMAuth)
-	b.bk.Pr = req
+	//b.bk.Pr = req
+	b.BrickInstance().Pr = req
 	return nil
 }
 
-func (b *tBMAuthRSPushBrick) Done() error {
-	bmpipe.NextBrickRemote(b)
+func (b *BMAuthRSPushBrick) Done(pkg string, idx int64, e error) error {
+	tmp, _ := bmpkg.GetPkgLen(pkg)
+	if int(idx) < tmp-1 {
+		bmrouter.NextBrickRemote(pkg, idx+1, b)
+	}
 	return nil
 }
 
-func (b *tBMAuthRSPushBrick) BrickInstance() *bmpipe.BMBrick {
+func (b *BMAuthRSPushBrick) BrickInstance() *bmpipe.BMBrick {
+	if b.bk == nil {
+		b.bk = &bmpipe.BMBrick{}
+	}
 	return b.bk
 }
 
-func (b *tBMAuthRSPushBrick) ResultTo(w io.Writer) error {
+func (b *BMAuthRSPushBrick) ResultTo(w io.Writer) error {
 	pr := b.BrickInstance().Pr
 	tmp := pr.(auth.BMAuth)
 	err := jsonapi.ToJsonAPI(&tmp, w)
 	return err
 }
 
-func (b *tBMAuthRSPushBrick) Return(w http.ResponseWriter) {
+func (b *BMAuthRSPushBrick) Return(w http.ResponseWriter) {
 	ec := b.BrickInstance().Err
 	if ec != 0 {
 		bmerror.ErrInstance().ErrorReval(ec, w)

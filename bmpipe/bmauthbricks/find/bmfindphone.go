@@ -1,69 +1,66 @@
 package authfind
 
 import (
-	//"fmt"
-	"github.com/alfredyang1986/blackmirror/bmcommon/bmsingleton/bmconf"
+	"fmt"
+	//"github.com/alfredyang1986/blackmirror/bmcommon/bmsingleton/bmconf"
 	"github.com/alfredyang1986/blackmirror/bmerror"
 	"github.com/alfredyang1986/blackmirror/bmmodel/auth"
 	"github.com/alfredyang1986/blackmirror/bmmodel/request"
 	"github.com/alfredyang1986/blackmirror/bmpipe"
+	"github.com/alfredyang1986/blackmirror/bmrouter"
+	//"github.com/alfredyang1986/blackmirror/bmpipe/bmauthbricks/push"
 	"github.com/alfredyang1986/blackmirror/jsonapi"
 	"io"
 	"net/http"
 	"reflect"
 )
 
-type tBMAuthPhoneFindBrick struct {
+type BMAuthPhoneFindBrick struct {
 	bk *bmpipe.BMBrick
-}
-
-func PhoneFindBrick(n bmpipe.BMBrickFace) bmpipe.BMBrickFace {
-	conf := bmconf.GetBMBrickConf("tBMAuthPhoneFindBrick")
-
-	pfb := &tBMAuthPhoneFindBrick{
-		bk: &bmpipe.BMBrick{
-			Host:   conf.Host,
-			Port:   conf.Port,
-			Router: conf.Router, //"/auth/phone/find",
-			Next:   n,
-			Pr:     nil,
-			Req:    nil,
-			Err:    0,
-		},
-	}
-	return pfb
 }
 
 /*------------------------------------------------
  * brick interface
  *------------------------------------------------*/
 
-func (b *tBMAuthPhoneFindBrick) Exec(f func(error)) error {
+func (b *BMAuthPhoneFindBrick) Exec() error {
 	var tmp auth.BMPhone
 	err := tmp.FindOne(*b.bk.Req)
 	b.bk.Pr = tmp
-	if f != nil {
-		f(err)
-	}
 	return err
 }
 
-func (b *tBMAuthPhoneFindBrick) Prepare(pr interface{}) error {
+func (b *BMAuthPhoneFindBrick) Prepare(pr interface{}) error {
 	req := pr.(request.Request)
-	b.bk.Req = &req
+	fmt.Println(req)
+	b.BrickInstance().Req = &req
+	//b.bk.Req = &req
 	return nil
 }
 
-func (b *tBMAuthPhoneFindBrick) Done() error {
-	bmpipe.NextBrickRemote(b)
+func (b *BMAuthPhoneFindBrick) Done(pkg string, idx int64, e error) error {
+	if e != nil && e.Error() == "not found" {
+		reval := auth.BMAuth{}
+		reval.Phone = auth.BMPhone{}
+		reval.Phone.Phone = b.BrickInstance().Req.CondiQueryVal("phone", "BMPhone").(string)
+		b.BrickInstance().Pr = reval
+
+		bmrouter.NextBrickRemote("insertauth", 0, b)
+	} else {
+		bmrouter.NextBrickRemote("phone2auth", 0, b)
+	}
+
 	return nil
 }
 
-func (b *tBMAuthPhoneFindBrick) BrickInstance() *bmpipe.BMBrick {
+func (b *BMAuthPhoneFindBrick) BrickInstance() *bmpipe.BMBrick {
+	if b.bk == nil {
+		b.bk = &bmpipe.BMBrick{}
+	}
 	return b.bk
 }
 
-func (b *tBMAuthPhoneFindBrick) ResultTo(w io.Writer) error {
+func (b *BMAuthPhoneFindBrick) ResultTo(w io.Writer) error {
 	pr := b.BrickInstance().Pr
 	if reflect.ValueOf(pr).Type().Name() == "BMPhone" {
 		tmp := pr.(auth.BMPhone)
@@ -76,7 +73,7 @@ func (b *tBMAuthPhoneFindBrick) ResultTo(w io.Writer) error {
 	}
 }
 
-func (b *tBMAuthPhoneFindBrick) Return(w http.ResponseWriter) {
+func (b *BMAuthPhoneFindBrick) Return(w http.ResponseWriter) {
 	ec := b.BrickInstance().Err
 	if ec != 0 {
 		bmerror.ErrInstance().ErrorReval(ec, w)

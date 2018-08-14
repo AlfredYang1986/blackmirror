@@ -3,18 +3,19 @@ package bmconf
 import (
 	"encoding/json"
 	"fmt"
-	//"github.com/alfredyang1986/blackmirror/bmpipe"
+	"github.com/alfredyang1986/blackmirror/bmcommon/bmsingleton"
+	"github.com/alfredyang1986/blackmirror/bmpipe"
 	"io/ioutil"
 	"log"
+	//"reflect"
 	"strings"
 	"sync"
 )
 
 type BMBrickConf struct {
-	Name   string `json:"name"`
-	Host   string `json:"host"`
-	Port   int    `json:"Port"`
-	Router string `json:"router"`
+	Name string `json:"name"`
+	Host string `json:"host"`
+	Port int    `json:"Port"`
 }
 
 var brickconf map[string]BMBrickConf = make(map[string]BMBrickConf)
@@ -23,6 +24,25 @@ var once sync.Once
 func GetBMBrickConf(n string) BMBrickConf {
 	once.Do(initedConf)
 	return brickconf[n]
+}
+
+func GetBMBrick(n string) (bmpipe.BMBrickFace, error) {
+	once.Do(initedConf)
+
+	fac := bmsingleton.GetFactoryInstance()
+
+	name := n
+	bks, err := fac.ReflectPointer(name)
+	if err != nil {
+		panic(err)
+	}
+
+	face, ok := bks.(bmpipe.BMBrickFace)
+	if !ok {
+		panic(ok)
+	}
+
+	return face, err
 }
 
 func initedConf() {
