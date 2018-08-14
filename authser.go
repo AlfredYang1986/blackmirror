@@ -7,7 +7,7 @@ import (
 	"github.com/alfredyang1986/blackmirror/bmmodel/profile"
 	"github.com/alfredyang1986/blackmirror/bmmodel/request"
 	"github.com/alfredyang1986/blackmirror/bmpipe/bmauthbricks/find"
-	//"github.com/alfredyang1986/blackmirror/bmpipe/bmauthbricks/push"
+	"github.com/alfredyang1986/blackmirror/bmpipe/bmauthbricks/push"
 	"github.com/alfredyang1986/blackmirror/bmrouter"
 	//"github.com/alfredyang1986/blackmirror/bmser/authser"
 	"net/http"
@@ -30,13 +30,13 @@ func main() {
 	fac.RegisterModel("BMAuthPhoneFindBrick", &authfind.BMAuthPhoneFindBrick{})
 	fac.RegisterModel("BMAuthRS2AuthBrick", &authfind.BMAuthRS2AuthBrick{})
 	fac.RegisterModel("BMPhone2AuthRSBrick", &authfind.BMPhone2AuthRSBrick{})
-	//fac.RegisterModel("BMAuthPhoneFindBrickExtends", &authfind.BMAuthPhoneFindBrickExtends{})
-	/* t["phonelogin"] = []string{"tBMAuthPhoneFindBrick:tBMAuthPhoneFindBrickExtends"}*/
-	//t["phone2auth"] = []string{"tBMPhone2AuthRSBrick", "tBMAuthRS2AuthBrick"}
-	//t["insertauth"] = []string{"tBMPhonePushBrick", "tBMWechatPushBrick",
-	//"tBMProfilePushBrick", "tBMAuthRSPushBrick", "tBMAuthPushBrick"}
 
-	//r := authser.GetRouter()
+	fac.RegisterModel("BMPhonePushBrick", &authpush.BMPhonePushBrick{})
+	fac.RegisterModel("BMWechatPushBrick", &authpush.BMWechatPushBrick{})
+	fac.RegisterModel("BMProfilePushBrick", &authpush.BMProfilePushBrick{})
+	fac.RegisterModel("BMAuthRSPushBrick", &authpush.BMAuthRSPushBrick{})
+	fac.RegisterModel("BMAuthPushBrick", &authpush.BMAuthPushBrick{})
+
 	r := bmrouter.BindRouter()
 	http.ListenAndServe(":8080", r)
 }

@@ -14,8 +14,8 @@ var oc sync.Once
 func initEPipeline() {
 	t["phonelogin"] = []string{"BMAuthPhoneFindBrick"}
 	t["phone2auth"] = []string{"BMPhone2AuthRSBrick", "BMAuthRS2AuthBrick"}
-	//t["insertauth"] = []string{"tBMPhonePushBrick", "tBMWechatPushBrick",
-	//"tBMProfilePushBrick", "tBMAuthRSPushBrick", "tBMAuthPushBrick"}
+	t["insertauth"] = []string{"BMPhonePushBrick", "BMWechatPushBrick",
+		"BMProfilePushBrick", "BMAuthRSPushBrick", "BMAuthPushBrick"}
 }
 
 func GetPkgLen(pkg string) (int, error) {

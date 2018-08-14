@@ -1,7 +1,7 @@
 package bmrouter
 
 import (
-	"fmt"
+	//"fmt"
 	"github.com/alfredyang1986/blackmirror/bmcommon/bmsingleton/bmpkg"
 	//"github.com/alfredyang1986/blackmirror/bmser"
 	"github.com/gorilla/mux"
@@ -19,13 +19,10 @@ func BindRouter() *mux.Router {
 
 		rt.HandleFunc("/api/v1/{package}/{cur}",
 			func(w http.ResponseWriter, r *http.Request) {
-				fmt.Println(1234)
 				vars := mux.Vars(r)
 				var cur int64 = 0
 				pkg := vars["package"] // the book title slug
-				fmt.Println(pkg)
-				strcur := vars["cur"] // the page
-				fmt.Println(strcur)
+				strcur := vars["cur"]  // the page
 				if strcur != "" {
 					cur, _ = strconv.ParseInt(strcur, 10, 0)
 				}

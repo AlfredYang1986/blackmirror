@@ -39,7 +39,6 @@ func (b *BMAuthRS2AuthBrick) Exec() error {
 
 func (b *BMAuthRS2AuthBrick) Prepare(pr interface{}) error {
 	req := pr.(auth.BMAuthProp)
-	//b.bk.Pr = req
 	b.BrickInstance().Pr = req
 	return nil
 }
