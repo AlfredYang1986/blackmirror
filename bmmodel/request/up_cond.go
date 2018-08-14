@@ -18,7 +18,7 @@ func (t UPCond) QueryConnect(tag string) interface{} {
 	return nil
 }
 
-func (cond UPCond) Cond2QueryObj() bson.M {
+func (cond UPCond) Cond2QueryObj(cat string) bson.M {
 	return bson.M{}
 }
 
