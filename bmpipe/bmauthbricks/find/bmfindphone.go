@@ -7,6 +7,7 @@ import (
 	"github.com/alfredyang1986/blackmirror/bmmodel/auth"
 	"github.com/alfredyang1986/blackmirror/bmmodel/request"
 	"github.com/alfredyang1986/blackmirror/bmpipe"
+	//"github.com/alfredyang1986/blackmirror/bmrouter"
 	//"github.com/alfredyang1986/blackmirror/bmpipe/bmauthbricks/push"
 	"github.com/alfredyang1986/blackmirror/jsonapi"
 	"io"
@@ -18,34 +19,14 @@ type BMAuthPhoneFindBrick struct {
 	bk *bmpipe.BMBrick
 }
 
-func PhoneFindBrick(n bmpipe.BMBrickFace) bmpipe.BMBrickFace {
-	/* conf := bmconf.GetBMBrickConf("BMAuthPhoneFindBrick")*/
-
-	//pfb := &BMAuthPhoneFindBrick{
-	//bk: &bmpipe.BMBrick{
-	//Host:   conf.Host,
-	//Port:   conf.Port,
-	//Router: conf.Router, //"/auth/phone/find",
-	//Next:   n,
-	//Pr:     nil,
-	//Req:    nil,
-	//Err:    0,
-	//},
-	/*}*/
-	return nil
-}
-
 /*------------------------------------------------
  * brick interface
  *------------------------------------------------*/
 
-func (b *BMAuthPhoneFindBrick) Exec(f func(error)) error {
+func (b *BMAuthPhoneFindBrick) Exec() error {
 	var tmp auth.BMPhone
 	err := tmp.FindOne(*b.bk.Req)
 	b.bk.Pr = tmp
-	if f != nil {
-		f(err)
-	}
 	return err
 }
 
@@ -56,8 +37,24 @@ func (b *BMAuthPhoneFindBrick) Prepare(pr interface{}) error {
 	return nil
 }
 
-func (b *BMAuthPhoneFindBrick) Done() error {
-	bmpipe.NextBrickRemote(b)
+func (b *BMAuthPhoneFindBrick) Done(pkg string, idx int64, e error) error {
+	//bmpipe.NextBrickRemote(b)
+	if e != nil && e.Error() == "not found" {
+		fmt.Println("not found")
+		/*tmp := authpush.PhonePushBrick(nil)*/
+		//reval := auth.BMAuth{}
+		//reval.Phone = auth.BMPhone{}
+		//reval.Phone.Phone = tbf.bks.BrickInstance().Req.CondiQueryVal("phone", "BMPhone").(string)
+		//tbf.bks.BrickInstance().Pr = reval
+		//t*/bf.bks.BrickInstance().Next = tmp
+	} else {
+		fmt.Println("found")
+		//tmp := authfind.Phone2AuthRSBrick(nil)
+		//tmp := Phone2AuthRSBrick(nil)
+		//tbf.bks.BrickInstance().Next = tmp
+	}
+
+	//bmrouter.NextBrickRemote(pkg, idx, b)
 	return nil
 }
 
@@ -88,30 +85,5 @@ func (b *BMAuthPhoneFindBrick) Return(w http.ResponseWriter) {
 	} else {
 		var reval auth.BMAuth = b.BrickInstance().Pr.(auth.BMAuth)
 		jsonapi.ToJsonAPI(&reval, w)
-	}
-}
-
-/*------------------------------------------------
- * brick inner error interface
- *------------------------------------------------*/
-
-type BMAuthPhoneFindBrickExtends struct {
-	bks bmpipe.BMBrickFace
-}
-
-func (tbf BMAuthPhoneFindBrickExtends) InnerErrorHandle(err error) {
-	if err != nil && err.Error() == "not found" {
-		fmt.Println("not found")
-		/*tmp := authpush.PhonePushBrick(nil)*/
-		//reval := auth.BMAuth{}
-		//reval.Phone = auth.BMPhone{}
-		//reval.Phone.Phone = tbf.bks.BrickInstance().Req.CondiQueryVal("phone", "BMPhone").(string)
-		//tbf.bks.BrickInstance().Pr = reval
-		//t*/bf.bks.BrickInstance().Next = tmp
-	} else {
-		fmt.Println("found")
-		//tmp := authfind.Phone2AuthRSBrick(nil)
-		//tmp := Phone2AuthRSBrick(nil)
-		//tbf.bks.BrickInstance().Next = tmp
 	}
 }

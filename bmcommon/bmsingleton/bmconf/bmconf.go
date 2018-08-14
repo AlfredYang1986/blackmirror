@@ -13,10 +13,9 @@ import (
 )
 
 type BMBrickConf struct {
-	Name   string `json:"name"`
-	Host   string `json:"host"`
-	Port   int    `json:"Port"`
-	Router string `json:"router"`
+	Name string `json:"name"`
+	Host string `json:"host"`
+	Port int    `json:"Port"`
 }
 
 var brickconf map[string]BMBrickConf = make(map[string]BMBrickConf)
@@ -27,22 +26,12 @@ func GetBMBrickConf(n string) BMBrickConf {
 	return brickconf[n]
 }
 
-func GetBMBrick(n string) (bmpipe.BMBrickFace, bmpipe.BMBrickExtends) {
+func GetBMBrick(n string) (bmpipe.BMBrickFace, error) {
 	once.Do(initedConf)
 
 	fac := bmsingleton.GetFactoryInstance()
 
-	var name string
-	var extends string
-	sp := strings.Split(n, ":")
-	if len(sp) == 0 {
-		name = n
-		extends = ""
-	} else {
-		name = sp[0]
-		extends = sp[1]
-	}
-
+	name := n
 	bks, err := fac.ReflectPointer(name)
 	if err != nil {
 		panic(err)
@@ -53,16 +42,7 @@ func GetBMBrick(n string) (bmpipe.BMBrickFace, bmpipe.BMBrickExtends) {
 		panic(ok)
 	}
 
-	bke, err := fac.ReflectPointer(extends)
-	ext, ok := bke.(bmpipe.BMBrickExtends)
-	if err != nil || !ok {
-		panic(err)
-	}
-	if !ok {
-		panic(ok)
-	}
-
-	return face, ext
+	return face, err
 }
 
 func initedConf() {

@@ -3,7 +3,7 @@ package bmrouter
 import (
 	//"fmt"
 	"github.com/alfredyang1986/blackmirror/bmcommon/bmsingleton/bmpkg"
-	"github.com/alfredyang1986/blackmirror/bmser"
+	//"github.com/alfredyang1986/blackmirror/bmser"
 	"github.com/gorilla/mux"
 	"net/http"
 	"strconv"
@@ -27,8 +27,8 @@ func BindRouter() *mux.Router {
 					cur, _ = strconv.ParseInt(strcur, 10, 0)
 				}
 
-				face, ext, _ := bmpkg.GetCurBrick(pkg, cur)
-				bmser.InvokeSkeleton(w, r, face, ext.InnerErrorHandle)
+				face, _ := bmpkg.GetCurBrick(pkg, cur)
+				InvokeSkeleton(w, r, face, pkg, cur)
 			})
 	})
 	return rt

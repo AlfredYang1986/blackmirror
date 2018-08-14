@@ -26,15 +26,11 @@ type BMBrick struct {
 	Err int
 }
 
-type BMBrickExtends interface {
-	InnerErrorHandle(error)
-}
-
 type BMBrickFace interface {
 	BrickInstance() *BMBrick
 	Prepare(ptr interface{}) error
-	Exec(func(error)) error
-	Done() error
+	Exec() error
+	Done(pkg string, idx int64, e error) error
 	ResultTo(w io.Writer) error
 	Return(w http.ResponseWriter)
 }

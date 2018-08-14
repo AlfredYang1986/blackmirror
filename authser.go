@@ -28,7 +28,7 @@ func main() {
 	fac.RegisterModel("up_condi", &request.UPCond{})
 
 	fac.RegisterModel("BMAuthPhoneFindBrick", &authfind.BMAuthPhoneFindBrick{})
-	fac.RegisterModel("BMAuthPhoneFindBrickExtends", &authfind.BMAuthPhoneFindBrickExtends{})
+	//fac.RegisterModel("BMAuthPhoneFindBrickExtends", &authfind.BMAuthPhoneFindBrickExtends{})
 	/* t["phonelogin"] = []string{"tBMAuthPhoneFindBrick:tBMAuthPhoneFindBrickExtends"}*/
 	//t["phone2auth"] = []string{"tBMPhone2AuthRSBrick", "tBMAuthRS2AuthBrick"}
 	//t["insertauth"] = []string{"tBMPhonePushBrick", "tBMWechatPushBrick",

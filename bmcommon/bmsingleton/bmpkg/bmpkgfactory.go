@@ -12,13 +12,13 @@ var t map[string][]string = make(map[string][]string)
 var oc sync.Once
 
 func initEPipeline() {
-	t["phonelogin"] = []string{"BMAuthPhoneFindBrick:BMAuthPhoneFindBrickExtends"}
-	//t["phone2auth"] = []string{"tBMPhone2AuthRSBrick", "tBMAuthRS2AuthBrick"}
+	t["phonelogin"] = []string{"BMAuthPhoneFindBrick"}
+	t["phone2auth"] = []string{"tBMPhone2AuthRSBrick", "tBMAuthRS2AuthBrick"}
 	//t["insertauth"] = []string{"tBMPhonePushBrick", "tBMWechatPushBrick",
 	//"tBMProfilePushBrick", "tBMAuthRSPushBrick", "tBMAuthPushBrick"}
 }
 
-func GetCurBrick(pkg string, idx int64) (bmpipe.BMBrickFace, bmpipe.BMBrickExtends, error) {
+func GetCurBrick(pkg string, idx int64) (bmpipe.BMBrickFace, error) {
 
 	oc.Do(initEPipeline)
 
@@ -34,6 +34,6 @@ func GetCurBrick(pkg string, idx int64) (bmpipe.BMBrickFace, bmpipe.BMBrickExten
 		err = errors.New("query resource router error")
 	}
 
-	face, ext := bmconf.GetBMBrick(reval)
-	return face, ext, err
+	face, err := bmconf.GetBMBrick(reval)
+	return face, err
 }

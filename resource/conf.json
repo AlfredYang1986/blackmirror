@@ -2,79 +2,66 @@
     {
         "name":"tBMAuthRS2AuthBrick",
         "host":"localhost",
-        "port":8080,
-        "router":"/find/rs/2/auth"
+        "port":8080
     },
     {
         "name":"tBMAuthFindBrick",
         "host":"localhost",
-        "port":8080,
-        "router":"/auth/find"
+        "port":8080
     },
     {
         "name":"tBMAuthPhoneFindBrick",
         "host":"localhost",
-        "port":8080,
-        "router":"/auth/phone/find"
+        "port":8080
     },
     {
         "name":"tBMPhone2AuthRSBrick",
         "host":"localhost",
-        "port":8080,
-        "router":"/find/phone/2/rs"
+        "port":8080
     },
     {
         "name":"tBMAuthPushBrick",
         "host":"localhost",
-        "port":8080,
-        "router":"/auth/push"
+        "port":8080
     },
     {
         "name":"tBMAuthRSPushBrick",
         "host":"localhost",
-        "port":8080,
-        "router":"/auth/rs/push"
+        "port":8080
     },
     {
         "name":"tBMPhonePushBrick",
         "host":"localhost",
-        "port":8080,
-        "router":"/auth/phone/push"
+        "port":8080
     },
     {
         "name":"tBMWechatPushBrick",
         "host":"localhost",
-        "port":8080,
-        "router":"/auth/wechat/push"
+        "port":8080
     },
     {
         "name":"tBMAuthPhoneUpdateBrick",
         "host":"localhost",
-        "port":8080,
-        "router":"/auth/phone/update"
+        "port":8080
     },
     {
         "name":"tBMAuthWechatUpdateBrick",
         "host":"localhost",
-        "port":8080,
-        "router":"/auth/wchat/update"
+        "port":8080
     },
     {
         "name":"tBMProfilePushBrick",
         "host":"localhost",
-        "port":8080,
-        "router":"/auth/profile/push"
+        "port":8080
     },
     {
         "name":"tBMFindProfileBrick",
         "host":"localhost",
-        "port":8080,
-        "router":"/auth/profile/find"
+        "port":8080
     },
     {
         "name":"tBMCompanyPushBrick",
         "host":"localhost",
-        "port":8080,
-        "router":"/profile/company/push"
+        "port":8080
     }
 ]
