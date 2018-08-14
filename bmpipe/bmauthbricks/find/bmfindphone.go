@@ -7,7 +7,7 @@ import (
 	"github.com/alfredyang1986/blackmirror/bmmodel/auth"
 	"github.com/alfredyang1986/blackmirror/bmmodel/request"
 	"github.com/alfredyang1986/blackmirror/bmpipe"
-	//"github.com/alfredyang1986/blackmirror/bmrouter"
+	"github.com/alfredyang1986/blackmirror/bmrouter"
 	//"github.com/alfredyang1986/blackmirror/bmpipe/bmauthbricks/push"
 	"github.com/alfredyang1986/blackmirror/jsonapi"
 	"io"
@@ -32,29 +32,24 @@ func (b *BMAuthPhoneFindBrick) Exec() error {
 
 func (b *BMAuthPhoneFindBrick) Prepare(pr interface{}) error {
 	req := pr.(request.Request)
+	fmt.Println(req)
 	b.BrickInstance().Req = &req
 	//b.bk.Req = &req
 	return nil
 }
 
 func (b *BMAuthPhoneFindBrick) Done(pkg string, idx int64, e error) error {
-	//bmpipe.NextBrickRemote(b)
 	if e != nil && e.Error() == "not found" {
-		fmt.Println("not found")
-		/*tmp := authpush.PhonePushBrick(nil)*/
-		//reval := auth.BMAuth{}
-		//reval.Phone = auth.BMPhone{}
-		//reval.Phone.Phone = tbf.bks.BrickInstance().Req.CondiQueryVal("phone", "BMPhone").(string)
-		//tbf.bks.BrickInstance().Pr = reval
-		//t*/bf.bks.BrickInstance().Next = tmp
+		reval := auth.BMAuth{}
+		reval.Phone = auth.BMPhone{}
+		reval.Phone.Phone = b.BrickInstance().Req.CondiQueryVal("phone", "BMPhone").(string)
+		b.BrickInstance().Pr = reval
+
+		bmrouter.NextBrickRemote(pkg, idx, b)
 	} else {
-		fmt.Println("found")
-		//tmp := authfind.Phone2AuthRSBrick(nil)
-		//tmp := Phone2AuthRSBrick(nil)
-		//tbf.bks.BrickInstance().Next = tmp
+		bmrouter.NextBrickRemote("phone2auth", 0, b)
 	}
 
-	//bmrouter.NextBrickRemote(pkg, idx, b)
 	return nil
 }
 

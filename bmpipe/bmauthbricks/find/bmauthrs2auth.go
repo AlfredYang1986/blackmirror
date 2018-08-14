@@ -3,6 +3,7 @@ package authfind
 import (
 	"fmt"
 	//"github.com/alfredyang1986/blackmirror/bmcommon/bmsingleton/bmconf"
+	"github.com/alfredyang1986/blackmirror/bmcommon/bmsingleton/bmpkg"
 	"github.com/alfredyang1986/blackmirror/bmerror"
 	"github.com/alfredyang1986/blackmirror/bmmodel/auth"
 	"github.com/alfredyang1986/blackmirror/bmmodel/profile"
@@ -15,7 +16,7 @@ import (
 	"net/http"
 )
 
-type tBMAuthRS2AuthBrick struct {
+type BMAuthRS2AuthBrick struct {
 	bk *bmpipe.BMBrick
 }
 
@@ -23,7 +24,7 @@ type tBMAuthRS2AuthBrick struct {
  * brick interface
  *------------------------------------------------*/
 
-func (b *tBMAuthRS2AuthBrick) Exec() error {
+func (b *BMAuthRS2AuthBrick) Exec() error {
 	prop := b.bk.Pr.(auth.BMAuthProp)
 	reval, err := findAuth(prop)
 	phone, err := findPhone(prop)
@@ -36,34 +37,36 @@ func (b *tBMAuthRS2AuthBrick) Exec() error {
 	return err
 }
 
-func (b *tBMAuthRS2AuthBrick) Prepare(pr interface{}) error {
+func (b *BMAuthRS2AuthBrick) Prepare(pr interface{}) error {
 	req := pr.(auth.BMAuthProp)
 	//b.bk.Pr = req
 	b.BrickInstance().Pr = req
 	return nil
 }
 
-func (b *tBMAuthRS2AuthBrick) Done(pkg string, idx int64, e error) error {
-	//bmpipe.NextBrickRemote(b)
-	bmrouter.NextBrickRemote(pkg, idx, b)
+func (b *BMAuthRS2AuthBrick) Done(pkg string, idx int64, e error) error {
+	tmp, _ := bmpkg.GetPkgLen(pkg)
+	if int(idx) < tmp-1 {
+		bmrouter.NextBrickRemote(pkg, idx+1, b)
+	}
 	return nil
 }
 
-func (b *tBMAuthRS2AuthBrick) BrickInstance() *bmpipe.BMBrick {
+func (b *BMAuthRS2AuthBrick) BrickInstance() *bmpipe.BMBrick {
 	if b.bk == nil {
 		b.bk = &bmpipe.BMBrick{}
 	}
 	return b.bk
 }
 
-func (b *tBMAuthRS2AuthBrick) ResultTo(w io.Writer) error {
+func (b *BMAuthRS2AuthBrick) ResultTo(w io.Writer) error {
 	pr := b.BrickInstance().Pr
 	tmp := pr.(auth.BMAuthProp)
 	err := jsonapi.ToJsonAPI(&tmp, w)
 	return err
 }
 
-func (b *tBMAuthRS2AuthBrick) Return(w http.ResponseWriter) {
+func (b *BMAuthRS2AuthBrick) Return(w http.ResponseWriter) {
 	ec := b.BrickInstance().Err
 	if ec != 0 {
 		bmerror.ErrInstance().ErrorReval(ec, w)

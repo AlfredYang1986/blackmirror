@@ -13,9 +13,21 @@ var oc sync.Once
 
 func initEPipeline() {
 	t["phonelogin"] = []string{"BMAuthPhoneFindBrick"}
-	t["phone2auth"] = []string{"tBMPhone2AuthRSBrick", "tBMAuthRS2AuthBrick"}
+	t["phone2auth"] = []string{"BMPhone2AuthRSBrick", "BMAuthRS2AuthBrick"}
 	//t["insertauth"] = []string{"tBMPhonePushBrick", "tBMWechatPushBrick",
 	//"tBMProfilePushBrick", "tBMAuthRSPushBrick", "tBMAuthPushBrick"}
+}
+
+func GetPkgLen(pkg string) (int, error) {
+	oc.Do(initEPipeline)
+
+	tmp := t[pkg]
+	var err error
+	if tmp == nil {
+		err = errors.New("query resource router error")
+	}
+
+	return len(tmp), err
 }
 
 func GetCurBrick(pkg string, idx int64) (bmpipe.BMBrickFace, error) {
