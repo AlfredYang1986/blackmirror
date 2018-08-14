@@ -5,6 +5,7 @@ import (
 	//"fmt"
 	"github.com/alfredyang1986/blackmirror/bmerror"
 	//"github.com/alfredyang1986/blackmirror/bmmodel/auth"
+	//"errors"
 	"github.com/alfredyang1986/blackmirror/bmmodel/request"
 	"github.com/alfredyang1986/blackmirror/jsonapi"
 	"io"
@@ -12,26 +13,24 @@ import (
 	"log"
 	"net/http"
 	"reflect"
-	"strconv"
+	//"strconv"
 	"strings"
 )
 
 type BMBrick struct {
-	Host   string
-	Port   int
-	Router string
-
 	Next BMBrickFace
 
-	Req  *request.Request
-	Name string
-	Pr   interface{}
+	Req *request.Request
+	Pr  interface{}
 
 	Err int
 }
 
+type BMBrickExtends interface {
+	InnerErrorHandle(error)
+}
+
 type BMBrickFace interface {
-	//FromJsonToInstance() interface{}
 	BrickInstance() *BMBrick
 	Prepare(ptr interface{}) error
 	Exec(func(error)) error
@@ -44,14 +43,14 @@ type BMBrickFace interface {
  * brick interface
  *------------------------------------------------*/
 
-func NextBrickLocal(b BMBrickFace) {
-	nxt := b.BrickInstance().Next
-	nxt.Prepare(b.BrickInstance().Pr)
-	nxt.Exec(nil)
-	nxt.Done()
-	b.BrickInstance().Err = nxt.BrickInstance().Err
-	b.BrickInstance().Pr = nxt.BrickInstance().Pr
-}
+/*func NextBrickLocal(b BMBrickFace) {*/
+//nxt := b.BrickInstance().Next
+//nxt.Prepare(b.BrickInstance().Pr)
+//nxt.Exec(nil)
+//nxt.Done()
+//b.BrickInstance().Err = nxt.BrickInstance().Err
+//b.BrickInstance().Pr = nxt.BrickInstance().Pr
+/*}*/
 
 func NextBrickRemote(b BMBrickFace) {
 
@@ -60,9 +59,9 @@ func NextBrickRemote(b BMBrickFace) {
 		return
 	}
 
-	host := nxt.BrickInstance().Host
-	port := strconv.Itoa(nxt.BrickInstance().Port)
-	router := nxt.BrickInstance().Router
+	host := "localhost" // nxt.BrickInstance().Host
+	port := "8080"      // strconv.Itoa(nxt.BrickInstance().Port)
+	router := "/api/v1" //nxt.BrickInstance().Router
 
 	url := strings.Join([]string{"http://", host, ":", port, router}, "")
 	contentType := "application/json;charset=utf-8"
