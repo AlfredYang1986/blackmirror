@@ -5,6 +5,7 @@ import (
 	//"fmt"
 	"github.com/alfredyang1986/blackmirror/bmerror"
 	//"github.com/alfredyang1986/blackmirror/bmmodel/auth"
+	//"errors"
 	"github.com/alfredyang1986/blackmirror/bmmodel/request"
 	"github.com/alfredyang1986/blackmirror/jsonapi"
 	"io"
@@ -28,6 +29,14 @@ type BMBrick struct {
 	Pr   interface{}
 
 	Err int
+
+	face BMBrickFace
+
+	/* PrepareFunc func(ptr interface{}) error*/
+	//ExecFunc    func(func(error)) error
+	//DoneFunc    func() error
+	//Result2Func func(io.Writer) error
+	/*ReturnFunc  func(http.ResponseWriter)*/
 }
 
 type BMBrickFace interface {
@@ -94,3 +103,50 @@ func NextBrickRemote(b BMBrickFace) {
 	}
 	b.BrickInstance().Pr = res
 }
+
+/*func (bk *BMBrick) BrickInstance() *BMBrick {*/
+//return bk
+//}
+
+//func (bk *BMBrick) Prepare(ptr interface{}) error {
+//if bk.PrepareFunc != nil {
+//return bk.Prepare(ptr)
+//} else {
+//return errors.New("brick init error, this brick don't have prepare function")
+//}
+//}
+
+//func (bk *BMBrick) Exec(f func(error)) error {
+//if bk.ExecFunc != nil {
+//return bk.ExecFunc(f)
+//} else {
+//return errors.New("brick init error, this brick don't have exec function")
+//}
+//}
+
+//func (bk *BMBrick) Done() error {
+//if bk.DoneFunc != nil {
+//return bk.DoneFunc()
+//} else {
+//NextBrickRemote(bk)
+//return errors.New("brick init error, this brick don't have done function")
+//}
+////NextBrickRemote(bk)
+//}
+
+//func (bk *BMBrick) ResultTo(w io.Writer) error {
+
+//if bk.Result2Func != nil {
+//return bk.Result2Func(w)
+//} else {
+//return errors.New("brick init error, this brick don't have result to function")
+//}
+//}
+
+//func (b *BMBrick) Return(w http.ResponseWriter) {
+//if b.ReturnFunc != nil {
+//b.ReturnFunc(w)
+//} else {
+//errors.New("brick init error, this brick don't have return function")
+//}
+/*}*/
