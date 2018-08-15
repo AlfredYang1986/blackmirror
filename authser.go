@@ -12,6 +12,12 @@ import (
 	"github.com/alfredyang1986/blackmirror/bmrouter"
 	//"github.com/alfredyang1986/blackmirror/bmser/authser"
 	"net/http"
+	"github.com/alfredyang1986/blackmirror/bmmodel/contact"
+	"github.com/alfredyang1986/blackmirror/bmpipe/bmcontactbricks/push"
+	"github.com/alfredyang1986/blackmirror/bmpipe/bmlocationbricks/push"
+	"github.com/alfredyang1986/blackmirror/bmmodel/location"
+	"github.com/alfredyang1986/blackmirror/bmmodel/order"
+	"github.com/alfredyang1986/blackmirror/bmpipe/bmorderbricks/push"
 )
 
 func main() {
@@ -31,6 +37,10 @@ func main() {
 	fac.RegisterModel("request", &request.Request{})
 	fac.RegisterModel("eq_condi", &request.EQCond{})
 	fac.RegisterModel("up_condi", &request.UPCond{})
+	fac.RegisterModel("Contact", &contact.Contact{})
+	fac.RegisterModel("BMContactProp", &contact.BMContactProp{})
+	fac.RegisterModel("Location", &location.Location{})
+	fac.RegisterModel("Order", &order.Order{})
 
 	/*------------------------------------------------
 	 * auth find bricks object
@@ -47,6 +57,11 @@ func main() {
 	fac.RegisterModel("BMProfilePushBrick", &authpush.BMProfilePushBrick{})
 	fac.RegisterModel("BMAuthRSPushBrick", &authpush.BMAuthRSPushBrick{})
 	fac.RegisterModel("BMAuthPushBrick", &authpush.BMAuthPushBrick{})
+
+	fac.RegisterModel("BMLocationPushBrick", &locationpush.BMLocationPushBrick{})
+	fac.RegisterModel("BMOrderPushBrick", &orderpush.BMOrderPushBrick{})
+	fac.RegisterModel("BMContactRSPushBrick", &contactpush.BMContactRSPushBrick{})
+	fac.RegisterModel("BMContactPushBrick", &contactpush.BMContactPushBrick{})
 
 	/*------------------------------------------------
 	 * auth update bricks object

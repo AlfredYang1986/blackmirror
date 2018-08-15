@@ -18,6 +18,9 @@ func initEPipeline() {
 		"BMProfilePushBrick", "BMAuthRSPushBrick", "BMAuthPushBrick"}
 	t["updatephone"] = []string{"BMAuthPhoneUpdateBrick"}
 	t["updatewechat"] = []string{"BMAuthWechatUpdateBrick"}
+
+	t["pushcontact"] = []string{"BMContactPushBrick", "BMLocationPushBrick", "BMOrderPushBrick", "BMContactRSPushBrick"}
+
 }
 
 func GetPkgLen(pkg string) (int, error) {
