@@ -7,6 +7,7 @@ import (
 	"github.com/alfredyang1986/blackmirror/bmmodel/profile"
 	"github.com/alfredyang1986/blackmirror/bmmodel/request"
 	"github.com/alfredyang1986/blackmirror/bmpipe/bmauthbricks/find"
+	"github.com/alfredyang1986/blackmirror/bmpipe/bmauthbricks/others"
 	"github.com/alfredyang1986/blackmirror/bmpipe/bmauthbricks/push"
 	"github.com/alfredyang1986/blackmirror/bmpipe/bmauthbricks/update"
 	"github.com/alfredyang1986/blackmirror/bmrouter"
@@ -53,6 +54,11 @@ func main() {
 	 *------------------------------------------------*/
 	fac.RegisterModel("BMAuthPhoneUpdateBrick", &authupdate.BMAuthPhoneUpdateBrick{})
 	fac.RegisterModel("BMAuthWechatUpdateBrick", &authupdate.BMAuthWechatUpdateBrick{})
+
+	/*------------------------------------------------
+	 * other bricks object
+	 *------------------------------------------------*/
+	fc.RegisterModel("BMAuthGenerateToken", &authothers.BMAuthGenerateToken{})
 
 	r := bmrouter.BindRouter()
 	http.ListenAndServe(":8080", r)

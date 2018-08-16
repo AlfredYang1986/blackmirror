@@ -60,7 +60,7 @@ func (b *BMAuthRS2AuthBrick) BrickInstance() *bmpipe.BMBrick {
 
 func (b *BMAuthRS2AuthBrick) ResultTo(w io.Writer) error {
 	pr := b.BrickInstance().Pr
-	tmp := pr.(auth.BMAuthProp)
+	tmp := pr.(auth.BMAuth)
 	err := jsonapi.ToJsonAPI(&tmp, w)
 	return err
 }

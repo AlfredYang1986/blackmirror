@@ -2,6 +2,7 @@ package bmsingleton
 
 import (
 	"errors"
+	"fmt"
 	"reflect"
 	"sync"
 )
@@ -84,6 +85,7 @@ func (f *modelFactory) ReflectPointer(name string) (interface{}, error) {
 		reval := reflect.New(tp).Interface()
 		return reval, nil
 	} else {
+		fmt.Println(name)
 		panic("not register class")
 		//return nil, errors.New("not register class")
 	}

@@ -36,6 +36,7 @@ func BindRouter() *mux.Router {
 					fmt.Println("need oauth")
 					bearer := r.Header.Get("Authorization")
 					tmp := strings.Split(bearer, " ")
+					fmt.Println(tmp)
 					if len(tmp) < 2 {
 						err = errors.New("not authorized")
 					} else {
