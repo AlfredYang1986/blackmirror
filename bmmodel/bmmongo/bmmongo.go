@@ -10,3 +10,8 @@ type BMMongo interface {
 	FindOne(request.Request) error
 	//FindMulti(req request.Request) ([]interface{}, error)
 }
+
+type BMMongoColl interface {
+	FindMulti(req request.Request) ([]interface{}, error)
+	//retset
+}

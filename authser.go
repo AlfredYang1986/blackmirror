@@ -18,6 +18,8 @@ import (
 	"github.com/alfredyang1986/blackmirror/bmmodel/location"
 	"github.com/alfredyang1986/blackmirror/bmmodel/order"
 	"github.com/alfredyang1986/blackmirror/bmpipe/bmorderbricks/push"
+	"github.com/alfredyang1986/blackmirror/bmpipe/bmcontactbricks/find"
+	"github.com/alfredyang1986/blackmirror/bmpipe/bmorderbricks/find"
 )
 
 func main() {
@@ -48,6 +50,9 @@ func main() {
 	fac.RegisterModel("BMAuthPhoneFindBrick", &authfind.BMAuthPhoneFindBrick{})
 	fac.RegisterModel("BMAuthRS2AuthBrick", &authfind.BMAuthRS2AuthBrick{})
 	fac.RegisterModel("BMPhone2AuthRSBrick", &authfind.BMPhone2AuthRSBrick{})
+	fac.RegisterModel("BMContactFindBrick", &contactfind.BMContactFindBrick{})
+	fac.RegisterModel("BMOrderFindBrick", &orderfind.BMOrderFindBrick{})
+	fac.RegisterModel("BMOrderFindMultiBrick", &orderfind.BMOrderFindMultiBrick{})
 
 	/*------------------------------------------------
 	 * auth push bricks object
