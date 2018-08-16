@@ -8,6 +8,10 @@ import (
 	"sync"
 )
 
+const (
+	NoNeedAuthIdx = 3
+)
+
 var t map[string][]string = make(map[string][]string)
 var oc sync.Once
 
@@ -16,6 +20,7 @@ func initEPipeline() {
 	t["phone2auth"] = []string{"BMPhone2AuthRSBrick", "BMAuthRS2AuthBrick"}
 	t["insertauth"] = []string{"BMPhonePushBrick", "BMWechatPushBrick",
 		"BMProfilePushBrick", "BMAuthRSPushBrick", "BMAuthPushBrick"}
+
 	t["updatephone"] = []string{"BMAuthPhoneUpdateBrick"}
 	t["updatewechat"] = []string{"BMAuthWechatUpdateBrick"}
 }
@@ -50,4 +55,36 @@ func GetCurBrick(pkg string, idx int64) (bmpipe.BMBrickFace, error) {
 
 	face, err := bmconf.GetBMBrick(reval)
 	return face, err
+}
+
+func IsNeedAuth(pkg string, cur int64) bool {
+	tmp := GetNoNeedAuthSlice()
+
+	for _, itm := range tmp {
+		if itm == pkg {
+			return cur == 0
+		}
+	}
+
+	return true
+}
+
+func GetNoNeedAuthSlice() []string {
+
+	oc.Do(initEPipeline)
+	var reval []string
+	idx := 0
+	for k, _ := range t {
+
+		if idx == NoNeedAuthIdx {
+			break
+		} else {
+			reval = append(reval, k)
+		}
+
+		idx++
+	}
+
+	fmt.Println(reval)
+	return reval
 }
