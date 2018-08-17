@@ -21,9 +21,9 @@ type BMOrderFindMultiBrick struct {
  *------------------------------------------------*/
 
 func (b *BMOrderFindMultiBrick) Exec() error {
-	var tmp order.Order
-	r, err := tmp.FindMulti(*b.bk.Req)
-	b.bk.Pr = r
+	var tmp order.Orders
+	err := tmp.FindMulti(*b.bk.Req)
+	b.bk.Pr = tmp
 	return err
 }
 
@@ -51,7 +51,7 @@ func (b *BMOrderFindMultiBrick) BrickInstance() *bmpipe.BMBrick {
 
 func (b *BMOrderFindMultiBrick) ResultTo(w io.Writer) error {
 	pr := b.BrickInstance().Pr
-	tmp := pr.(order.Order)
+	tmp := pr.(order.Orders)
 	err := jsonapi.ToJsonAPI(&tmp, w)
 	return err
 }
@@ -61,7 +61,7 @@ func (b *BMOrderFindMultiBrick) Return(w http.ResponseWriter) {
 	if ec != 0 {
 		bmerror.ErrInstance().ErrorReval(ec, w)
 	} else {
-		var reval order.Order = b.BrickInstance().Pr.(order.Order)
+		var reval order.Orders = b.BrickInstance().Pr.(order.Orders)
 		jsonapi.ToJsonAPI(&reval, w)
 	}
 }

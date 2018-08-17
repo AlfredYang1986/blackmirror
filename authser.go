@@ -39,6 +39,7 @@ func main() {
 	fac.RegisterModel("request", &request.Request{})
 	fac.RegisterModel("eq_condi", &request.EQCond{})
 	fac.RegisterModel("up_condi", &request.UPCond{})
+	fac.RegisterModel("fm_condi", &request.FMUCond{})
 	fac.RegisterModel("Contact", &contact.Contact{})
 	fac.RegisterModel("BMContactProp", &contact.BMContactProp{})
 	fac.RegisterModel("Location", &location.Location{})

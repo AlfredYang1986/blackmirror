@@ -3,17 +3,23 @@ package order
 import (
 	"github.com/alfredyang1986/blackmirror/bmmodel/request"
 	"github.com/alfredyang1986/blackmirror/bmmodel"
-	"fmt"
+	"gopkg.in/mgo.v2/bson"
 )
 
-func (bd *Order) FindMulti(req request.Request) (interface{}, error) {
-	var rs []Order
-	err := bmmodel.FindMutil(req, &rs)
-	var mrs []Order
-	for _,r := range rs {
+type Orders struct {
+
+	Id        string            `json:"id"`
+	Id_       bson.ObjectId     `bson:"_id"`
+
+	Orders	  []Order 			`json:"orders"`
+
+}
+
+func (bd *Orders) FindMulti(req request.Request) error {
+	err := bmmodel.FindMutil(req, &bd.Orders)
+	for i,r := range bd.Orders {
 		r.ResetIdWithId_()
-		mrs = append(mrs, r)
+		bd.Orders[i] = r
 	}
-	fmt.Println(mrs)
-	return mrs, err
+	return  err
 }

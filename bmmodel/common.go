@@ -106,13 +106,11 @@ func FindMutil(req request.Request, ptr interface{}) error {
 	}
 	defer session.Close()
 
+	fmu := req.Cond[0].(request.FMUCond)
+	skip := (fmu.Page - 1) * fmu.Take
+
 	c := session.DB("test").C(req.Res)
-	//err = c.Find(req.Cond2QueryObj(req.Res)).Skip(1).Limit(2).All(ptrs)
-	err = c.Find(req.Cond2QueryObj(req.Res)).All(ptr)
-	//for _,ptr := range *ptrs {
-	//	ptr.ResetIdWithId_()
-	//}
-	//ptr.ResetIdWithId_()
+	err = c.Find(req.Cond2QueryObj(req.Res)).Skip(skip).Limit(fmu.Take).All(ptr)
 
 	return err
 }
