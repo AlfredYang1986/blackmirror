@@ -1,0 +1,7 @@
+.idea/
+.git/
+
+blackmirror
+
+# Mac OSX specific
+.DS_Store

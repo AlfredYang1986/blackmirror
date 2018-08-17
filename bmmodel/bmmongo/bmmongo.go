@@ -8,5 +8,9 @@ type BMMongo interface {
 	InsertBMObject() error
 	UpdateBMObject(request.Request) error
 	FindOne(request.Request) error
-	//FindMulti(req request.Request) ([]interface{}, error)
+}
+
+type BMMongoMulti interface {
+	FindMulti(req request.Request) error
+	//RetsetID
 }

@@ -99,6 +99,22 @@ func FindOne(req request.Request, ptr BMObject) error {
 	return nil
 }
 
+func FindMutil(req request.Request, ptr interface{}) error {
+	session, err := mgo.Dial("localhost:27017")
+	if err != nil {
+		return errors.New("dial db error")
+	}
+	defer session.Close()
+
+	fmu := req.Cond[0].(request.FMUCond)
+	skip := (fmu.Page - 1) * fmu.Take
+
+	c := session.DB("test").C(req.Res)
+	err = c.Find(req.Cond2QueryObj(req.Res)).Skip(skip).Limit(fmu.Take).All(ptr)
+
+	return err
+}
+
 func UpdateOne(req request.Request, ptr BMObject) error {
 	session, err := mgo.Dial("localhost:27017")
 	if err != nil {

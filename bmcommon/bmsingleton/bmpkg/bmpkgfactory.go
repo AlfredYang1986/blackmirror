@@ -21,6 +21,12 @@ func initEPipeline() {
 	t["updatephone"] = []string{"BMAuthPhoneUpdateBrick"}
 	t["updatewechat"] = []string{"BMAuthWechatUpdateBrick"}
 
+	t["pushcontact"] = []string{"BMContactPushBrick", "BMLocationPushBrick", "BMOrderPushBrick", "BMContactRSPushBrick"}
+	t["findcontact"] = []string{"BMContactFindBrick"}
+	t["findorder"] = []string{"BMOrderFindBrick"}
+	t["findordermulti"] = []string{"BMOrderFindMultiBrick"}
+
+
 	k = []string{
 		"phonelogin", "phone2auth", "insertauth",
 	}
