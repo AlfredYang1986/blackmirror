@@ -2,9 +2,9 @@ package bmrouter //bmser
 
 import (
 	"bytes"
-	"github.com/alfredyang1986/blackmirror-modules/bmerror"
-	"github.com/alfredyang1986/blackmirror-modules/bmpipe"
-	"github.com/alfredyang1986/blackmirror-modules/jsonapi"
+	"github.com/alfredyang1986/blackmirror/bmerror"
+	"github.com/alfredyang1986/blackmirror/bmpipe"
+	"github.com/alfredyang1986/blackmirror/jsonapi"
 	"io/ioutil"
 	"log"
 	"net/http"
