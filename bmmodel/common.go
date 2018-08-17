@@ -3,8 +3,8 @@ package bmmodel
 import (
 	"errors"
 	"fmt"
-	"github.com/alfredyang1986/blackmirror/bmmodel/bmmongo"
-	"github.com/alfredyang1986/blackmirror/bmmodel/request"
+	"github.com/alfredyang1986/blackmirror-modules/bmmodel/bmmongo"
+	"github.com/alfredyang1986/blackmirror-modules/bmmodel/request"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 	"reflect"

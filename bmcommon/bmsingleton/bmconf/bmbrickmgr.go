@@ -1,9 +1,5 @@
-package bmconf//bmbrickmgr
-
-import (
-)
+package bmconf
 
 type BMBrickMgr struct {
 	Name  string `json:"name"`
-	//brick *bmpipe.BMBrick
 }

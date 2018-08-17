@@ -3,8 +3,8 @@ package bmpkg
 import (
 	"errors"
 	"fmt"
-	"github.com/alfredyang1986/blackmirror/bmcommon/bmsingleton/bmconf"
-	"github.com/alfredyang1986/blackmirror/bmpipe"
+	"github.com/alfredyang1986/blackmirror-modules/bmcommon/bmsingleton/bmconf"
+	"github.com/alfredyang1986/blackmirror-modules/bmpipe"
 	"sync"
 )
 

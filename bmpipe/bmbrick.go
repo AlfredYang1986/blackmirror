@@ -1,7 +1,7 @@
 package bmpipe
 
 import (
-	"github.com/alfredyang1986/blackmirror/bmmodel/request"
+	"github.com/alfredyang1986/blackmirror-modules/bmmodel/request"
 	"io"
 	"net/http"
 )

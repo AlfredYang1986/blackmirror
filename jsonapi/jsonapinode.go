@@ -3,9 +3,9 @@ package jsonapi
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/alfredyang1986/blackmirror/adt"
-	"github.com/alfredyang1986/blackmirror/bmcommon/bmsingleton"
-	"github.com/alfredyang1986/blackmirror/bmmodel"
+	"github.com/alfredyang1986/blackmirror-modules/adt"
+	"github.com/alfredyang1986/blackmirror-modules/bmcommon/bmsingleton"
+	"github.com/alfredyang1986/blackmirror-modules/bmmodel"
 	"gopkg.in/mgo.v2/bson"
 	"io"
 	"log"

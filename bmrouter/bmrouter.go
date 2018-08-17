@@ -1,9 +1,7 @@
 package bmrouter
 
 import (
-	//"fmt"
-	"github.com/alfredyang1986/blackmirror/bmcommon/bmsingleton/bmpkg"
-	//"github.com/alfredyang1986/blackmirror/bmser"
+	"github.com/alfredyang1986/blackmirror-modules/bmcommon/bmsingleton/bmpkg"
 	"github.com/gorilla/mux"
 	"net/http"
 	"strconv"

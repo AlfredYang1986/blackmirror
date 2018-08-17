@@ -3,8 +3,8 @@ package bmconf
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/alfredyang1986/blackmirror/bmcommon/bmsingleton"
-	"github.com/alfredyang1986/blackmirror/bmpipe"
+	"github.com/alfredyang1986/blackmirror-modules/bmcommon/bmsingleton"
+	"github.com/alfredyang1986/blackmirror-modules/bmpipe"
 	"io/ioutil"
 	"log"
 	//"reflect"

@@ -3,9 +3,9 @@ package jsonapi
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/alfredyang1986/blackmirror/adt"
-	//"github.com/alfredyang1986/blackmirror/bmmodel/brand"
-	"github.com/alfredyang1986/blackmirror/jsonapi/jsonapiobj"
+	"github.com/alfredyang1986/blackmirror-modules/adt"
+	//"github.com/alfredyang1986/blackmirror-modules/bmmodel/brand"
+	"github.com/alfredyang1986/blackmirror-modules/jsonapi/jsonapiobj"
 	"io"
 	"log"
 	//"os"
