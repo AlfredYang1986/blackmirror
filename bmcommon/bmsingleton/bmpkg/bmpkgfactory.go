@@ -3,9 +3,10 @@ package bmpkg
 import (
 	"errors"
 	"fmt"
+	"sync"
+
 	"github.com/alfredyang1986/blackmirror/bmcommon/bmsingleton/bmconf"
 	"github.com/alfredyang1986/blackmirror/bmpipe"
-	"sync"
 )
 
 var t map[string][]string = make(map[string][]string)
@@ -24,8 +25,8 @@ func initEPipeline() {
 	t["pushcontact"] = []string{"BMContactPushBrick", "BMLocationPushBrick", "BMOrderPushBrick", "BMContactRSPushBrick"}
 	t["findcontact"] = []string{"BMContactFindBrick"}
 	t["findorder"] = []string{"BMOrderFindBrick"}
+	t["deleteorder"] = []string{"BMOrderDeleteBrick"}
 	t["findordermulti"] = []string{"BMOrderFindMultiBrick"}
-
 
 	k = []string{
 		"phonelogin", "phone2auth", "insertauth",

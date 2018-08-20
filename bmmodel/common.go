@@ -3,12 +3,13 @@ package bmmodel
 import (
 	"errors"
 	"fmt"
+	"reflect"
+	"strings"
+
 	"github.com/alfredyang1986/blackmirror/bmmodel/bmmongo"
 	"github.com/alfredyang1986/blackmirror/bmmodel/request"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
-	"reflect"
-	"strings"
 )
 
 type BMObject interface {
@@ -95,6 +96,26 @@ func FindOne(req request.Request, ptr BMObject) error {
 		return err
 	}
 	ptr.ResetIdWithId_()
+
+	return nil
+}
+
+func DeleteOne(req request.Request, ptr BMObject) error {
+	session, err := mgo.Dial("localhost:27017")
+	if err != nil {
+		return errors.New("dial db error")
+	}
+	defer session.Close()
+
+	c := session.DB("test").C(req.Res)
+	err = c.Find(req.Cond2QueryObj(req.Res)).One(ptr)
+	if err != nil {
+		return err
+	}
+	err = c.Remove(req.Cond2QueryObj(req.Res))
+	if err != nil {
+		return err
+	}
 
 	return nil
 }
