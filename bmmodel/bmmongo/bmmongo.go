@@ -12,5 +12,4 @@ type BMMongo interface {
 
 type BMMongoMulti interface {
 	FindMulti(req request.Request) error
-	//RetsetID
 }

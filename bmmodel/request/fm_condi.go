@@ -5,9 +5,9 @@ import (
 )
 
 type FMUCond struct {
-	Id string      	`json:"id"    bson:"_id"`
-	Take int     	`json:"take"  bson:"take"`
-	Page int 		`json:"page"  bson:"page"`
+	Id   string `json:"id"    bson:"_id"`
+	Take int    `json:"take"  bson:"take"`
+	Page int    `json:"page"  bson:"page"`
 }
 
 func (t FMUCond) SetConnect(tag string, v interface{}) interface{} {

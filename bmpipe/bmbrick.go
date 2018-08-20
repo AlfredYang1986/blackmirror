@@ -15,12 +15,6 @@ type BMBrick struct {
 	Err int
 
 	face BMBrickFace
-
-	/* PrepareFunc func(ptr interface{}) error*/
-	//ExecFunc    func(func(error)) error
-	//DoneFunc    func() error
-	//Result2Func func(io.Writer) error
-	/*ReturnFunc  func(http.ResponseWriter)*/
 }
 
 type BMBrickFace interface {
