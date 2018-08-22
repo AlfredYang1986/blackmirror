@@ -214,10 +214,10 @@ func (s *DDStm) map2Instance(id string, tp string, m map[string]interface{}) (in
 				fieldValue.SetInt(tmp)
 			case reflect.Float32, reflect.Float64:
 				fieldValue.SetFloat(vp.Float())
-			case reflect.Array, reflect.Slice:
+				//case reflect.Array, reflect.Slice:
 				//tmp := m[name]
 				//fmt.Println(tmp)
-				fmt.Println("This jsonapi(array) is not implemented!")
+				//fmt.Println("This jsonapi(array) is not implemented!")
 			}
 		}
 	}
@@ -226,6 +226,6 @@ func (s *DDStm) map2Instance(id string, tp string, m map[string]interface{}) (in
 	return tmp, nil
 }
 
-func getArrayByElemType(i interface{})  {
+func getArrayByElemType(i interface{}) {
 
 }

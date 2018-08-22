@@ -53,6 +53,7 @@ func initedConf() {
 
 	_, err := dec.Token()
 	if err != nil {
+		log.Println("error token")
 		log.Fatal(err)
 	}
 
@@ -60,6 +61,7 @@ func initedConf() {
 		var conf BMBrickConf
 		err := dec.Decode(&conf)
 		if err != nil {
+			log.Println("error loading")
 			log.Fatal(err)
 		}
 		brickconf[conf.Name] = conf
