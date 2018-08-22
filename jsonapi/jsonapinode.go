@@ -11,6 +11,7 @@ import (
 	"log"
 	"reflect"
 	"strings"
+	//"github.com/alfredyang1986/blackmirror/bmmate"
 )
 
 const (
@@ -200,9 +201,6 @@ func (s *DDStm) map2Instance(id string, tp string, m map[string]interface{}) (in
 			vp := reflect.ValueOf(m[name]) //.Elem()
 			switch fieldValue.Type().Kind() {
 			default:
-				//fmt.Println(1234)
-				//fmt.Println(name)
-				//fmt.Println(vp)
 				fieldValue.Set(vp)
 			case reflect.Int, reflect.Int8, reflect.Int16,
 				reflect.Int32, reflect.Int64:
@@ -216,10 +214,18 @@ func (s *DDStm) map2Instance(id string, tp string, m map[string]interface{}) (in
 				fieldValue.SetInt(tmp)
 			case reflect.Float32, reflect.Float64:
 				fieldValue.SetFloat(vp.Float())
+			case reflect.Array, reflect.Slice:
+				//tmp := m[name]
+				//fmt.Println(tmp)
+				fmt.Println("This jsonapi(array) is not implemented!")
 			}
 		}
 	}
 	tmp := v.Interface()
 
 	return tmp, nil
+}
+
+func getArrayByElemType(i interface{})  {
+
 }

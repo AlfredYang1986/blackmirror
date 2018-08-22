@@ -36,6 +36,7 @@ func ErrInstance() *tBMError {
 				-9999: BMErrorNode{Code: -9999, Message: "unknown error"},
 				-1:    BMErrorNode{Code: -1, Message: "phone already regisated"},
 				-2:    BMErrorNode{Code: -2, Message: "wechat already regisated"},
+				-3:    BMErrorNode{Code: -3, Message: "course already regisated"},
 			},
 		}
 	})

@@ -20,3 +20,7 @@ func IsMap(v interface{}) bool {
 func IsRSInterface(v interface{}) bool {
 	return false //reflect.TypeOf(v).Kind() == reflect.in
 }
+
+func IsString(v interface{}) bool {
+	return reflect.TypeOf(v).Kind() == reflect.String
+}
