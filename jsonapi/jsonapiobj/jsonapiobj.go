@@ -17,13 +17,8 @@ type JsResult struct {
 func (o *JsResult) FromObject(ptr interface{}) error {
 
 	if bmmate.IsSeq(ptr) {
-		ppr := ptr.([]interface{})
-		var rst []interface{}
-		for _, itm := range ppr {
-			v := reflect.ValueOf(itm).Elem()
-			tmp, _ := o.struct2jsonAcc(v)
-			rst = append(rst, tmp)
-		}
+		v := reflect.ValueOf(ptr)
+		rst, _ := o.value2jsonAcc(v)
 		o.Obj = map[string]interface{}{"data": rst, "included": o.Inc}
 	} else {
 		v := reflect.ValueOf(ptr).Elem()
