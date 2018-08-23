@@ -138,7 +138,8 @@ func (o *JsResult) value2jsonAcc(v reflect.Value) (interface{}, error) {
 		return o.struct2jsonAcc(v)
 	case reflect.Interface:
 		if bmmate.IsStruct(v) {
-			if reflect.TypeOf(v.Interface()).Kind() == reflect.String {
+			tp := reflect.TypeOf(v.Interface()).Kind()
+			if tp == reflect.String || tp == reflect.Map {
 				return o.value2jsonAcc(reflect.ValueOf(v.Interface()))
 			} else {
 				return o.struct2jsonAcc(reflect.ValueOf(v.Interface()))

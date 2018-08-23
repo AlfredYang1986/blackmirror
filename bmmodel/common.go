@@ -10,6 +10,7 @@ import (
 	"github.com/alfredyang1986/blackmirror/bmmodel/request"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
+	"github.com/alfredyang1986/blackmirror/bmmate"
 )
 
 type BMObject interface {
@@ -227,6 +228,16 @@ func AttrValue(v reflect.Value) (interface{}, error) {
 			rst[key.String()] = tmp
 		}
 		return rst, nil
+	case reflect.Interface:
+		if bmmate.IsStruct(v) {
+			if reflect.TypeOf(v.Interface()).Kind() == reflect.String {
+				return AttrValue(reflect.ValueOf(v.Interface()))
+			} else {
+				return AttrValue(reflect.ValueOf(v.Interface()))
+			}
+		} else {
+			return AttrValue(reflect.ValueOf(v.Interface()))
+		}
 	}
 
 	return NoPtr{}, errors.New("not implement")

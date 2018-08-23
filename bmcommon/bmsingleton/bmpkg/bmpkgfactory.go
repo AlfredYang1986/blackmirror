@@ -24,8 +24,11 @@ func initEPipeline() {
 
 	t["pushcourse"] = []string{"BMCoursePushBrick"}
 	t["pushstudent"] = []string{"BMStudentPushBrick", "BMStudentRSPushBrick"}
+	t["pushteacher"] = []string{"BMTeacherPushBrick"}
+	t["pushlocation"] = []string{"BMLocationPushBrick"}
+	t["pushclass"] = []string{"BMClassPushBrick"}
 
-	t["pushcontact"] = []string{"BMContactPushBrick", "BMLocationPushBrick", "BMOrderPushBrick", "BMContactRSPushBrick"}
+	t["pushcontact"] = []string{"BMContactPushBrick", "BMOrderPushBrick", "BMContactRSPushBrick"}
 	t["findcontact"] = []string{"BMContactFindBrick"}
 	t["findorder"] = []string{"BMOrderFindBrick"}
 	t["deleteorder"] = []string{"BMOrderDeleteBrick"}
