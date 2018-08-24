@@ -6,11 +6,11 @@ import (
 	"reflect"
 	"strings"
 
+	"github.com/alfredyang1986/blackmirror/bmmate"
 	"github.com/alfredyang1986/blackmirror/bmmodel/bmmongo"
 	"github.com/alfredyang1986/blackmirror/bmmodel/request"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
-	"github.com/alfredyang1986/blackmirror/bmmate"
 )
 
 type BMObject interface {

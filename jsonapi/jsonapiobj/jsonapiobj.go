@@ -132,16 +132,18 @@ func (o *JsResult) value2jsonAcc(v reflect.Value) (interface{}, error) {
 	case reflect.Struct:
 		return o.struct2jsonAcc(v)
 	case reflect.Interface:
-		if bmmate.IsStruct(v) {
-			tp := reflect.TypeOf(v.Interface()).Kind()
-			if tp == reflect.String || tp == reflect.Map {
-				return o.value2jsonAcc(reflect.ValueOf(v.Interface()))
-			} else {
-				return o.struct2jsonAcc(reflect.ValueOf(v.Interface()))
-			}
-		} else {
-			return o.value2jsonAcc(reflect.ValueOf(v.Interface()))
-		}
+		//if bmmate.IsStruct(v) {
+		//	tp := reflect.TypeOf(v.Interface()).Kind()
+		//	if tp == reflect.String || tp == reflect.Map || tp == reflect.Float64 || tp == reflect.Slice {
+		//		return o.value2jsonAcc(reflect.ValueOf(v.Interface()))
+		//	} else {
+		//		return o.struct2jsonAcc(reflect.ValueOf(v.Interface()))
+		//	}
+		//} else {
+		//	return o.value2jsonAcc(reflect.ValueOf(v.Interface()))
+		//}
+		//TODO: 暫時測試環境下這樣寫，之後採用上面對已知類型的安全處理
+		return o.value2jsonAcc(reflect.ValueOf(v.Interface()))
 	}
 }
 
