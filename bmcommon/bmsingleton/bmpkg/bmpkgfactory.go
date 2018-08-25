@@ -27,6 +27,7 @@ func initEPipeline() {
 	t["pushteacher"] = []string{"BMTeacherPushBrick"}
 	t["pushlocation"] = []string{"BMLocationPushBrick"}
 	t["pushclass"] = []string{"BMClassPushBrick"}
+	t["pushactivity"] = []string{"BMActivityPushBrick"}
 
 	t["findstudent"] = []string{"BMStudentFindBrick", "BMStudent2StudentRSBrick", "BMStudentRS2StudentBrick"}
 	t["findstudents"] = []string{"BMStudentFindMultiBrick"}
