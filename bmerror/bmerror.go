@@ -37,6 +37,7 @@ func ErrInstance() *tBMError {
 				-1:    BMErrorNode{Code: -1, Message: "This phone already registered"},
 				-2:    BMErrorNode{Code: -2, Message: "This WeChat already registered"},
 				-3:    BMErrorNode{Code: -3, Message: "This course or experience_class already registered, please change name"},
+				-4:    BMErrorNode{Code: -4, Message: "This company already registered, please change name"},
 			},
 		}
 	})
