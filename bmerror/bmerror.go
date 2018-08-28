@@ -38,6 +38,9 @@ func ErrInstance() *tBMError {
 				-2:    BMErrorNode{Code: -2, Message: "This WeChat already registered"},
 				-3:    BMErrorNode{Code: -3, Message: "This course or experience_class already registered, please change name"},
 				-4:    BMErrorNode{Code: -4, Message: "This company already registered, please change name"},
+				-5:    BMErrorNode{Code: -5, Message: "This brand already registered, please change name"},
+				-6:    BMErrorNode{Code: -6, Message: "No company found!"},
+				-7:    BMErrorNode{Code: -7, Message: "No brand found!"},
 			},
 		}
 	})

@@ -17,17 +17,18 @@ func initEPipeline() {
 	t["phonelogin"] = []string{"BMAuthPhoneFindBrick"}
 	t["phone2auth"] = []string{"BMPhone2AuthRSBrick", "BMAuthRS2AuthBrick", "BMAuthGenerateToken"}
 	t["insertauth"] = []string{"BMPhonePushBrick", "BMWechatPushBrick",
-		"BMProfilePushBrick", "BMAuthCompanyPushBrick", "BMAuthRSPushBrick", "BMAuthPushBrick", "BMAuthGenerateToken"}
+		"BMProfilePushBrick", "BMAuthCompanyPushBrick", "BMProfileCompanyRSPushBrick", "BMAuthRSPushBrick", "BMAuthPushBrick", "BMAuthGenerateToken"}
 
 	t["updatephone"] = []string{"BMAuthPhoneUpdateBrick"}
 	t["updatewechat"] = []string{"BMAuthWechatUpdateBrick"}
 
+	t["pushbrand"] = []string{"BMBrandPushBrick", "BMBrandPushLocationBrick", "BMBrandLocationRSPush", "BMBrandCompanyRSPush"}
 	t["pushcourse"] = []string{"BMCoursePushBrick"}
 	t["pushstudent"] = []string{"BMStudentPushBrick", "BMStudentRSPushBrick"}
 	t["pushteacher"] = []string{"BMTeacherPushBrick"}
 	t["pushlocation"] = []string{"BMLocationPushBrick"}
 	t["pushclass"] = []string{"BMClassPushBrick"}
-	t["pushactivity"] = []string{"BMActivityPushBrick"}
+	t["pushactivity"] = []string{"BMActivityPushBrick", "BMActivityBrandRSPush"}
 
 	t["findstudent"] = []string{"BMStudentFindBrick", "BMStudent2StudentRSBrick", "BMStudentRS2StudentBrick"}
 	t["findstudents"] = []string{"BMStudentFindMultiBrick"}
