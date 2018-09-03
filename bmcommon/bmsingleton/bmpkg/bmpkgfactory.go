@@ -39,8 +39,12 @@ func initEPipeline() {
 	t["deleteorder"] = []string{"BMOrderDeleteBrick"}
 	t["findordermulti"] = []string{"BMOrderFindMultiBrick"}
 
+	t["maxregister"] = []string{"PHAuthProfilePush", "PHAuthCompanyPush", "PHAuthProfileRSPush",
+		"PHAuthRSPushBrick", "PHAuthPushBrick", "PHAuthGenerateToken"}
+	t["maxlogin"] = []string{"PHAuthFindProfileBrick", "PHProfile2AuthProp", "PHAuthProp2AuthBrick", "PHAuthGenerateToken"}
+
 	k = []string{
-		"phonelogin", "phone2auth", "insertauth",
+		"phonelogin", "phone2auth", "insertauth",  "maxregister", "maxlogin",
 	}
 }
 

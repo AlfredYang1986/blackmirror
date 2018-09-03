@@ -41,6 +41,8 @@ func ErrInstance() *tBMError {
 				-5:    BMErrorNode{Code: -5, Message: "This brand already registered, please change name"},
 				-6:    BMErrorNode{Code: -6, Message: "No company found!"},
 				-7:    BMErrorNode{Code: -7, Message: "No brand found!"},
+				-101:  BMErrorNode{Code: -101, Message: "This user already registered"},
+				-102:  BMErrorNode{Code: -102, Message: "User not found"},
 			},
 		}
 	})
