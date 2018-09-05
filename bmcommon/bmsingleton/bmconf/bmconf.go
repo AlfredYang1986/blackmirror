@@ -47,8 +47,8 @@ func GetBMBrick(n string) (bmpipe.BMBrickFace, error) {
 
 func initedConf() {
 	fmt.Println("start of init conf")
-	//b, _ := ioutil.ReadFile("resource/conf.json")
-	b, _ := ioutil.ReadFile("/go/src/github.com/Jeorch/max-go/resource/conf.json")
+	b, _ := ioutil.ReadFile("resource/conf.json")
+	//b, _ := ioutil.ReadFile("/go/src/github.com/Jeorch/max-go/resource/conf.json")
 	jsonStream := string(b)
 	dec := json.NewDecoder(strings.NewReader(jsonStream))
 

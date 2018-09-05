@@ -11,8 +11,10 @@ type tBMError struct {
 }
 
 type BMErrorNode struct {
-	Code    int    `json:"code"`
-	Message string `json:"message"`
+	Id     string `json:"id"`
+	Code   int    `json:"code"`
+	Title  string `json:"title"`
+	Detail string `json:"detail"`
 }
 
 /*------------------------------------------------
@@ -33,16 +35,16 @@ func ErrInstance() *tBMError {
 	o.Do(func() {
 		e = &tBMError{
 			m: map[int]BMErrorNode{
-				-9999: BMErrorNode{Code: -9999, Message: "unknown error"},
-				-1:    BMErrorNode{Code: -1, Message: "This phone already registered"},
-				-2:    BMErrorNode{Code: -2, Message: "This WeChat already registered"},
-				-3:    BMErrorNode{Code: -3, Message: "This course or experience_class already registered, please change name"},
-				-4:    BMErrorNode{Code: -4, Message: "This company already registered, please change name"},
-				-5:    BMErrorNode{Code: -5, Message: "This brand already registered, please change name"},
-				-6:    BMErrorNode{Code: -6, Message: "No company found!"},
-				-7:    BMErrorNode{Code: -7, Message: "No brand found!"},
-				-101:  BMErrorNode{Code: -101, Message: "This user already registered"},
-				-102:  BMErrorNode{Code: -102, Message: "User not found"},
+				-9999: BMErrorNode{Code: -9999, Title: "unknown error"},
+				-1:    BMErrorNode{Code: -1, Title: "This phone already registered"},
+				-2:    BMErrorNode{Code: -2, Title: "This WeChat already registered"},
+				-3:    BMErrorNode{Code: -3, Title: "This course or experience_class already registered, please change name"},
+				-4:    BMErrorNode{Code: -4, Title: "This company already registered, please change name"},
+				-5:    BMErrorNode{Code: -5, Title: "This brand already registered, please change name"},
+				-6:    BMErrorNode{Code: -6, Title: "No company found!"},
+				-7:    BMErrorNode{Code: -7, Title: "No brand found!"},
+				-101:  BMErrorNode{Code: -101, Title: "This user already registered"},
+				-102:  BMErrorNode{Code: -102, Title: "User not found"},
 			},
 		}
 	})
@@ -62,10 +64,12 @@ func (e *tBMError) IsErrorDefined(ec int) bool {
 func (e *tBMError) ErrorReval(ec int, w http.ResponseWriter) {
 	if e.IsErrorDefined(ec) {
 		tmp := e.m[ec]
-		jsonapi.ToJsonAPI(&tmp, w)
+		//jsonapi.ToJsonAPI(&tmp, w)
+		jsonapi.ToJsonAPIForError(&tmp, w)
 	} else {
 		//panic("cannot return no defined error")
 		tmp := e.m[-9999]
-		jsonapi.ToJsonAPI(&tmp, w)
+		//jsonapi.ToJsonAPI(&tmp, w)
+		jsonapi.ToJsonAPIForError(&tmp, w)
 	}
 }
