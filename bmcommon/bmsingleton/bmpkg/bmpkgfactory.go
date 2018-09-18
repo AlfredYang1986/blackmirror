@@ -49,7 +49,7 @@ func initEPipeline() {
 	t["maxjobsend"] = []string{"PHMaxJobSendBrick"}
 
 	k = []string{
-		"phonelogin", "phone2auth", "insertauth",  "maxregister", "maxlogin",
+		"phonelogin", "phone2auth", "insertauth", "maxregister", "maxlogin",
 	}
 }
 

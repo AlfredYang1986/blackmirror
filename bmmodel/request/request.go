@@ -5,13 +5,12 @@ import (
 )
 
 type Request struct {
-	Id      string      `json:"id"`
-	Res     string      `json:"res"`
-	Cond 	[]Condition `json:"conditions" jsonapi:"relationships"`
-	EqCond  []EQCond    `json:"eqcond" jsonapi:"relationships"`
-	FmCond  []FMUCond   `json:"fmcond" jsonapi:"relationships"`
-	UpCond  []UPCond   	`json:"upcond" jsonapi:"relationships"`
-
+	Id     string      `json:"id"`
+	Res    string      `json:"res"`
+	Cond   []Condition `json:"conditions" jsonapi:"relationships"`
+	EqCond []EQCond    `json:"eqcond" jsonapi:"relationships"`
+	FmCond []FMUCond   `json:"fmcond" jsonapi:"relationships"`
+	UpCond []UPCond    `json:"upcond" jsonapi:"relationships"`
 }
 
 func (req Request) SetConnect(tag string, v interface{}) interface{} {

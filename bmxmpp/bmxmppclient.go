@@ -52,14 +52,14 @@ func Forward(userjid string, msg string) error {
 	//resource,_ := uuid.GenerateUUID()
 
 	options := xmpp.Options{
-		Host: 		   *server,
+		Host:          *server,
 		User:          *username,
 		Password:      *password,
 		NoTLS:         *notls,
 		StartTLS:      *starttls,
 		Debug:         *debug,
 		Session:       *session,
-		Resource:       resource,
+		Resource:      resource,
 		Status:        *status,
 		StatusMessage: *statusMessage,
 	}

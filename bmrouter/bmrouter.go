@@ -63,7 +63,7 @@ func BindRouter() *mux.Router {
 	return rt
 }
 
-func uploadFunc(w http.ResponseWriter, r *http.Request)  {
+func uploadFunc(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Println("method:", r.Method)
 	w.Header().Add("Content-Type", "application/json")
@@ -98,7 +98,7 @@ func uploadFunc(w http.ResponseWriter, r *http.Request)  {
 		response := map[string]interface{}{
 			"status": "ok",
 			"result": result,
-			"error": "",
+			"error":  "",
 		}
 		jso := jsonapiobj.JsResult{}
 		jso.Obj = response
