@@ -42,6 +42,11 @@ func initEPipeline() {
 	t["maxregister"] = []string{"PHAuthProfilePush", "PHAuthCompanyPush", "PHAuthProfileRSPush",
 		"PHAuthRSPushBrick", "PHAuthPushBrick", "PHAuthGenerateToken"}
 	t["maxlogin"] = []string{"PHAuthFindProfileBrick", "PHProfile2AuthProp", "PHAuthProp2AuthBrick", "PHAuthGenerateToken"}
+	t["maxjobforward"] = []string{"PHMaxJobForwardBrick"}
+	t["maxjobgenerate"] = []string{"PHMaxJobGenerateBrick"}
+	t["maxjobdelete"] = []string{"PHMaxJobDeleteBrick"}
+	t["maxjobpush"] = []string{"PHMaxJobPushBrick"}
+	t["maxjobsend"] = []string{"PHMaxJobSendBrick"}
 
 	k = []string{
 		"phonelogin", "phone2auth", "insertauth",  "maxregister", "maxlogin",

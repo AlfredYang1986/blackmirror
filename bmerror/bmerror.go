@@ -11,10 +11,11 @@ type tBMError struct {
 }
 
 type BMErrorNode struct {
-	Id     string `json:"id"`
-	Code   int    `json:"code"`
-	Title  string `json:"title"`
-	Detail string `json:"detail"`
+	Id     		string `json:"id"`
+	Code   		int    `json:"code"`
+	Status   	int    `json:"status"`
+	Title  		string `json:"title"`
+	Detail 		string `json:"detail"`
 }
 
 /*------------------------------------------------
