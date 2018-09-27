@@ -47,6 +47,7 @@ func GetBMBrick(n string) (bmpipe.BMBrickFace, error) {
 
 func initedConf() {
 	fmt.Println("start of init conf")
+	//TODO: 配置文件路径 待 用脚本指定dev路径和deploy路径
 	b, _ := ioutil.ReadFile("resource/conf.json")
 	//b, _ := ioutil.ReadFile("/go/src/github.com/Jeorch/max-go/resource/conf.json")
 	jsonStream := string(b)

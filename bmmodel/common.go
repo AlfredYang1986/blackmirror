@@ -61,6 +61,7 @@ func ResetId_WithID(ptr BMObject) {
 }
 
 func InsertBMObject(ptr BMObject) error {
+	//TODO: mongodb配置参数待抽离
 	session, err := mgo.Dial("localhost:27017")
 	if err != nil {
 		return errors.New("dial db error")
@@ -85,6 +86,7 @@ func InsertBMObject(ptr BMObject) error {
 }
 
 func FindOne(req request.Request, ptr BMObject) error {
+	//TODO: mongodb配置参数待抽离
 	session, err := mgo.Dial("localhost:27017")
 	if err != nil {
 		return errors.New("dial db error")
@@ -102,6 +104,7 @@ func FindOne(req request.Request, ptr BMObject) error {
 }
 
 func DeleteOne(req request.Request, ptr BMObject) error {
+	//TODO: mongodb配置参数待抽离
 	session, err := mgo.Dial("localhost:27017")
 	if err != nil {
 		return errors.New("dial db error")
@@ -122,6 +125,7 @@ func DeleteOne(req request.Request, ptr BMObject) error {
 }
 
 func FindMutil(req request.Request, ptr interface{}) error {
+	//TODO: mongodb配置参数待抽离
 	session, err := mgo.Dial("localhost:27017")
 	if err != nil {
 		return errors.New("dial db error")
@@ -138,6 +142,7 @@ func FindMutil(req request.Request, ptr interface{}) error {
 }
 
 func UpdateOne(req request.Request, ptr BMObject) error {
+	//TODO: mongodb配置参数待抽离
 	session, err := mgo.Dial("localhost:27017")
 	if err != nil {
 		return errors.New("dial db error")

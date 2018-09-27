@@ -19,7 +19,9 @@ func CheckToken(token string) error {
 	if err == redis.Nil {
 		return errors.New("token not exist")
 	} else if err != nil {
-		panic(err)
+		//panic(err)
+		fmt.Println(err.Error())
+		return err
 	} else {
 		return nil
 	}

@@ -14,6 +14,7 @@ var k []string
 var oc sync.Once
 
 func initEPipeline() {
+	//TODO：ddsaas 待提出
 	t["phonelogin"] = []string{"BMAuthPhoneFindBrick"}
 	t["phone2auth"] = []string{"BMPhone2AuthRSBrick", "BMAuthRS2AuthBrick", "BMAuthGenerateToken"}
 	t["insertauth"] = []string{"BMPhonePushBrick", "BMWechatPushBrick",
@@ -39,6 +40,7 @@ func initEPipeline() {
 	t["deleteorder"] = []string{"BMOrderDeleteBrick"}
 	t["findordermulti"] = []string{"BMOrderFindMultiBrick"}
 
+	//TODO：max 待提出
 	t["maxregister"] = []string{"PHAuthProfilePush", "PHAuthCompanyPush", "PHAuthProfileRSPush",
 		"PHAuthRSPushBrick", "PHAuthPushBrick", "PHAuthGenerateToken"}
 	t["maxlogin"] = []string{"PHAuthFindProfileBrick", "PHProfile2AuthProp", "PHAuthProp2AuthBrick", "PHAuthGenerateToken"}
@@ -47,6 +49,9 @@ func initEPipeline() {
 	t["maxjobdelete"] = []string{"PHMaxJobDeleteBrick"}
 	t["maxjobpush"] = []string{"PHMaxJobPushBrick"}
 	t["maxjobsend"] = []string{"PHMaxJobSendBrick"}
+	t["samplecheckselecter"] = []string{"PHSampleCheckSelecterForwardBrick"}
+	t["samplecheckbody"] = []string{"PHSampleCheckBodyForwardBrick"}
+	t["resultcheck"] = []string{"PHResultCheckForwardBrick"}
 
 	k = []string{
 		"phonelogin", "phone2auth", "insertauth", "maxregister", "maxlogin",

@@ -20,6 +20,9 @@ import (
 var rt *mux.Router
 var o sync.Once
 
+//var wg sync.WaitGroup
+//var mt sync.Mutex
+//var delta int = 0
 func BindRouter() *mux.Router {
 	o.Do(func() {
 		rt = mux.NewRouter()
@@ -55,9 +58,16 @@ func BindRouter() *mux.Router {
 					SimpleResponseForErr(err.Error(), w)
 					return
 				}
-
 				face, _ := bmpkg.GetCurBrick(pkg, cur)
+
 				InvokeSkeleton(w, r, face, pkg, cur)
+
+				//delta = delta + int(cur) + 1
+				//println(delta)
+				//wg.Add(delta)
+				//go InvokeSkeleton(w, r, face, pkg, cur, &wg, &mt)
+				//wg.Wait()
+				//println(w)
 			})
 	})
 	return rt
@@ -65,7 +75,7 @@ func BindRouter() *mux.Router {
 
 func uploadFunc(w http.ResponseWriter, r *http.Request) {
 
-	fmt.Println("method:", r.Method)
+	//fmt.Println("method:", r.Method)
 	w.Header().Add("Content-Type", "application/json")
 	if r.Method == "GET" {
 		errMsg := "upload request method error, please use POST."
