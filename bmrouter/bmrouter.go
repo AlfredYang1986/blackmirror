@@ -7,6 +7,7 @@ import (
 	"github.com/alfredyang1986/blackmirror/bmrouter/bmoauth"
 	"github.com/alfredyang1986/blackmirror/jsonapi/jsonapiobj"
 	"io"
+	"io/ioutil"
 	"os"
 	//"github.com/alfredyang1986/blackmirror/bmser"
 	"errors"
@@ -28,6 +29,8 @@ func BindRouter() *mux.Router {
 		rt = mux.NewRouter()
 
 		rt.HandleFunc("/upload", uploadFunc)
+
+		rt.HandleFunc("/download/{filename}", downloadFunc)
 
 		rt.HandleFunc("/api/v1/{package}/{cur}",
 			func(w http.ResponseWriter, r *http.Request) {
@@ -116,6 +119,19 @@ func uploadFunc(w http.ResponseWriter, r *http.Request) {
 		enc.Encode(jso.Obj)
 	}
 
+}
+
+func downloadFunc(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	filename := vars["filename"]
+	out, err := ioutil.ReadFile("resource/" + filename)
+	if err != nil {
+		fmt.Println("error")
+		fmt.Println(err.Error())
+	}
+	w.Header().Set("Content-Disposition", "attachment; filename=" + filename)
+	w.Header().Set("Content-Type", r.Header.Get("Content-Type"))
+	w.Write(out)
 }
 
 func SimpleResponseForErr(errMsg string, w io.Writer) {

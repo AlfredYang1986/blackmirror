@@ -1,0 +1,9 @@
+{
+  "tcpPort":12345,
+  "httpPort":8080,
+  "httpsPort":436,
+  "others":{
+    "item1":"string",
+    "item2":false
+  }
+}
