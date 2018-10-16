@@ -124,7 +124,9 @@ func uploadFunc(w http.ResponseWriter, r *http.Request) {
 func downloadFunc(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	filename := vars["filename"]
-	out, err := ioutil.ReadFile("resource/" + filename)
+	localFile := "resource/" + filename
+	out, err := ioutil.ReadFile(localFile)
+	//os.Remove(localFile)
 	if err != nil {
 		fmt.Println("error")
 		fmt.Println(err.Error())

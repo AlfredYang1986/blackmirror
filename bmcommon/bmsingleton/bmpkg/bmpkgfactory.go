@@ -51,6 +51,7 @@ func initEPipeline() {
 	t["samplecheckselecter"] = []string{"PHSampleCheckSelecterForwardBrick"}
 	t["samplecheckbody"] = []string{"PHSampleCheckBodyForwardBrick"}
 	t["resultcheck"] = []string{"PHResultCheckForwardBrick"}
+	t["exportmaxresult"] = []string{"PHExportMaxResultForwardBrick"}
 
 	k = []string{
 		"phonelogin", "phone2auth", "insertauth", "maxregister", "maxlogin",
