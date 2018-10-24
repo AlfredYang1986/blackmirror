@@ -20,6 +20,7 @@ func (t EQCond) QueryConnect(tag string) interface{} {
 }
 
 func (cond EQCond) Cond2QueryObj(cate string) bson.M {
+	//TODO:当传递eq_cond并包含category时,以下逻辑会有一些问题.
 	tmp := len(cond.Ct) > 0 && cond.Ct == cate
 	if tmp || len(cond.Ct) == 0 {
 		return bson.M{cond.Ky: cond.Vy}

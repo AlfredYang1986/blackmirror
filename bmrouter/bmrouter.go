@@ -32,6 +32,8 @@ func BindRouter() *mux.Router {
 
 		rt.HandleFunc("/download/{filename}", downloadFunc)
 
+		rt.HandleFunc("/resource/{filename}", getResourceFunc)
+
 		rt.HandleFunc("/api/v1/{package}/{cur}",
 			func(w http.ResponseWriter, r *http.Request) {
 				vars := mux.Vars(r)
@@ -126,13 +128,28 @@ func downloadFunc(w http.ResponseWriter, r *http.Request) {
 	filename := vars["filename"]
 	localFile := "resource/" + filename
 	out, err := ioutil.ReadFile(localFile)
-	//os.Remove(localFile)
+	//defer os.Remove(localFile)
 	if err != nil {
 		fmt.Println("error")
 		fmt.Println(err.Error())
 	}
 	w.Header().Set("Content-Disposition", "attachment; filename=" + filename)
 	w.Header().Set("Content-Type", r.Header.Get("Content-Type"))
+	//w.Header().Set("charset", "utf-8")
+	w.Write(out)
+}
+
+func getResourceFunc(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	filename := vars["filename"]
+	localFile := "resource-public/" + filename
+	out, err := ioutil.ReadFile(localFile)
+	if err != nil {
+		fmt.Println("error")
+		fmt.Println(err.Error())
+	}
+	//w.Header().Set("Content-Disposition", "attachment; filename=" + filename)
+	//w.Header().Set("Content-Type", r.Header.Get("Content-Type"))
 	w.Write(out)
 }
 
