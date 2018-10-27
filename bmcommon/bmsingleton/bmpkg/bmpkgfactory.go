@@ -15,6 +15,11 @@ var oc sync.Once
 
 func initEPipeline() {
 	//TODO：ddsaas 待提出
+	t["generatersakey"] = []string{"BMRsaKeyGenerateBrick"}
+	t["getpublickey"] = []string{"BMGetPublicKeyBrick"}
+	t["insertaccount"] = []string{"BMAccountPushBrick"}
+	t["accountlogin"] = []string{"BMAccountFindBrick"}
+	t["phonelogin"] = []string{"BMAuthPhoneFindBrick"}
 	t["phonelogin"] = []string{"BMAuthPhoneFindBrick"}
 	t["phone2auth"] = []string{"BMPhone2AuthRSBrick", "BMAuthRS2AuthBrick", "BMAuthGenerateToken"}
 	t["insertauth"] = []string{"BMPhonePushBrick", "BMWechatPushBrick",
@@ -54,7 +59,7 @@ func initEPipeline() {
 	t["exportmaxresult"] = []string{"PHExportMaxResultForwardBrick"}
 
 	k = []string{
-		"phonelogin", "phone2auth", "insertauth", "maxregister", "maxlogin",
+		"getpublickey", "generatersakey", "insertaccount", "accountlogin", "phonelogin", "phone2auth", "insertauth", "maxregister", "maxlogin",
 	}
 }
 

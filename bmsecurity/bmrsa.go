@@ -9,6 +9,30 @@ import (
 	"errors"
 )
 
+type RsaKey struct {
+	PublicKey	  string
+	PrivateKey	  string
+}
+
+func GetRsaKey(bits int) (RsaKey, error) {
+	var rsaKey RsaKey
+
+	// 生成私钥
+	privateKey, err := rsa.GenerateKey(rand.Reader, bits)
+	if err != nil {
+		return RsaKey{}, err
+	}
+	derStream,_ := x509.MarshalPKCS8PrivateKey(privateKey)
+	rsaKey.PrivateKey = base64.StdEncoding.EncodeToString(derStream)
+
+	// 生成公钥
+	publicKey := &privateKey.PublicKey
+	derPkix, err := x509.MarshalPKIXPublicKey(publicKey)
+	rsaKey.PublicKey = base64.StdEncoding.EncodeToString(derPkix)
+
+	return rsaKey, err
+}
+
 // 加密
 func RsaEncrypt(publicKey, origData []byte) ([]byte, error) {
 	block, _ := pem.Decode(publicKey)
