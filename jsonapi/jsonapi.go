@@ -76,8 +76,8 @@ func ToJsonString(bm interface{}) (string, error) {
 }
 
 func ToJsonAPIForError(bm interface{}, w io.Writer) error {
-	jso := jsonapiobj.JsResult{}
+	//jso := jsonapiobj.JsResult{}
 	enc := json.NewEncoder(w)
-	enc.Encode(jso.Obj)
+	enc.Encode(bm)
 	return nil
 }

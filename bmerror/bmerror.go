@@ -18,6 +18,10 @@ type BMErrorNode struct {
 	Detail string `json:"detail"`
 }
 
+type BMErrorObject struct {
+	Errors []BMErrorNode `json:"errors"`
+}
+
 /*------------------------------------------------
  * relationships interface
  *------------------------------------------------*/
@@ -64,14 +68,28 @@ func (e *tBMError) IsErrorDefined(ec int) bool {
 }
 
 func (e *tBMError) ErrorReval(ec int, w http.ResponseWriter) {
+	var errobjs []BMErrorNode
+	if e.IsErrorDefined(ec) {
+		errobjs = append(errobjs, e.m[ec])
+	} else {
+		panic("cannot return no defined error")
+		errobjs = append(errobjs, e.m[-9999])
+	}
+	tmp := BMErrorObject{
+		Errors:errobjs,
+	}
+	jsonapi.ToJsonAPIForError(&tmp, w)
+}
+
+func (e *tBMError) ErrorReval2(ec int, w http.ResponseWriter) {
 	if e.IsErrorDefined(ec) {
 		tmp := e.m[ec]
-		//jsonapi.ToJsonAPI(&tmp, w)
-		jsonapi.ToJsonAPIForError(&tmp, w)
+		jsonapi.ToJsonAPI(&tmp, w)
+		//jsonapi.ToJsonAPIForError(&tmp, w)
 	} else {
-		//panic("cannot return no defined error")
+		panic("cannot return no defined error")
 		tmp := e.m[-9999]
-		//jsonapi.ToJsonAPI(&tmp, w)
-		jsonapi.ToJsonAPIForError(&tmp, w)
+		jsonapi.ToJsonAPI(&tmp, w)
+		//jsonapi.ToJsonAPIForError(&tmp, w)
 	}
 }

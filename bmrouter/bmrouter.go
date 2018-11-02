@@ -21,9 +21,6 @@ import (
 var rt *mux.Router
 var o sync.Once
 
-//var wg sync.WaitGroup
-//var mt sync.Mutex
-//var delta int = 0
 func BindRouter() *mux.Router {
 	o.Do(func() {
 		rt = mux.NewRouter()
@@ -67,12 +64,6 @@ func BindRouter() *mux.Router {
 
 				InvokeSkeleton(w, r, face, pkg, cur)
 
-				//delta = delta + int(cur) + 1
-				//println(delta)
-				//wg.Add(delta)
-				//go InvokeSkeleton(w, r, face, pkg, cur, &wg, &mt)
-				//wg.Wait()
-				//println(w)
 			})
 	})
 	return rt
@@ -95,6 +86,7 @@ func uploadFunc(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		defer file.Close()
+		//TODO: 配置文件路径 待 用脚本指定dev路径和deploy路径
 		localDir := "resource/" + handler.Filename
 		f, err := os.OpenFile(localDir, os.O_WRONLY|os.O_CREATE, 0666)
 		if err != nil {
@@ -126,6 +118,7 @@ func uploadFunc(w http.ResponseWriter, r *http.Request) {
 func downloadFunc(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	filename := vars["filename"]
+	//TODO: 配置文件路径 待 用脚本指定dev路径和deploy路径
 	localFile := "resource/" + filename
 	out, err := ioutil.ReadFile(localFile)
 	//defer os.Remove(localFile)
@@ -142,14 +135,13 @@ func downloadFunc(w http.ResponseWriter, r *http.Request) {
 func getResourceFunc(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	filename := vars["filename"]
+	//TODO: 配置文件路径 待 用脚本指定dev路径和deploy路径
 	localFile := "resource-public/" + filename
 	out, err := ioutil.ReadFile(localFile)
 	if err != nil {
 		fmt.Println("error")
 		fmt.Println(err.Error())
 	}
-	//w.Header().Set("Content-Disposition", "attachment; filename=" + filename)
-	//w.Header().Set("Content-Type", r.Header.Get("Content-Type"))
 	w.Write(out)
 }
 

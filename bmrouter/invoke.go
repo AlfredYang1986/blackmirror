@@ -2,6 +2,7 @@ package bmrouter //bmser
 
 import (
 	"bytes"
+	"github.com/alfredyang1986/blackmirror/bmconfighandle"
 	"github.com/alfredyang1986/blackmirror/bmerror"
 	"github.com/alfredyang1986/blackmirror/bmpipe"
 	"github.com/alfredyang1986/blackmirror/jsonapi"
@@ -11,7 +12,11 @@ import (
 	"reflect"
 	"strconv"
 	"strings"
+	"sync"
 )
+
+var once sync.Once
+var bmRouter bmconfig.BMRouterConfig
 
 func InvokeSkeleton(w http.ResponseWriter, r *http.Request,
 	bks bmpipe.BMBrickFace, pkg string, idx int64) {
@@ -57,10 +62,11 @@ func InvokeSkeleton(w http.ResponseWriter, r *http.Request,
 
 func NextBrickRemote(pkg string, idx int64, face bmpipe.BMBrickFace) {
 
-	//TODO: ip & port 待提出
-	host := "localhost"  // nxt.BrickInstance().Host
-	port := "8081"       // strconv.Itoa(nxt.BrickInstance().Port)
-	router := "/api/v1/" //nxt.BrickInstance().Router
+	once.Do(bmRouter.GenerateConfig)
+	//TODO: 各个bricks待抽离
+	host := bmRouter.Host // nxt.BrickInstance().Host
+	port := bmRouter.Port // strconv.Itoa(nxt.BrickInstance().Port)
+	router := "/api/v1/"  //nxt.BrickInstance().Router
 	router += pkg
 	router += "/"
 	router += strconv.Itoa(int(idx))

@@ -3,8 +3,10 @@ package bmmodel
 import (
 	"errors"
 	"fmt"
+	"github.com/alfredyang1986/blackmirror/bmconfighandle"
 	"reflect"
 	"strings"
+	"sync"
 
 	"github.com/alfredyang1986/blackmirror/bmmate"
 	"github.com/alfredyang1986/blackmirror/bmmodel/bmmongo"
@@ -27,6 +29,9 @@ type BMObject interface {
 
 type NoPtr struct {
 }
+
+var once sync.Once
+var bmMongoConfig bmconfig.BMMongoConfig
 
 const (
 	BMJson    string = "json"
@@ -62,7 +67,9 @@ func ResetId_WithID(ptr BMObject) {
 
 func InsertBMObject(ptr BMObject) error {
 	//TODO: mongodb配置参数待抽离
-	session, err := mgo.Dial("localhost:27017")
+	//session, err := mgo.Dial("localhost:27017")
+	once.Do(bmMongoConfig.GenerateConfig)
+	session, err := mgo.Dial(bmMongoConfig.Host + ":" + bmMongoConfig.Port)
 	if err != nil {
 		return errors.New("dial db error")
 	}
@@ -87,7 +94,9 @@ func InsertBMObject(ptr BMObject) error {
 
 func FindOne(req request.Request, ptr BMObject) error {
 	//TODO: mongodb配置参数待抽离
-	session, err := mgo.Dial("localhost:27017")
+	//session, err := mgo.Dial("localhost:27017")
+	once.Do(bmMongoConfig.GenerateConfig)
+	session, err := mgo.Dial(bmMongoConfig.Host + ":" + bmMongoConfig.Port)
 	if err != nil {
 		return errors.New("dial db error")
 	}
@@ -105,7 +114,9 @@ func FindOne(req request.Request, ptr BMObject) error {
 
 func DeleteOne(req request.Request, ptr BMObject) error {
 	//TODO: mongodb配置参数待抽离
-	session, err := mgo.Dial("localhost:27017")
+	//session, err := mgo.Dial("localhost:27017")
+	once.Do(bmMongoConfig.GenerateConfig)
+	session, err := mgo.Dial(bmMongoConfig.Host + ":" + bmMongoConfig.Port)
 	if err != nil {
 		return errors.New("dial db error")
 	}
@@ -126,7 +137,9 @@ func DeleteOne(req request.Request, ptr BMObject) error {
 
 func FindMutil(req request.Request, ptr interface{}) error {
 	//TODO: mongodb配置参数待抽离
-	session, err := mgo.Dial("localhost:27017")
+	//session, err := mgo.Dial("localhost:27017")
+	once.Do(bmMongoConfig.GenerateConfig)
+	session, err := mgo.Dial(bmMongoConfig.Host + ":" + bmMongoConfig.Port)
 	if err != nil {
 		return errors.New("dial db error")
 	}
@@ -143,7 +156,9 @@ func FindMutil(req request.Request, ptr interface{}) error {
 
 func UpdateOne(req request.Request, ptr BMObject) error {
 	//TODO: mongodb配置参数待抽离
-	session, err := mgo.Dial("localhost:27017")
+	//session, err := mgo.Dial("localhost:27017")
+	once.Do(bmMongoConfig.GenerateConfig)
+	session, err := mgo.Dial(bmMongoConfig.Host + ":" + bmMongoConfig.Port)
 	if err != nil {
 		return errors.New("dial db error")
 	}
