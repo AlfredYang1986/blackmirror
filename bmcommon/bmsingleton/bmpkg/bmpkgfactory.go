@@ -30,7 +30,7 @@ func initEPipeline() {
 	t["insertattendee"] = []string{"BMAttendeePushPerson", "BMAttendeePushBrick", "BMAttendeePushGuardian", "BMAttendeePushPersonRS", "BMAttendeePushGuardianRS"}
 	t["findattendee"] = []string{"BMAttendeeFindBrick", "BMAttendeeRS2Attendee"}
 	t["findattendeemulti"] = []string{"BMAttendeeFindMulti"}
-	t["updateattendee"] = []string{"BMAttendeeUpdate", "BmPersonUpdate"}
+	t["updateattendee"] = []string{"BMAttendeeUpdate"}
 
 	t["pushbrand"] = []string{"BMBrandPushBrick", "BMBrandPushLocationBrick", "BMBrandLocationRSPush", "BMBrandCompanyRSPush"}
 	t["pushteacher"] = []string{"BmTeacherPushBrick", "BmTeacherPersonPushBrick", "BmTeacherPushPersonRS"}

@@ -169,6 +169,11 @@ func UpdateOne(req request.Request, ptr BMObject) error {
 	defer session.Close()
 
 	c := session.DB(bmMongoConfig.Database).C(req.Res)
+	bm := req.Cond2QueryObj(req.Res)
+	if len(bm) == 0 {
+		fmt.Println("未指定更新对象")
+		return nil
+	}
 	err = c.Find(req.Cond2QueryObj(req.Res)).One(ptr)
 	if err != nil {
 		return err
