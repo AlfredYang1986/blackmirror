@@ -32,7 +32,7 @@ func initEPipeline() {
 	t["findattendeemulti"] = []string{"BMAttendeeFindMulti"}
 
 	t["pushbrand"] = []string{"BMBrandPushBrick", "BMBrandPushLocationBrick", "BMBrandLocationRSPush", "BMBrandCompanyRSPush"}
-	t["pushteacher"] = []string{"BMTeacherPushBrick"}
+	t["pushteacher"] = []string{"BmTeacherPushBrick", "BmTeacherPersonPushBrick", "BmTeacherPushPersonRS"}
 
 	//TODO：max 待提出
 	t["maxregister"] = []string{"PHAuthProfilePush", "PHAuthCompanyPush", "PHAuthProfileRSPush",
