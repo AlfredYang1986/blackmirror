@@ -4,7 +4,7 @@ import (
 	"gopkg.in/mgo.v2/bson"
 )
 
-type FmCond struct {
+type Fmcond struct {
 	Id   string      `json:"id"    bson:"_id"`
 	Take int         `json:"take"  bson:"take"`
 	Page int         `json:"page"  bson:"page"`
@@ -13,15 +13,15 @@ type FmCond struct {
 	Ct   string      `json:"category"`
 }
 
-func (t FmCond) SetConnect(tag string, v interface{}) interface{} {
+func (t Fmcond) SetConnect(tag string, v interface{}) interface{} {
 	return t
 }
 
-func (t FmCond) QueryConnect(tag string) interface{} {
+func (t Fmcond) QueryConnect(tag string) interface{} {
 	return nil
 }
 
-func (cond FmCond) Cond2QueryObj(cate string) bson.M {
+func (cond Fmcond) Cond2QueryObj(cate string) bson.M {
 	tmp := len(cond.Ct) > 0 && cond.Ct == cate
 	if tmp {
 		return bson.M{cond.Ky: cond.Vy}
@@ -30,14 +30,14 @@ func (cond FmCond) Cond2QueryObj(cate string) bson.M {
 	}
 }
 
-func (cond FmCond) Cond2UpdateObj() bson.M {
+func (cond Fmcond) Cond2UpdateObj() bson.M {
 	return bson.M{}
 }
 
-func (cond FmCond) IsQueryCondi() bool {
+func (cond Fmcond) IsQueryCondi() bool {
 	return true
 }
 
-func (cond FmCond) IsUpdateCondi() bool {
+func (cond Fmcond) IsUpdateCondi() bool {
 	return false
 }

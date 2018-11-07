@@ -4,22 +4,22 @@ import (
 	"gopkg.in/mgo.v2/bson"
 )
 
-type EqCond struct {
+type Eqcond struct {
 	Id string      `json:"id"`
 	Ky string      `json:"key"`
 	Vy interface{} `json:"val"`
 	Ct string      `json:"category"`
 }
 
-func (t EqCond) SetConnect(tag string, v interface{}) interface{} {
+func (t Eqcond) SetConnect(tag string, v interface{}) interface{} {
 	return t
 }
 
-func (t EqCond) QueryConnect(tag string) interface{} {
+func (t Eqcond) QueryConnect(tag string) interface{} {
 	return nil
 }
 
-func (cond EqCond) Cond2QueryObj(cate string) bson.M {
+func (cond Eqcond) Cond2QueryObj(cate string) bson.M {
 	//TODO:当传递eq_cond并包含category时,以下逻辑会有一些问题.
 	tmp := len(cond.Ct) > 0 && cond.Ct == cate
 	if tmp || len(cond.Ct) == 0 {
@@ -33,14 +33,14 @@ func (cond EqCond) Cond2QueryObj(cate string) bson.M {
 	}
 }
 
-func (cond EqCond) Cond2UpdateObj() bson.M {
+func (cond Eqcond) Cond2UpdateObj() bson.M {
 	return bson.M{}
 }
 
-func (cond EqCond) IsQueryCondi() bool {
+func (cond Eqcond) IsQueryCondi() bool {
 	return true
 }
 
-func (cond EqCond) IsUpdateCondi() bool {
+func (cond Eqcond) IsUpdateCondi() bool {
 	return false
 }
