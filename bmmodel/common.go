@@ -150,7 +150,7 @@ func FindMutil(req request.Request, ptr interface{}) error {
 
 	c := session.DB(bmMongoConfig.Database).C(req.Res)
 	if fmu.Take == 0 {
-		err = c.Find(fmu.Cond2QueryObj(req.Res)).All(ptr)
+		err = c.Find(req.Cond2QueryObj(req.Res)).All(ptr)
 	} else {
 		err = c.Find(req.Cond2QueryObj(req.Res)).Skip(skip).Limit(fmu.Take).All(ptr)
 	}
@@ -193,7 +193,10 @@ func UpdateOne(req request.Request, ptr BMObject) error {
 		}
 	}
 	ptr.ResetIdWithId_()
-	err = c.Update(bson.M{"_id": ptr.QueryObjectId()}, ptr)
+	uv := reflect.ValueOf(ptr).Elem()
+	rst, err := Struct2map(uv)
+	rst["_id"] = ptr.QueryObjectId()
+	err = c.Update(bson.M{"_id": ptr.QueryObjectId()}, rst)
 
 	return err
 
