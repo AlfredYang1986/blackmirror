@@ -39,6 +39,7 @@ func initEPipeline() {
 	t["findteachermulti"] = []string{"BmTeacherFindMultiBrick", "BmTeacherMultiRS"}
 
 	t["pushsessioninfo"] = []string{"BmSessionInfoPushBrick", "BmSessionCatPushBrick", "BmBindSessionCatPushBrick"}
+	t["findsessioninfo"] = []string{"BmFindSessionInfoBrick", "BmBindFindSessionInfoCatBrick"}
 
 	//TODO：max 待提出
 	t["maxregister"] = []string{"PHAuthProfilePush", "PHAuthCompanyPush", "PHAuthProfileRSPush",
