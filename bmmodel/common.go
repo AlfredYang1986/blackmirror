@@ -77,7 +77,7 @@ func InsertBMObject(ptr BMObject) error {
 
 	v := reflect.ValueOf(ptr).Elem()
 	cn := v.Type().Name()
-	c := session.DB("test").C(cn)
+	c := session.DB(bmMongoConfig.Database).C(cn)
 	ptr.ResetId_WithID()
 
 	//nExist, _ := c.FindId(ptr.Id_).Count()
@@ -102,7 +102,7 @@ func FindOne(req request.Request, ptr BMObject) error {
 	}
 	defer session.Close()
 
-	c := session.DB("test").C(req.Res)
+	c := session.DB(bmMongoConfig.Database).C(req.Res)
 	err = c.Find(req.Cond2QueryObj(req.Res)).One(ptr)
 	if err != nil {
 		return err
@@ -122,7 +122,7 @@ func DeleteOne(req request.Request, ptr BMObject) error {
 	}
 	defer session.Close()
 
-	c := session.DB("test").C(req.Res)
+	c := session.DB(bmMongoConfig.Database).C(req.Res)
 	err = c.Find(req.Cond2QueryObj(req.Res)).One(ptr)
 	if err != nil {
 		return err
@@ -148,8 +148,12 @@ func FindMutil(req request.Request, ptr interface{}) error {
 	fmu := req.FmCond[0]
 	skip := (fmu.Page - 1) * fmu.Take
 
-	c := session.DB("test").C(req.Res)
-	err = c.Find(req.Cond2QueryObj(req.Res)).Skip(skip).Limit(fmu.Take).All(ptr)
+	c := session.DB(bmMongoConfig.Database).C(req.Res)
+	if fmu.Take == 0 {
+		err = c.Find(fmu.Cond2QueryObj(req.Res)).All(ptr)
+	} else {
+		err = c.Find(req.Cond2QueryObj(req.Res)).Skip(skip).Limit(fmu.Take).All(ptr)
+	}
 
 	return err
 }
@@ -164,7 +168,7 @@ func UpdateOne(req request.Request, ptr BMObject) error {
 	}
 	defer session.Close()
 
-	c := session.DB("test").C(req.Res)
+	c := session.DB(bmMongoConfig.Database).C(req.Res)
 	err = c.Find(req.Cond2QueryObj(req.Res)).One(ptr)
 	if err != nil {
 		return err

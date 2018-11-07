@@ -20,30 +20,19 @@ func initEPipeline() {
 	t["insertaccount"] = []string{"BMAccountPushBrick"}
 	t["accountlogin"] = []string{"BMAccountFindBrick"}
 	t["phonelogin"] = []string{"BMAuthPhoneFindBrick"}
-	t["phonelogin"] = []string{"BMAuthPhoneFindBrick"}
 	t["phone2auth"] = []string{"BMPhone2AuthRSBrick", "BMAuthRS2AuthBrick", "BMAuthGenerateToken"}
 	t["insertauth"] = []string{"BMPhonePushBrick", "BMWechatPushBrick",
-		"BMProfilePushBrick", "BMAuthCompanyPushBrick", "BMProfileCompanyRSPushBrick", "BMAuthRSPushBrick", "BMAuthPushBrick", "BMAuthGenerateToken"}
+		/*"BMProfilePushBrick", "BMAuthCompanyPushBrick", "BMProfileCompanyRSPushBrick", */"BMAuthRSPushBrick", "BMAuthPushBrick", "BMAuthGenerateToken"}
 
 	t["updatephone"] = []string{"BMAuthPhoneUpdateBrick"}
 	t["updatewechat"] = []string{"BMAuthWechatUpdateBrick"}
 
+	t["insertattendee"] = []string{"BMAttendeePushPerson", "BMAttendeePushBrick", "BMAttendeePushGuardian", "BMAttendeePushPersonRS", "BMAttendeePushGuardianRS"}
+	t["findattendee"] = []string{"BMAttendeeFindBrick", "BMAttendeeRS2Attendee"}
+	t["findattendeemulti"] = []string{"BMAttendeeFindMulti"}
+
 	t["pushbrand"] = []string{"BMBrandPushBrick", "BMBrandPushLocationBrick", "BMBrandLocationRSPush", "BMBrandCompanyRSPush"}
-	t["pushcourse"] = []string{"BMCoursePushBrick"}
-	t["pushstudent"] = []string{"BMStudentPushBrick", "BMStudentRSPushBrick"}
 	t["pushteacher"] = []string{"BMTeacherPushBrick"}
-	t["pushlocation"] = []string{"BMLocationPushBrick"}
-	t["pushclass"] = []string{"BMClassPushBrick"}
-	t["pushactivity"] = []string{"BMActivityPushBrick", "BMActivityBrandRSPush"}
-
-	t["findstudent"] = []string{"BMStudentFindBrick", "BMStudent2StudentRSBrick", "BMStudentRS2StudentBrick"}
-	t["findstudents"] = []string{"BMStudentFindMultiBrick"}
-
-	t["pushcontact"] = []string{"BMContactPushBrick", "BMOrderPushBrick", "BMContactRSPushBrick"}
-	t["findcontact"] = []string{"BMContactFindBrick"}
-	t["findorder"] = []string{"BMOrderFindBrick"}
-	t["deleteorder"] = []string{"BMOrderDeleteBrick"}
-	t["findordermulti"] = []string{"BMOrderFindMultiBrick"}
 
 	//TODO：max 待提出
 	t["maxregister"] = []string{"PHAuthProfilePush", "PHAuthCompanyPush", "PHAuthProfileRSPush",

@@ -4,32 +4,32 @@ import (
 	"gopkg.in/mgo.v2/bson"
 )
 
-type UPCond struct {
+type UpCond struct {
 	Id string      `json:"id"`
 	Ky string      `json:"key"`
 	Vy interface{} `json:"val"`
 }
 
-func (t UPCond) SetConnect(tag string, v interface{}) interface{} {
+func (t UpCond) SetConnect(tag string, v interface{}) interface{} {
 	return t
 }
 
-func (t UPCond) QueryConnect(tag string) interface{} {
+func (t UpCond) QueryConnect(tag string) interface{} {
 	return nil
 }
 
-func (cond UPCond) Cond2QueryObj(cat string) bson.M {
+func (cond UpCond) Cond2QueryObj(cat string) bson.M {
 	return bson.M{}
 }
 
-func (cond UPCond) Cond2UpdateObj() bson.M {
+func (cond UpCond) Cond2UpdateObj() bson.M {
 	return bson.M{cond.Ky: cond.Vy}
 }
 
-func (cond UPCond) IsQueryCondi() bool {
+func (cond UpCond) IsQueryCondi() bool {
 	return false
 }
 
-func (cond UPCond) IsUpdateCondi() bool {
+func (cond UpCond) IsUpdateCondi() bool {
 	return true
 }
