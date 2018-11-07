@@ -35,6 +35,8 @@ func initEPipeline() {
 	t["pushbrand"] = []string{"BMBrandPushBrick", "BMBrandPushLocationBrick", "BMBrandLocationRSPush", "BMBrandCompanyRSPush"}
 	t["pushteacher"] = []string{"BmTeacherPushBrick", "BmTeacherPersonPushBrick", "BmTeacherPushPersonRS"}
 	t["findteacher"] = []string{"BmTeacherFindBrick", "BmTeacherRS2Teacher"}
+	t["findteacherprimary"] = []string{"BmPersonFindBrick", "BmPersonTeacherRS"}
+	t["findteachermulti"] = []string{"BmTeacherFindMultiBrick", "BmTeacherMultiRS"}
 
 	//TODO：max 待提出
 	t["maxregister"] = []string{"PHAuthProfilePush", "PHAuthCompanyPush", "PHAuthProfileRSPush",
@@ -50,7 +52,7 @@ func initEPipeline() {
 	t["exportmaxresult"] = []string{"PHExportMaxResultForwardBrick"}
 
 	k = []string{
-		"getpublickey", "generatersakey", "insertaccount", "accountlogin", "phonelogin", "phone2auth", "insertauth", "maxregister", "maxlogin",
+		"getpublickey", "generatersakey", "insertaccount", "accountlogin", "phonelogin", "phone2auth", "insertauth", "maxregister", "maxlogin", "findteacherprimary",
 	}
 }
 
