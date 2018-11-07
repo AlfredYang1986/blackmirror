@@ -10,5 +10,5 @@ type Condition interface {
 	Cond2QueryObj(cate string) bson.M
 
 	IsUpdateCondi() bool
-	Cond2UpdateObj() bson.M
+	Cond2UpdateObj(cate string) bson.M
 }

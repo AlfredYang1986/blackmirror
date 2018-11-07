@@ -33,7 +33,7 @@ func (cond Eqcond) Cond2QueryObj(cate string) bson.M {
 	}
 }
 
-func (cond Eqcond) Cond2UpdateObj() bson.M {
+func (cond Eqcond) Cond2UpdateObj(cate string) bson.M {
 	return bson.M{}
 }
 

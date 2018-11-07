@@ -77,7 +77,7 @@ func (req Request) Cond2QueryObj(cat string) bson.M {
 	return rst
 }
 
-func (req Request) Cond2UpdateObj() bson.M {
+func (req Request) Cond2UpdateObj(cat string) bson.M {
 	rst := make(map[string]interface{})
 
 	var conds_tmp []Upcond
@@ -89,7 +89,7 @@ func (req Request) Cond2UpdateObj() bson.M {
 
 	for _, cond := range conds_all {
 		if cond.IsUpdateCondi() {
-			for k, v := range cond.Cond2UpdateObj() {
+			for k, v := range cond.Cond2UpdateObj(cat) {
 				rst[k] = v
 			}
 		}

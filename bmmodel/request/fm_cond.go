@@ -22,7 +22,7 @@ func (cond Fmcond) Cond2QueryObj(cate string) bson.M {
 	return bson.M{}
 }
 
-func (cond Fmcond) Cond2UpdateObj() bson.M {
+func (cond Fmcond) Cond2UpdateObj(cate string) bson.M {
 	return bson.M{}
 }
 

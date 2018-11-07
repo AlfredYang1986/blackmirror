@@ -174,7 +174,7 @@ func UpdateOne(req request.Request, ptr BMObject) error {
 		return err
 	}
 
-	up := req.Cond2UpdateObj()
+	up := req.Cond2UpdateObj(req.Res)
 	v := reflect.ValueOf(ptr).Elem()
 	for i := 0; i < v.NumField(); i++ {
 		fieldInfo := v.Type().Field(i) // a.reflect.struct.field
