@@ -34,6 +34,7 @@ func initEPipeline() {
 
 	t["pushbrand"] = []string{"BMBrandPushBrick", "BMBrandPushLocationBrick", "BMBrandLocationRSPush", "BMBrandCompanyRSPush"}
 	t["pushteacher"] = []string{"BmTeacherPushBrick", "BmTeacherPersonPushBrick", "BmTeacherPushPersonRS"}
+	t["findteacher"] = []string{"BmTeacherFindBrick", "BmTeacherRS2Teacher"}
 
 	//TODO：max 待提出
 	t["maxregister"] = []string{"PHAuthProfilePush", "PHAuthCompanyPush", "PHAuthProfileRSPush",
