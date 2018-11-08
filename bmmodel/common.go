@@ -176,10 +176,10 @@ func UpdateOne(req request.Request, ptr BMObject) error {
 	//	fmt.Println("未指定更新对象")
 	//	return nil
 	//}
-	//err = c.Find(req.Cond2QueryObj(req.Res)).One(ptr)
-	//if err != nil {
-	//	return err
-	//}
+	err = c.Find(req.Cond2QueryObj(req.Res)).One(ptr)
+	if err != nil {
+		return err
+	}
 
 	up := req.Cond2UpdateObj(req.Res)
 	v := reflect.ValueOf(ptr).Elem()
