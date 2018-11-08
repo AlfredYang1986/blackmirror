@@ -2,8 +2,6 @@ package jsonapiobj
 
 import (
 	"errors"
-	"github.com/hashicorp/go-uuid"
-
 	//"fmt"
 	"github.com/alfredyang1986/blackmirror/bmmate"
 	"github.com/alfredyang1986/blackmirror/bmmodel"
@@ -84,12 +82,14 @@ func (o *JsResult) struct2jsonAcc(v reflect.Value) (interface{}, error) {
 		rships[ky] = tmp
 	}
 
-	if rst["id"] == "" {
-		result["id"],_ = uuid.GenerateUUID()
-	} else {
-		result["id"] = rst["id"]
-	}
+	//TODO:临时解决解析出的实体id为空的问题
+	//if rst["id"] == "" {
+	//	result["id"],_ = uuid.GenerateUUID()
+	//} else {
+	//	result["id"] = rst["id"]
+	//}
 
+	result["id"] = rst["id"]
 	//TODO: typeName目前待改成动态注册名称,而非struct的名称.
 	result["type"] = v.Type().Name()
 	result["attributes"] = attr

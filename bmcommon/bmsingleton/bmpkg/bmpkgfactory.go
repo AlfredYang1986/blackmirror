@@ -27,7 +27,7 @@ func initEPipeline() {
 	t["updatephone"] = []string{"BMAuthPhoneUpdateBrick"}
 	t["updatewechat"] = []string{"BMAuthWechatUpdateBrick"}
 
-	t["insertattendee"] = []string{"BMAttendeePushPerson", "BMAttendeePushBrick", "BMAttendeePushGuardian", "BMAttendeePushPersonRS", "BMAttendeePushGuardianRS"}
+	t["insertattendee"] = []string{"BMAttendeePushBrick", "BMAttendeePushGuardian", "BMAttendeePushGuardianRS"}
 	t["findattendee"] = []string{"BMAttendeeFindBrick", "BMAttendeeRS2Attendee"}
 	t["findattendeemulti"] = []string{"BMAttendeeFindMulti"}
 	t["updateattendee"] = []string{"BMAttendeeUpdate"}
