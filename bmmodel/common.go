@@ -158,6 +158,22 @@ func FindMutil(req request.Request, ptr interface{}) error {
 	return err
 }
 
+func FindMutilWithBson(coll string, condi bson.M, ptr interface{}) error {
+	//TODO: mongodb配置参数待抽离
+	//session, err := mgo.Dial("localhost:27017")
+	once.Do(bmMongoConfig.GenerateConfig)
+	session, err := mgo.Dial(bmMongoConfig.Host + ":" + bmMongoConfig.Port)
+	if err != nil {
+		return errors.New("dial db error")
+	}
+	defer session.Close()
+
+	c := session.DB(bmMongoConfig.Database).C(coll)
+	err = c.Find(condi).All(ptr)
+
+	return err
+}
+
 func UpdateOne(req request.Request, ptr BMObject) error {
 	//TODO: mongodb配置参数待抽离
 	//session, err := mgo.Dial("localhost:27017")
