@@ -33,10 +33,10 @@ func initEPipeline() {
 	t["updateattendee"] = []string{"BMAttendeeUpdate"}
 
 	t["pushbrand"] = []string{"BMBrandPushBrick", "BMBrandPushLocationBrick", "BMBrandLocationRSPush", "BMBrandCompanyRSPush"}
-	t["pushteacher"] = []string{"BmTeacherPushBrick", "BmTeacherPersonPushBrick", "BmTeacherPushPersonRS"}
-	t["findteacher"] = []string{"BmTeacherFindBrick", "BmTeacherRS2Teacher"}
-	t["findteacherprimary"] = []string{"BmPersonFindBrick", "BmPersonTeacherRS"}
-	t["findteachermulti"] = []string{"BmTeacherFindMultiBrick", "BmTeacherMultiRS"}
+	t["pushteacher"] = []string{"BmTeacherPushBrick"}
+	t["findteacher"] = []string{"BmTeacherFindBrick"}
+	//t["findteacherprimary"] = []string{"BmPersonFindBrick", "BmPersonTeacherRS"}
+	t["findteachermulti"] = []string{"BmTeacherFindMultiBrick"}
 
 	t["pushsessioninfo"] = []string{"BmSessionInfoPushBrick", "BmSessionCatPushBrick", "BmBindSessionCatPushBrick"}
 	t["findsessioninfo"] = []string{"BmFindSessionInfoBrick", "BmBindFindSessionInfoCatBrick"}
