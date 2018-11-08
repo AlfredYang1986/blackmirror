@@ -30,20 +30,25 @@ func initEPipeline() {
 	t["insertattendee"] = []string{"BMAttendeePushBrick", "BMAttendeePushGuardian", "BMAttendeePushGuardianRS"}
 	t["findattendee"] = []string{"BMAttendeeFindBrick", "BMAttendeeRS2Attendee"}
 	t["findattendeemulti"] = []string{"BMAttendeeFindMulti"}
-	t["updateattendee"] = []string{"BMAttendeeUpdate"}
-	t["updateguardian"] = []string{"BmGuardianUpdate"}
+	t["updateattendee"] = []string{"BMAttendeeUpdateBrick"}
+	t["updateguardian"] = []string{"BmGuardianUpdateBrick"}
 
-	t["pushbrand"] = []string{"BMBrandPushBrick", "BMBrandPushLocationBrick", "BMBrandLocationRSPush", "BMBrandCompanyRSPush"}
+	t["pushbrand"] = []string{"BMBrandPushBrick"}
+	t["updatebrand"] = []string{"BmBrandUpdateBrick"}
+
 	t["pushteacher"] = []string{"BmTeacherPushBrick"}
 	t["findteacher"] = []string{"BmTeacherFindBrick"}
 	//t["findteacherprimary"] = []string{"BmPersonFindBrick", "BmPersonTeacherRS"}
 	t["findteachermulti"] = []string{"BmTeacherFindMultiBrick"}
+	t["updateteacher"] = []string{"BmTeacherUpdateBrick"}
 
 	t["pushsessioninfo"] = []string{"BmSessionInfoPushBrick", "BmSessionCatPushBrick", "BmBindSessionCatPushBrick"}
 	t["findsessioninfo"] = []string{"BmFindSessionInfoBrick", "BmBindFindSessionInfoCatBrick"}
 	t["findsessioninfomulti"] = []string{"BmFindSessionInfoMultiBrick", "BmFindSessionInfoBindCatMultiBrick"}
+	t["updatesessioninfd"] = []string{"BmSessionInfoUpdateBrick"}
 
 	t["pushyard"] = []string{"BmYardPushBrick", "BmTagImgYardPushBrick", "BmYardRoomPushBrick", "BmBindYardPropBrick"}
+	t["updateyard"] = []string{"BmYardUpdateBrick"}
 
 	//TODO：max 待提出
 	t["maxregister"] = []string{"PHAuthProfilePush", "PHAuthCompanyPush", "PHAuthProfileRSPush",
