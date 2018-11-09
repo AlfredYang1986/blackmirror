@@ -21,20 +21,19 @@ func initEPipeline() {
 	t["accountlogin"] = []string{"BMAccountFindBrick"}
 	t["phonelogin"] = []string{"BMAuthPhoneFindBrick"}
 	t["phone2auth"] = []string{"BMPhone2AuthRSBrick", "BMAuthRS2AuthBrick", "BMAuthGenerateToken"}
-	t["insertauth"] = []string{"BMPhonePushBrick", "BMWechatPushBrick",
-		/*"BMProfilePushBrick", "BMAuthCompanyPushBrick", "BMProfileCompanyRSPushBrick", */"BMAuthRSPushBrick", "BMAuthPushBrick", "BMAuthGenerateToken"}
+	t["insertauth"] = []string{"BMPhonePushBrick", "BMWechatPushBrick", "BMAuthRSPushBrick", "BMAuthPushBrick", "BMAuthGenerateToken"}
 
 	t["updatephone"] = []string{"BMAuthPhoneUpdateBrick"}
 	t["updatewechat"] = []string{"BMAuthWechatUpdateBrick"}
+
+	t["pushbrand"] = []string{"BMBrandPushBrick"}
+	t["updatebrand"] = []string{"BmBrandUpdateBrick"}
 
 	t["insertattendee"] = []string{"BMAttendeePushBrick", "BMAttendeePushGuardian", "BMAttendeePushGuardianRS"}
 	t["findattendee"] = []string{"BMAttendeeFindBrick", "BMAttendeeRS2Attendee"}
 	t["findattendeemulti"] = []string{"BMAttendeeFindMulti"}
 	t["updateattendee"] = []string{"BMAttendeeUpdateBrick"}
 	t["updateguardian"] = []string{"BmGuardianUpdateBrick"}
-
-	t["pushbrand"] = []string{"BMBrandPushBrick"}
-	t["updatebrand"] = []string{"BmBrandUpdateBrick"}
 
 	t["pushteacher"] = []string{"BmTeacherPushBrick"}
 	t["findteacher"] = []string{"BmTeacherFindBrick"}
@@ -48,8 +47,9 @@ func initEPipeline() {
 	t["updatesessioninfd"] = []string{"BmSessionInfoUpdateBrick"}
 
 	t["pushyard"] = []string{"BmYardPushBrick", "BmTagImgYardPushBrick", "BmYardRoomPushBrick", "BmBindYardPropBrick"}
-	t["updateyard"] = []string{"BmYardUpdateBrick"}
 	t["findyard"] = []string{"BmYardFindBrick", "BmYardFindBindBrick"}
+	t["findyardmulti"] = []string{"BmYardFindMulti"}
+	t["updateyard"] = []string{"BmYardUpdateBrick"}
 
 	//TODO：max 待提出
 	t["maxregister"] = []string{"PHAuthProfilePush", "PHAuthCompanyPush", "PHAuthProfileRSPush",

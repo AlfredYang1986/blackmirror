@@ -177,7 +177,6 @@ func (s *DDStm) map2Instance(id string, tp string, m map[string]interface{}) (in
 
 	fac := bmsingleton.GetFactoryInstance()
 	v, _ := fac.ReflectValue(tp)
-
 	for i := 0; i < v.NumField(); i++ {
 
 		fieldInfo := v.Type().Field(i) // a.reflect.struct.field

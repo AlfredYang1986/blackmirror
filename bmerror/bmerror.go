@@ -41,6 +41,7 @@ func ErrInstance() *tBMError {
 		e = &tBMError{
 			m: map[int]BMErrorNode{
 				-9999: BMErrorNode{Code: -9999, Title: "unknown error"},
+				-9998: BMErrorNode{Code: -9998, Title: "jsonapi resolve error!"},
 				-1:    BMErrorNode{Code: -1, Title: "This phone already registered"},
 				-2:    BMErrorNode{Code: -2, Title: "This WeChat already registered"},
 				-3:    BMErrorNode{Code: -3, Title: "This course or experience_class already registered, please change name"},
@@ -72,7 +73,7 @@ func (e *tBMError) ErrorReval(ec int, w http.ResponseWriter) {
 	if e.IsErrorDefined(ec) {
 		errobjs = append(errobjs, e.m[ec])
 	} else {
-		panic("cannot return no defined error")
+		//panic("cannot return no defined error")
 		errobjs = append(errobjs, e.m[-9999])
 	}
 	tmp := BMErrorObject{

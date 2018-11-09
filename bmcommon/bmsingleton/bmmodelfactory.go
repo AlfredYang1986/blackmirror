@@ -61,7 +61,6 @@ func (f *modelFactory) ReflectValue(name string) (reflect.Value, error) {
 			b = true
 		}
 	}
-
 	if b == true {
 		reval := reflect.New(tp).Elem()
 		return reval, nil

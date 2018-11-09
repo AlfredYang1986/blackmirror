@@ -63,7 +63,6 @@ func BindRouter() *mux.Router {
 				face, _ := bmpkg.GetCurBrick(pkg, cur)
 
 				InvokeSkeleton(w, r, face, pkg, cur)
-
 			})
 	})
 	return rt

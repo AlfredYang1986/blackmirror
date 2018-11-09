@@ -66,8 +66,6 @@ func ResetId_WithID(ptr BMObject) {
 }
 
 func InsertBMObject(ptr BMObject) error {
-	//TODO: mongodb配置参数待抽离
-	//session, err := mgo.Dial("localhost:27017")
 	once.Do(bmMongoConfig.GenerateConfig)
 	session, err := mgo.Dial(bmMongoConfig.Host + ":" + bmMongoConfig.Port)
 	if err != nil {
@@ -93,8 +91,6 @@ func InsertBMObject(ptr BMObject) error {
 }
 
 func FindOne(req request.Request, ptr BMObject) error {
-	//TODO: mongodb配置参数待抽离
-	//session, err := mgo.Dial("localhost:27017")
 	once.Do(bmMongoConfig.GenerateConfig)
 	session, err := mgo.Dial(bmMongoConfig.Host + ":" + bmMongoConfig.Port)
 	if err != nil {
@@ -113,8 +109,6 @@ func FindOne(req request.Request, ptr BMObject) error {
 }
 
 func DeleteOne(req request.Request, ptr BMObject) error {
-	//TODO: mongodb配置参数待抽离
-	//session, err := mgo.Dial("localhost:27017")
 	once.Do(bmMongoConfig.GenerateConfig)
 	session, err := mgo.Dial(bmMongoConfig.Host + ":" + bmMongoConfig.Port)
 	if err != nil {
@@ -136,8 +130,6 @@ func DeleteOne(req request.Request, ptr BMObject) error {
 }
 
 func FindMutil(req request.Request, ptr interface{}) error {
-	//TODO: mongodb配置参数待抽离
-	//session, err := mgo.Dial("localhost:27017")
 	once.Do(bmMongoConfig.GenerateConfig)
 	session, err := mgo.Dial(bmMongoConfig.Host + ":" + bmMongoConfig.Port)
 	if err != nil {
@@ -159,8 +151,6 @@ func FindMutil(req request.Request, ptr interface{}) error {
 }
 
 func FindMutilWithBson(coll string, condi bson.M, ptr interface{}) error {
-	//TODO: mongodb配置参数待抽离
-	//session, err := mgo.Dial("localhost:27017")
 	once.Do(bmMongoConfig.GenerateConfig)
 	session, err := mgo.Dial(bmMongoConfig.Host + ":" + bmMongoConfig.Port)
 	if err != nil {
@@ -175,8 +165,6 @@ func FindMutilWithBson(coll string, condi bson.M, ptr interface{}) error {
 }
 
 func UpdateOne(req request.Request, ptr BMObject) error {
-	//TODO: mongodb配置参数待抽离
-	//session, err := mgo.Dial("localhost:27017")
 	once.Do(bmMongoConfig.GenerateConfig)
 	session, err := mgo.Dial(bmMongoConfig.Host + ":" + bmMongoConfig.Port)
 	if err != nil {
@@ -186,12 +174,6 @@ func UpdateOne(req request.Request, ptr BMObject) error {
 
 	c := session.DB(bmMongoConfig.Database).C(req.Res)
 
-	//手动指定更新资源
-	//bm := req.Cond2QueryObj(req.Res)
-	//if len(bm) == 0 {
-	//	fmt.Println("未指定更新对象")
-	//	return nil
-	//}
 	err = c.Find(req.Cond2QueryObj(req.Res)).One(ptr)
 	if err != nil {
 		return err

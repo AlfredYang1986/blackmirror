@@ -20,6 +20,14 @@ var bmRouter bmconfig.BMRouterConfig
 
 func InvokeSkeleton(w http.ResponseWriter, r *http.Request,
 	bks bmpipe.BMBrickFace, pkg string, idx int64) {
+
+	//defer func() {
+	//	if r := recover(); r != nil {
+	//		bks.BrickInstance().Err = -9998
+	//		bks.Return(w)
+	//	}
+	//}()
+
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		log.Printf("Error reading body: %v", err)
@@ -36,29 +44,6 @@ func InvokeSkeleton(w http.ResponseWriter, r *http.Request,
 	bks.Done(pkg, idx, err)
 	bks.Return(w)
 }
-
-//func InvokeSkeleton2(w http.ResponseWriter, r *http.Request,
-//	bks bmpipe.BMBrickFace, pkg string, idx int64, wg *sync.WaitGroup, mt *sync.Mutex) {
-//
-//	mt.Lock()
-//
-//	body, err := ioutil.ReadAll(r.Body)
-//	if err != nil {
-//		log.Printf("Error reading body: %v", err)
-//		http.Error(w, "can't read body", http.StatusBadRequest)
-//		return
-//	}
-//	sjson := string(body)
-//	w.Header().Add("Content-Type", "application/json")
-//	rst, _ := jsonapi.FromJsonAPI(sjson)
-//	bks.Prepare(rst)
-//	err = bks.Exec()
-//	bks.Done(pkg, idx, err)
-//	bks.Return(w)
-//
-//	mt.Unlock()
-//	wg.Done()
-//}
 
 func NextBrickRemote(pkg string, idx int64, face bmpipe.BMBrickFace) {
 
