@@ -157,8 +157,8 @@ func FindMutilWithBson(coll string, condi bson.M, ptr interface{}) error {
 		return errors.New("dial db error")
 	}
 	defer session.Close()
-
 	c := session.DB(bmMongoConfig.Database).C(coll)
+
 	err = c.Find(condi).All(ptr)
 
 	return err
