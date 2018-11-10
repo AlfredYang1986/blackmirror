@@ -13,5 +13,5 @@ func (br *BMRouterConfig) GenerateConfig() {
 
 	br.Host = profileItems["Host"].(string)
 	br.Port = profileItems["Port"].(string)
-	br.Port = profileItems["TmpDir"].(string)
+	br.TmpDir = profileItems["TmpDir"].(string)
 }
