@@ -16,6 +16,7 @@ import (
 	"strconv"
 	"strings"
 	"sync"
+	"github.com/alfredyang1986/blackmirror/bmconfighandle"
 )
 
 var rt *mux.Router
@@ -85,8 +86,13 @@ func uploadFunc(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		defer file.Close()
+
 		//TODO: 配置文件路径 待 用脚本指定dev路径和deploy路径
-		localDir := "resource/" + handler.Filename
+		var bmRouter bmconfig.BMRouterConfig
+		once.Do(bmRouter.GenerateConfig)
+
+		localDir := bmRouter.TmpDir + "/" + handler.Filename
+		//localDir := "tmp/" + handler.Filename
 		f, err := os.OpenFile(localDir, os.O_WRONLY|os.O_CREATE, 0666)
 		if err != nil {
 			fmt.Println("OpenFile error")

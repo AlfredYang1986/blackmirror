@@ -3,6 +3,7 @@ package bmconfig
 type BMRouterConfig struct {
 	Host string
 	Port string
+	TmpDir string
 }
 
 func (br *BMRouterConfig) GenerateConfig() {
@@ -12,4 +13,5 @@ func (br *BMRouterConfig) GenerateConfig() {
 
 	br.Host = profileItems["Host"].(string)
 	br.Port = profileItems["Port"].(string)
+	br.Port = profileItems["TmpDir"].(string)
 }
