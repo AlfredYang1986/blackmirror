@@ -46,7 +46,7 @@ func initEPipeline() {
 	t["findsessioninfomulti"] = []string{"BmFindSessionInfoMultiBrick", "BmFindSessionInfoBindCatMultiBrick"}
 	t["updatesessioninfd"] = []string{"BmSessionInfoUpdateBrick"}
 
-	t["pushyard"] = []string{"BmYardPushBrick", "BmTagImgYardPushBrick", "BmYardRoomPushBrick", "BmYardPushCertificationBrick", "BmBindYardPropBrick"}
+	t["pushyard"] = []string{"BmYardPushBrick", "BmTagImgYardPushBrick", "BmYardRoomPushBrick", /*"BmYardPushCertificationBrick",*/ "BmBindYardPropBrick"}
 	t["findyard"] = []string{"BmYardFindBrick", "BmYardFindBindBrick"}
 	t["findyardmulti"] = []string{"BmYardFindMulti"}
 	t["updateyard"] = []string{"BmYardUpdateBrick"}
