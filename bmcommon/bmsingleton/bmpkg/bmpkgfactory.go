@@ -52,6 +52,8 @@ func initEPipeline() {
 	t["findyard"] = []string{"BmYardFindBrick", "BmYardFindBindBrick"}
 	t["findyardmulti"] = []string{"BmYardFindMulti"}
 	t["updateyard"] = []string{"BmYardUpdateBrick"}
+	t["pushtagimg"] = []string{"BmTagImgPushBrick"}
+	t["tagimgbindyard"] = []string{"BmTagImgBindYard"}
 
 	//TODO：max 待提出
 	t["maxregister"] = []string{"PHAuthProfilePush", "PHAuthCompanyPush", "PHAuthProfileRSPush",
