@@ -81,7 +81,7 @@ func NextBrickRemote(pkg string, idx int64, face bmpipe.BMBrickFace) {
 	res, err := jsonapi.FromJsonAPI(string(content))
 	v := reflect.ValueOf(res)
 	if v.Type().Name() == "BMErrorNode" {
-		en := res.(bmerror.BMErrorNode)
+		en := res.(bmerror.BmErrorNode)
 		face.BrickInstance().Err = en.Code
 	}
 	face.BrickInstance().Pr = res
@@ -119,7 +119,7 @@ func ForWardNextBrick(host string, port string, pkg string, idx int64, face bmpi
 	res, err := jsonapi.FromJsonAPI(string(content))
 	v := reflect.ValueOf(res)
 	if v.Type().Name() == "BMErrorNode" {
-		en := res.(bmerror.BMErrorNode)
+		en := res.(bmerror.BmErrorNode)
 		face.BrickInstance().Err = en.Code
 	}
 	face.BrickInstance().Pr = res
