@@ -17,6 +17,8 @@ import (
 	"strings"
 	"sync"
 	"github.com/alfredyang1986/blackmirror/bmconfighandle"
+	"github.com/hashicorp/go-uuid"
+	"github.com/alfredyang1986/ddsaas/bmalioss"
 )
 
 var rt *mux.Router
@@ -78,6 +80,7 @@ func uploadFunc(w http.ResponseWriter, r *http.Request) {
 		SimpleResponseForErr(errMsg, w)
 	} else {
 		r.ParseMultipartForm(32 << 20)
+		//file, handler, err := r.FormFile("file")
 		file, handler, err := r.FormFile("file")
 		if err != nil {
 			fmt.Println(err)
@@ -89,10 +92,14 @@ func uploadFunc(w http.ResponseWriter, r *http.Request) {
 
 		//TODO: 配置文件路径 待 用脚本指定dev路径和deploy路径
 		var bmRouter bmconfig.BMRouterConfig
-		once.Do(bmRouter.GenerateConfig)
+		//once.Do(bmRouter.GenerateConfig)
+		bmRouter.GenerateConfig()
 
-		localDir := bmRouter.TmpDir + "/" + handler.Filename
-		//localDir := "tmp/" + handler.Filename
+		fn, err := uuid.GenerateUUID()
+		lsttmp := strings.Split(handler.Filename, ".")
+		exname := lsttmp[len(lsttmp) - 1]
+
+		localDir := bmRouter.TmpDir + "/" + fn + "." + exname // handler.Filename
 		f, err := os.OpenFile(localDir, os.O_WRONLY|os.O_CREATE, 0666)
 		if err != nil {
 			fmt.Println("OpenFile error")
@@ -105,8 +112,13 @@ func uploadFunc(w http.ResponseWriter, r *http.Request) {
 		io.Copy(f, file)
 
 		result := map[string]string{
-			"file": handler.Filename,
+			//"file": handler.Filename,
+			"file": fn,
 		}
+
+		//bmalioss.QuerySTSToken()
+		bmalioss.PushOneObject("bmsass", fn, localDir)
+
 		response := map[string]interface{}{
 			"status": "ok",
 			"result": result,
