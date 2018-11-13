@@ -14,6 +14,10 @@ type BMMongoMulti interface {
 	FindMulti(req request.Request) error
 }
 
+type BmMongoCover interface {
+	CoverBMObject() error
+}
+
 type BMMongoDel interface {
 	DeleteOne(request.Request) error
 }

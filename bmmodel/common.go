@@ -79,14 +79,16 @@ func InsertBMObject(ptr BMObject) error {
 	ptr.ResetId_WithID()
 
 	//nExist, _ := c.FindId(ptr.Id_).Count()
-	nExist, _ := c.FindId(ptr.QueryObjectId).Count()
+	nExist, _ := c.Find(bson.M{"_id": ptr.QueryObjectId()}).Count()
 	if nExist == 0 {
 		rst, err := Struct2map(v)
 		rst["_id"] = ptr.QueryObjectId()
 		err = c.Insert(rst)
 		return err
 	} else {
-		return errors.New("Only can instert not existed doc")
+		//TODO:抽离成单一接口调用.
+		return CoverOne(ptr)
+		//return errors.New("Only can instert not existed doc")
 	}
 }
 
@@ -201,6 +203,27 @@ func UpdateOne(req request.Request, ptr BMObject) error {
 	uv := reflect.ValueOf(ptr).Elem()
 	rst, err := Struct2map(uv)
 	rst["_id"] = ptr.QueryObjectId()
+	err = c.Update(bson.M{"_id": ptr.QueryObjectId()}, rst)
+
+	return err
+
+}
+
+func CoverOne(ptr BMObject) error {
+	once.Do(bmMongoConfig.GenerateConfig)
+	session, err := mgo.Dial(bmMongoConfig.Host + ":" + bmMongoConfig.Port)
+	if err != nil {
+		return errors.New("dial db error")
+	}
+	defer session.Close()
+
+	ptr.ResetIdWithId_()
+	v := reflect.ValueOf(ptr).Elem()
+	cn := v.Type().Name()
+	rst, err := Struct2map(v)
+	rst["_id"] = ptr.QueryObjectId()
+
+	c := session.DB(bmMongoConfig.Database).C(cn)
 	err = c.Update(bson.M{"_id": ptr.QueryObjectId()}, rst)
 
 	return err
