@@ -21,3 +21,7 @@ type BmMongoCover interface {
 type BMMongoDel interface {
 	DeleteOne(request.Request) error
 }
+
+type BMMongoDelAll interface {
+	DeleteAll(request.Request) error
+}

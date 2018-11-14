@@ -128,7 +128,30 @@ func DeleteOne(req request.Request, ptr BMObject) error {
 		return err
 	}
 
-	return nil
+	return err
+}
+
+func DeleteAll(req request.Request, ptr BMObject) error {
+	once.Do(bmMongoConfig.GenerateConfig)
+	session, err := mgo.Dial(bmMongoConfig.Host + ":" + bmMongoConfig.Port)
+	if err != nil {
+		return errors.New("dial db error")
+	}
+	defer session.Close()
+
+	c := session.DB(bmMongoConfig.Database).C(req.Res)
+	err = c.Find(req.Cond2QueryObj(req.Res)).One(ptr)
+	if err != nil {
+		return err
+	}
+	info, err := c.RemoveAll(req.Cond2QueryObj(req.Res))
+	if err != nil {
+		return err
+	}
+
+	fmt.Println(info.Removed)
+
+	return err
 }
 
 func FindMutil(req request.Request, ptr interface{}) error {

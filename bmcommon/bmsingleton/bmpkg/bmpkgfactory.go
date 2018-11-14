@@ -44,17 +44,21 @@ func initEPipeline() {
 	t["updateteacher"] = []string{"BmTeacherUpdateBrick"}
 
 	t["pushsessioninfo"] = []string{"BmSessionInfoPushBrick", "BmSessionCatPushBrick", "BmSessionImgPushBrick", "BmSessionPushProp"}
-	t["findsessioninfo"] = []string{"BmFindSessionInfoBrick", "BmBindFindSessionInfoCatBrick"}
+	t["findsessioninfo"] = []string{"BmFindSessionInfoBrick"}
 	t["findsessioninfomulti"] = []string{"BmFindSessionInfoMultiBrick", "BmFindSessionInfoBindCatMultiBrick"}
 	t["updatesessioninfo"] = []string{"BmSessionInfoUpdateBrick"}
 	t["updatecategory"] = []string{"BmCategoryUpdateBrick"}
 
 	t["pushyard"] = []string{"BmYardPushBrick", "BmTagImgYardPushBrick", "BmYardRoomPushBrick", /*"BmYardPushCertificationBrick",*/ "BmBindYardPropBrick"}
-	t["findyard"] = []string{"BmYardFindBrick", "BmYardFindBindBrick"}
+	t["findyard"] = []string{"BmYardFindBrick"}
 	t["findyardmulti"] = []string{"BmYardFindMulti"}
 	t["updateyard"] = []string{"BmYardUpdateBrick"}
 	t["pushtagimg"] = []string{"BmTagImgPushBrick"}
 	t["tagimgbindyard"] = []string{"BmTagImgBindYard"}
+
+	t["pushreservable"] = []string{"BmReservablePushBrick", "BmBindReservableProp", "BmReservablePushSession", "BmSessionCatPushBrick", "BmSessionImgPushBrick", "BmSessionPushProp"}
+	t["findreservable"] = []string{"BmReservableFindBrick"}
+	t["findreservablemulti"] = []string{"BmReservableFindMulti"}
 
 	//TODO：max 待提出
 	t["maxregister"] = []string{"PHAuthProfilePush", "PHAuthCompanyPush", "PHAuthProfileRSPush",
