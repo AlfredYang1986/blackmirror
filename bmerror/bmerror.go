@@ -50,6 +50,7 @@ func ErrInstance() *tBMError {
 				-6:    BmErrorNode{Code: -6, Title: "No company found!"},
 				-7:    BmErrorNode{Code: -7, Title: "No brand found!"},
 				-8:    BmErrorNode{Code: -8, Title: "This account already registered!"},
+				-9:    BmErrorNode{Code: -9, Title: "This applyee already registered! or Wrong wechat info!"},
 				-101:  BmErrorNode{Code: -101, Title: "This user already registered"},
 				-102:  BmErrorNode{Code: -102, Title: "User not found"},
 			},

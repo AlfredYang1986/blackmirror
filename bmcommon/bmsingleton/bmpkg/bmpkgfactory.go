@@ -45,7 +45,7 @@ func initEPipeline() {
 
 	t["pushsessioninfo"] = []string{"BmSessionInfoPushBrick", "BmSessionCatPushBrick", "BmSessionImgPushBrick", "BmSessionPushProp"}
 	t["findsessioninfo"] = []string{"BmFindSessionInfoBrick"}
-	t["findsessioninfomulti"] = []string{"BmFindSessionInfoMultiBrick", "BmFindSessionInfoBindCatMultiBrick"}
+	t["findsessioninfomulti"] = []string{"BmFindSessionInfoMultiBrick"}
 	t["updatesessioninfo"] = []string{"BmSessionInfoUpdateBrick"}
 	t["updatecategory"] = []string{"BmCategoryUpdateBrick"}
 
@@ -59,6 +59,14 @@ func initEPipeline() {
 	t["pushreservable"] = []string{"BmReservablePushBrick", "BmBindReservableProp", "BmReservablePushSession", "BmSessionCatPushBrick", "BmSessionImgPushBrick", "BmSessionPushProp"}
 	t["findreservable"] = []string{"BmReservableFindBrick"}
 	t["findreservablemulti"] = []string{"BmReservableFindMulti"}
+
+	t["pushapplyee"] = []string{"BmApplyeePushBrick", "BmApplyeeGenerateToken"}
+	t["findapplyee"] = []string{"BmApplyeeFindBrick"}
+	t["applyeegeneratetoken"] = []string{"BmApplyeeGenerateToken"}
+
+	t["pushapply"] = []string{"BmApplyPushBrick", "BmApplyPushKids", "BmApplyPushProp"}
+	t["findapply"] = []string{"BmApplyFindBrick"}
+	t["findapplies"] = []string{"BmAppliesFindBrick"}
 
 	//TODO：max 待提出
 	t["maxregister"] = []string{"PHAuthProfilePush", "PHAuthCompanyPush", "PHAuthProfileRSPush",
@@ -75,6 +83,7 @@ func initEPipeline() {
 
 	k = []string{
 		"getpublickey", "generatersakey", "insertaccount", "accountlogin", "phonelogin", "phone2auth", "insertauth", "maxregister", "maxlogin", "findteacherprimary",
+		"pushapplyee", "findapplyee", "applyeegeneratetoken",
 	}
 }
 
