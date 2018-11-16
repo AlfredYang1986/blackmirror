@@ -163,7 +163,10 @@ func FindMutil(req request.Request, ptr interface{}) error {
 	defer session.Close()
 
 	fmu := req.Fmcond
-	skip := (fmu.Page - 1) * fmu.Take
+	if fmu.Page < 0 {
+		fmu.Page = 0
+	}
+	skip := fmu.Page * fmu.Take
 
 	c := session.DB(bmMongoConfig.Database).C(req.Res)
 	if fmu.Take == 0 {
