@@ -31,7 +31,7 @@ func PushToken(token string) error {
 	pipe := client.Pipeline()
 
 	pipe.Incr(token)
-	pipe.Expire(token, 7*24*time.Hour)
+	pipe.Expire(token, 365*24*time.Hour)
 
 	_, err := pipe.Exec()
 	fmt.Println(token)
