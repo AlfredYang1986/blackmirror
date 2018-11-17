@@ -27,7 +27,7 @@ func initEPipeline() {
 	t["updatewechat"] = []string{"BMAuthWechatUpdateBrick"}
 
 	t["accountbindbrand"] = []string{"BmAccountBindBrand"}
-	t["pushbrand"] = []string{"BmBrandPushBrick" ,"BmBrandPushProp", "BmBrandBindProp"}
+	t["pushbrand"] = []string{"BmBrandPushBrick", "BmBrandPushProp", "BmBrandBindProp"}
 	t["findbrand"] = []string{"BmBrandFindBrick"}
 	t["updatebrand"] = []string{"BmBrandUpdateBrick"}
 
@@ -49,7 +49,7 @@ func initEPipeline() {
 	t["updatesessioninfo"] = []string{"BmSessionInfoUpdateBrick"}
 	t["updatecategory"] = []string{"BmCategoryUpdateBrick"}
 
-	t["pushyard"] = []string{"BmYardPushBrick", "BmTagImgYardPushBrick", "BmYardRoomPushBrick", /*"BmYardPushCertificationBrick",*/ "BmBindYardPropBrick"}
+	t["pushyard"] = []string{"BmYardPushBrick", "BmTagImgYardPushBrick", "BmYardRoomPushBrick" /*"BmYardPushCertificationBrick",*/, "BmBindYardPropBrick"}
 	t["findyard"] = []string{"BmYardFindBrick"}
 	t["findyardmulti"] = []string{"BmYardFindMulti"}
 	t["updateyard"] = []string{"BmYardUpdateBrick"}
@@ -67,6 +67,10 @@ func initEPipeline() {
 	t["pushapply"] = []string{"BmApplyPushBrick", "BmApplyPushKids", "BmApplyPushProp"}
 	t["findapply"] = []string{"BmApplyFindBrick"}
 	t["findapplies"] = []string{"BmAppliesFindBrick"}
+
+	t["pushsessionable"] = []string{"BmSessionablePushBrick", "BmSessionablePushProp"}
+	t["findsessionable"] = []string{"BmSessionableFindBrick"}
+	t["findsessionablemulti"] = []string{"BmSessionableFindMulti"}
 
 	//TODO：max 待提出
 	t["maxregister"] = []string{"PHAuthProfilePush", "PHAuthCompanyPush", "PHAuthProfileRSPush",

@@ -3,16 +3,13 @@ package bmoauth
 import (
 	"errors"
 	"fmt"
+	"github.com/alfredyang1986/blackmirror/bmredis"
 	"github.com/go-redis/redis"
 	"time"
 )
 
 func CheckToken(token string) error {
-	client := redis.NewClient(&redis.Options{
-		Addr:     "192.168.100.174:6379",
-		Password: "", // no password set
-		DB:       0,  // use default DB
-	})
+	client := bmredis.GetRedisClient()
 	defer client.Close()
 
 	_, err := client.Get(token).Result()
@@ -28,11 +25,7 @@ func CheckToken(token string) error {
 }
 
 func PushToken(token string) error {
-	client := redis.NewClient(&redis.Options{
-		Addr:     "192.168.100.174:6379",
-		Password: "", // no password set
-		DB:       0,  // use default DB
-	})
+	client := bmredis.GetRedisClient()
 	defer client.Close()
 
 	pipe := client.Pipeline()
