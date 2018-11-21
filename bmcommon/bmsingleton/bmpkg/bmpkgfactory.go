@@ -72,6 +72,8 @@ func initEPipeline() {
 	t["findsessionable"] = []string{"BmSessionableFindBrick"}
 	t["findsessionablemulti"] = []string{"BmSessionableFindMulti"}
 
+	t["findwechatinfo"] = []string{"BmWeChatInfoFindBrick"}
+
 	//TODO：max 待提出
 	t["maxregister"] = []string{"PHAuthProfilePush", "PHAuthCompanyPush", "PHAuthProfileRSPush",
 		"PHAuthRSPushBrick", "PHAuthPushBrick", "PHAuthGenerateToken"}
@@ -87,7 +89,7 @@ func initEPipeline() {
 
 	k = []string{
 		"getpublickey", "generatersakey", "insertaccount", "accountlogin", "phonelogin", "phone2auth", "insertauth", "maxregister", "maxlogin", "findteacherprimary",
-		"pushapplyee", "findapplyee", "applyeegeneratetoken",
+		"pushapplyee", "findapplyee", "applyeegeneratetoken", "findwechatinfo",
 	}
 }
 
