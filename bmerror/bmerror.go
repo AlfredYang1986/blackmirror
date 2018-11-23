@@ -2,6 +2,7 @@ package bmerror
 
 import (
 	"github.com/alfredyang1986/blackmirror/jsonapi"
+	"github.com/hashicorp/go-uuid"
 	"net/http"
 	"sync"
 )
@@ -41,7 +42,7 @@ func ErrInstance() *tBMError {
 		e = &tBMError{
 			m: map[int]BmErrorNode{
 				-9999: BmErrorNode{Code: -9999, Title: "unknown error"},
-				-9998: BmErrorNode{Code: -9998, Title: "jsonapi resolve error!"},
+				-9998: BmErrorNode{Code: -9998, Title: "Error! JsonAPI resolve error!", Detail: "Please check your input data!"},
 				-1:    BmErrorNode{Code: -1, Title: "This phone already registered"},
 				-2:    BmErrorNode{Code: -2, Title: "This WeChat already registered"},
 				-3:    BmErrorNode{Code: -3, Title: "This course or experience_class already registered, please change name"},
@@ -71,12 +72,15 @@ func (e *tBMError) IsErrorDefined(ec int) bool {
 
 func (e *tBMError) ErrorReval(ec int, w http.ResponseWriter) {
 	var errobjs []BmErrorNode
+	eid, _ :=uuid.GenerateUUID()
+	enode := BmErrorNode{}
 	if e.IsErrorDefined(ec) {
-		errobjs = append(errobjs, e.m[ec])
+		enode = e.m[ec]
 	} else {
-		//panic("cannot return no defined error")
-		errobjs = append(errobjs, e.m[-9999])
+		enode = e.m[-9999]
 	}
+	enode.Id = eid
+	errobjs = append(errobjs, enode)
 	tmp := BMErrorObject{
 		Errors:errobjs,
 	}
