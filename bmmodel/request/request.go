@@ -9,7 +9,8 @@ type Request struct {
 	Res    string      `json:"res"`
 	Cond   []Condition `json:"conditions" jsonapi:"relationships"`
 	Eqcond []Eqcond    `json:"Eqcond" jsonapi:"relationships"`
-	Fmcond Fmcond    `json:"Fmcond" jsonapi:"relationships"`
+	Gtcond []Gtcond    `json:"Gtcond" jsonapi:"relationships"`
+	Fmcond Fmcond      `json:"Fmcond" jsonapi:"relationships"`
 	Upcond []Upcond    `json:"Upcond" jsonapi:"relationships"`
 }
 
@@ -29,6 +30,12 @@ func (req Request) SetConnect(tag string, v interface{}) interface{} {
 			rst = append(rst, item.(Eqcond))
 		}
 		req.Eqcond = rst
+	case "Gtcond":
+		var rst []Gtcond
+		for _, item := range v.([]interface{}) {
+			rst = append(rst, item.(Gtcond))
+		}
+		req.Gtcond = rst
 	case "Fmcond":
 		req.Fmcond = v.(Fmcond)
 	case "Upcond":
@@ -47,6 +54,8 @@ func (req Request) QueryConnect(tag string) interface{} {
 		return req.Cond
 	case "Eqcond":
 		return req.Eqcond
+	case "Gtcond":
+		return req.Gtcond
 	case "Fmcond":
 		return req.Fmcond
 	case "Upcond":
@@ -59,14 +68,7 @@ func (req Request) QueryConnect(tag string) interface{} {
 func (req Request) Cond2QueryObj(cat string) bson.M {
 	rst := make(map[string]interface{})
 
-	var conds_tmp []Eqcond
-	var conds_all []Eqcond
-	for _, cond := range req.Cond {
-		conds_tmp = append(conds_tmp, cond.(Eqcond))
-	}
-	conds_all = append(conds_tmp, req.Eqcond...)
-
-	for _, cond := range conds_all {
+	for _, cond := range req.Gtcond {
 		if cond.IsQueryCondi() {
 			tmp := cond.Cond2QueryObj(cat)
 			for k, v := range tmp {
@@ -74,6 +76,25 @@ func (req Request) Cond2QueryObj(cat string) bson.M {
 			}
 		}
 	}
+
+	for _, cond := range req.Cond {
+		if cond.IsQueryCondi() {
+			tmp := cond.Cond2QueryObj(cat)
+			for k, v := range tmp {
+				rst[k] = v
+			}
+		}
+	}
+
+	for _, cond := range req.Eqcond {
+		if cond.IsQueryCondi() {
+			tmp := cond.Cond2QueryObj(cat)
+			for k, v := range tmp {
+				rst[k] = v
+			}
+		}
+	}
+
 	return rst
 }
 
