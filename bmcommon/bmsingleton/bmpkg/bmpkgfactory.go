@@ -58,6 +58,7 @@ func initEPipeline() {
 
 	t["pushreservable"] = []string{"BmReservablePushBrick", "BmBindReservableProp", "BmReservablePushSession", "BmSessionCatPushBrick", "BmSessionImgPushBrick", "BmSessionPushProp"}
 	t["findreservable"] = []string{"BmReservableFindBrick"}
+	t["deletereservable"] = []string{"BmReservableDeleteBrick"}
 	t["findreservablemulti"] = []string{"BmReservableFindMulti"}
 
 	t["pushapplyee"] = []string{"BmApplyeePushBrick", "BmApplyeeGenerateToken"}
@@ -70,6 +71,7 @@ func initEPipeline() {
 
 	t["pushsessionable"] = []string{"BmSessionablePushBrick", "BmSessionablePushProp"}
 	t["findsessionable"] = []string{"BmSessionableFindBrick"}
+	t["deletesessionable"] = []string{"BmSessionableDeleteBrick"}
 	t["findsessionablemulti"] = []string{"BmSessionableFindMulti"}
 
 	t["findwechatinfo"] = []string{"BmWeChatInfoFindBrick"}
