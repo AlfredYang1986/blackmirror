@@ -2,6 +2,7 @@ package bmrouter //bmser
 
 import (
 	"bytes"
+	"fmt"
 	"github.com/alfredyang1986/blackmirror/bmconfighandle"
 	"github.com/alfredyang1986/blackmirror/bmerror"
 	"github.com/alfredyang1986/blackmirror/bmpipe"
@@ -21,14 +22,14 @@ var bmRouter bmconfig.BMRouterConfig
 func InvokeSkeleton(w http.ResponseWriter, r *http.Request,
 	bks bmpipe.BMBrickFace, pkg string, idx int64) {
 
-	//defer func() {
-	//	if r := recover(); r != nil {
-	//		fmt.Println("Panic Error! Msg:")
-	//		fmt.Println(r)
-	//		bks.BrickInstance().Err = -9998
-	//		bks.Return(w)
-	//	}
-	//}()
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Println("Panic Error! Msg:")
+			fmt.Println(r)
+			bks.BrickInstance().Err = -9998
+			bks.Return(w)
+		}
+	}()
 
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
