@@ -5,13 +5,19 @@ import (
 )
 
 type Request struct {
-	Id     string      `json:"id"`
-	Res    string      `json:"res"`
-	Cond   []Condition `json:"conditions" jsonapi:"relationships"`
-	Eqcond []Eqcond    `json:"Eqcond" jsonapi:"relationships"`
-	Gtcond []Gtcond    `json:"Gtcond" jsonapi:"relationships"`
-	Fmcond Fmcond      `json:"Fmcond" jsonapi:"relationships"`
-	Upcond []Upcond    `json:"Upcond" jsonapi:"relationships"`
+	Id      string      `json:"id"`
+	Res     string      `json:"res"`
+	Cond    []Condition `json:"conditions" jsonapi:"relationships"`
+	Eqcond  []Eqcond    `json:"Eqcond" jsonapi:"relationships"`
+	Necond  []Necond    `json:"Necond" jsonapi:"relationships"`
+	Gtcond  []Gtcond    `json:"Gtcond" jsonapi:"relationships"`
+	Gtecond []Gtecond   `json:"Gtecond" jsonapi:"relationships"`
+	Ltcond  []Ltcond    `json:"Ltcond" jsonapi:"relationships"`
+	Ltecond []Ltecond   `json:"Ltecond" jsonapi:"relationships"`
+	Incond  []Incond    `json:"Incond" jsonapi:"relationships"`
+	Nincond []Nincond   `json:"Nincond" jsonapi:"relationships"`
+	Fmcond  Fmcond      `json:"Fmcond" jsonapi:"relationships"`
+	Upcond  []Upcond    `json:"Upcond" jsonapi:"relationships"`
 }
 
 func (req Request) SetConnect(tag string, v interface{}) interface{} {
@@ -30,12 +36,48 @@ func (req Request) SetConnect(tag string, v interface{}) interface{} {
 			rst = append(rst, item.(Eqcond))
 		}
 		req.Eqcond = rst
+	case "Necond":
+		var rst []Necond
+		for _, item := range v.([]interface{}) {
+			rst = append(rst, item.(Necond))
+		}
+		req.Necond = rst
 	case "Gtcond":
 		var rst []Gtcond
 		for _, item := range v.([]interface{}) {
 			rst = append(rst, item.(Gtcond))
 		}
 		req.Gtcond = rst
+	case "Gtecond":
+		var rst []Gtecond
+		for _, item := range v.([]interface{}) {
+			rst = append(rst, item.(Gtecond))
+		}
+		req.Gtecond = rst
+	case "Ltcond":
+		var rst []Ltcond
+		for _, item := range v.([]interface{}) {
+			rst = append(rst, item.(Ltcond))
+		}
+		req.Ltcond = rst
+	case "Ltecond":
+		var rst []Ltecond
+		for _, item := range v.([]interface{}) {
+			rst = append(rst, item.(Ltecond))
+		}
+		req.Ltecond = rst
+	case "Incond":
+		var rst []Incond
+		for _, item := range v.([]interface{}) {
+			rst = append(rst, item.(Incond))
+		}
+		req.Incond = rst
+	case "Nincond":
+		var rst []Nincond
+		for _, item := range v.([]interface{}) {
+			rst = append(rst, item.(Nincond))
+		}
+		req.Nincond = rst
 	case "Fmcond":
 		req.Fmcond = v.(Fmcond)
 	case "Upcond":
@@ -54,8 +96,20 @@ func (req Request) QueryConnect(tag string) interface{} {
 		return req.Cond
 	case "Eqcond":
 		return req.Eqcond
+	case "Necond":
+		return req.Necond
 	case "Gtcond":
 		return req.Gtcond
+	case "Gtecond":
+		return req.Gtecond
+	case "Ltcond":
+		return req.Ltcond
+	case "Ltecond":
+		return req.Ltecond
+	case "Incond":
+		return req.Incond
+	case "Nincond":
+		return req.Nincond
 	case "Fmcond":
 		return req.Fmcond
 	case "Upcond":
@@ -77,6 +131,33 @@ func (req Request) Cond2QueryObj(cat string) bson.M {
 		}
 	}
 
+	for _, cond := range req.Gtecond {
+		if cond.IsQueryCondi() {
+			tmp := cond.Cond2QueryObj(cat)
+			for k, v := range tmp {
+				rst[k] = v
+			}
+		}
+	}
+
+	for _, cond := range req.Ltcond {
+		if cond.IsQueryCondi() {
+			tmp := cond.Cond2QueryObj(cat)
+			for k, v := range tmp {
+				rst[k] = v
+			}
+		}
+	}
+
+	for _, cond := range req.Ltecond {
+		if cond.IsQueryCondi() {
+			tmp := cond.Cond2QueryObj(cat)
+			for k, v := range tmp {
+				rst[k] = v
+			}
+		}
+	}
+
 	for _, cond := range req.Cond {
 		if cond.IsQueryCondi() {
 			tmp := cond.Cond2QueryObj(cat)
@@ -86,7 +167,34 @@ func (req Request) Cond2QueryObj(cat string) bson.M {
 		}
 	}
 
+	for _, cond := range req.Incond {
+		if cond.IsQueryCondi() {
+			tmp := cond.Cond2QueryObj(cat)
+			for k, v := range tmp {
+				rst[k] = v
+			}
+		}
+	}
+
+	for _, cond := range req.Nincond {
+		if cond.IsQueryCondi() {
+			tmp := cond.Cond2QueryObj(cat)
+			for k, v := range tmp {
+				rst[k] = v
+			}
+		}
+	}
+
 	for _, cond := range req.Eqcond {
+		if cond.IsQueryCondi() {
+			tmp := cond.Cond2QueryObj(cat)
+			for k, v := range tmp {
+				rst[k] = v
+			}
+		}
+	}
+
+	for _, cond := range req.Necond {
 		if cond.IsQueryCondi() {
 			tmp := cond.Cond2QueryObj(cat)
 			for k, v := range tmp {
