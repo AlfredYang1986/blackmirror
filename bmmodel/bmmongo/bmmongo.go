@@ -25,3 +25,7 @@ type BMMongoDel interface {
 type BMMongoDelAll interface {
 	DeleteAll(request.Request) error
 }
+
+type BMMongoCount interface {
+	FindCount(request.Request) (int, error)
+}

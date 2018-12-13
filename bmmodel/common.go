@@ -174,6 +174,21 @@ func FindMutil(req request.Request, ptr interface{}) error {
 	return err
 }
 
+func FindCount(req request.Request) (int, error) {
+	once.Do(bmMongoConfig.GenerateConfig)
+	session, err := mgo.Dial(bmMongoConfig.Host + ":" + bmMongoConfig.Port)
+	if err != nil {
+		return 0, errors.New("dial db error")
+	}
+	defer session.Close()
+
+
+	c := session.DB(bmMongoConfig.Database).C(req.Res)
+	n, err := c.Find(req.Cond2QueryObj(req.Res)).Count()
+
+	return n, err
+}
+
 func FindMutilWithBson(coll string, condi bson.M, ptr interface{}) error {
 	once.Do(bmMongoConfig.GenerateConfig)
 	session, err := mgo.Dial(bmMongoConfig.Host + ":" + bmMongoConfig.Port)

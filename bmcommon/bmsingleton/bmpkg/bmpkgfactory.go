@@ -68,6 +68,7 @@ func initEPipeline() {
 	t["pushapply"] = []string{"BmApplyPushBrick", "BmApplyPushKids", "BmApplyPushProp"}
 	t["findapply"] = []string{"BmApplyFindBrick"}
 	t["findapplies"] = []string{"BmAppliesFindBrick"}
+	t["findcount"] = []string{"BmCountFindBrick"}
 
 	t["pushsessionable"] = []string{"BmSessionablePushBrick", "BmSessionablePushProp"}
 	t["findsessionable"] = []string{"BmSessionableFindBrick"}
