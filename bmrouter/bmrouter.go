@@ -28,7 +28,8 @@ func BindRouter() *mux.Router {
 	o.Do(func() {
 		rt = mux.NewRouter()
 
-		rt.HandleFunc("/upload", uploadFunc)
+		rt.HandleFunc("/upload", upload2OssFunc)
+		rt.HandleFunc("/maxupload", uploadCommonFunc)
 
 		rt.HandleFunc("/download/{filename}", downloadFunc)
 
@@ -71,7 +72,7 @@ func BindRouter() *mux.Router {
 	return rt
 }
 
-func uploadFunc(w http.ResponseWriter, r *http.Request) {
+func upload2OssFunc(w http.ResponseWriter, r *http.Request) {
 
 	//fmt.Println("method:", r.Method)
 	w.Header().Add("Content-Type", "application/json")
@@ -118,6 +119,56 @@ func uploadFunc(w http.ResponseWriter, r *http.Request) {
 
 		//bmalioss.QuerySTSToken()
 		bmalioss.PushOneObject("bmsass", fn, localDir)
+
+		response := map[string]interface{}{
+			"status": "ok",
+			"result": result,
+			"error":  "",
+		}
+		jso := jsonapiobj.JsResult{}
+		jso.Obj = response
+		enc := json.NewEncoder(w)
+		enc.Encode(jso.Obj)
+	}
+
+}
+
+func uploadCommonFunc(w http.ResponseWriter, r *http.Request) {
+
+	w.Header().Add("Content-Type", "application/json")
+	if r.Method == "GET" {
+		errMsg := "upload request method error, please use POST."
+		SimpleResponseForErr(errMsg, w)
+	} else {
+		r.ParseMultipartForm(32 << 20)
+		file, handler, err := r.FormFile("file")
+		if err != nil {
+			fmt.Println(err)
+			errMsg := "upload file key error, please use key 'file'."
+			SimpleResponseForErr(errMsg, w)
+			return
+		}
+		defer file.Close()
+
+		//TODO: 配置文件路径 待 用脚本指定dev路径和deploy路径
+		var bmRouter bmconfig.BMRouterConfig
+		bmRouter.GenerateConfig()
+
+		localDir := bmRouter.TmpDir + "/" + handler.Filename
+		f, err := os.OpenFile(localDir, os.O_WRONLY|os.O_CREATE, 0666)
+		if err != nil {
+			fmt.Println("OpenFile error")
+			fmt.Println(err)
+			errMsg := "upload local file open error."
+			SimpleResponseForErr(errMsg, w)
+			return
+		}
+		defer f.Close()
+		io.Copy(f, file)
+
+		result := map[string]string{
+			"file": handler.Filename,
+		}
 
 		response := map[string]interface{}{
 			"status": "ok",

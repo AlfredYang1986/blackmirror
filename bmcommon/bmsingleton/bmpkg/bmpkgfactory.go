@@ -17,8 +17,11 @@ func initEPipeline() {
 	//TODO：ddsaas 待提出
 	t["generatersakey"] = []string{"BMRsaKeyGenerateBrick"}
 	t["getpublickey"] = []string{"BMGetPublicKeyBrick"}
+
 	t["insertaccount"] = []string{"BMAccountPushBrick"}
 	t["accountlogin"] = []string{"BMAccountFindBrick"}
+	//t["accountlogin"] = []string{"BMAccountFindBrick", "BmAccountGenerateToken"}
+
 	t["phonelogin"] = []string{"BMAuthPhoneFindBrick"}
 	t["phone2auth"] = []string{"BMPhone2AuthRSBrick", "BMAuthRS2AuthBrick", "BMAuthGenerateToken"}
 	t["insertauth"] = []string{"BMPhonePushBrick", "BMWechatPushBrick", "BMAuthRSPushBrick", "BMAuthPushBrick", "BMAuthGenerateToken"}
@@ -74,6 +77,11 @@ func initEPipeline() {
 	t["findsessionable"] = []string{"BmSessionableFindBrick"}
 	t["deletesessionable"] = []string{"BmSessionableDeleteBrick"}
 	t["findsessionablemulti"] = []string{"BmSessionableFindMulti"}
+	t["findsessionablemultibyyard"] = []string{"BmSessionableFindMultiByYard"}
+
+	t["pushcourseunit"] = []string{"BmCourseUnitPushBrick", "BmCourseUnitPushProp"}
+	t["findcourseunit"] = []string{"BmCourseUnitFindBrick"}
+	t["findcourseunitmulti"] = []string{"BmCourseUnitFindMulti"}
 
 	t["findwechatinfo"] = []string{"BmWeChatInfoFindBrick"}
 
@@ -84,6 +92,7 @@ func initEPipeline() {
 	t["maxjobgenerate"] = []string{"PHMaxJobGenerateBrick"}
 	t["maxjobdelete"] = []string{"PHMaxJobDeleteBrick"}
 	t["maxjobpush"] = []string{"PHMaxJobPushBrick"}
+	t["maxjobpushpanel"] = []string{"PHMaxJobPushPanelBrick"}
 	t["maxjobsend"] = []string{"PHMaxJobSendBrick"}
 	t["samplecheckselecter"] = []string{"PHSampleCheckSelecterForwardBrick"}
 	t["samplecheckbody"] = []string{"PHSampleCheckBodyForwardBrick"}
