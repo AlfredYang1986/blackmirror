@@ -5,19 +5,20 @@ import (
 )
 
 type Request struct {
-	Id      string      `json:"id"`
-	Res     string      `json:"res"`
-	Cond    []Condition `json:"conditions" jsonapi:"relationships"`
-	Eqcond  []Eqcond    `json:"Eqcond" jsonapi:"relationships"`
-	Necond  []Necond    `json:"Necond" jsonapi:"relationships"`
-	Gtcond  []Gtcond    `json:"Gtcond" jsonapi:"relationships"`
-	Gtecond []Gtecond   `json:"Gtecond" jsonapi:"relationships"`
-	Ltcond  []Ltcond    `json:"Ltcond" jsonapi:"relationships"`
-	Ltecond []Ltecond   `json:"Ltecond" jsonapi:"relationships"`
-	Incond  []Incond    `json:"Incond" jsonapi:"relationships"`
-	Nincond []Nincond   `json:"Nincond" jsonapi:"relationships"`
-	Fmcond  Fmcond      `json:"Fmcond" jsonapi:"relationships"`
-	Upcond  []Upcond    `json:"Upcond" jsonapi:"relationships"`
+	Id       string      `json:"id"`
+	Res      string      `json:"res"`
+	Cond     []Condition `json:"conditions" jsonapi:"relationships"`
+	Eqcond   []Eqcond    `json:"Eqcond" jsonapi:"relationships"`
+	Necond   []Necond    `json:"Necond" jsonapi:"relationships"`
+	Gtcond   []Gtcond    `json:"Gtcond" jsonapi:"relationships"`
+	Gtecond  []Gtecond   `json:"Gtecond" jsonapi:"relationships"`
+	Ltcond   []Ltcond    `json:"Ltcond" jsonapi:"relationships"`
+	Ltecond  []Ltecond   `json:"Ltecond" jsonapi:"relationships"`
+	Incond   []Incond    `json:"Incond" jsonapi:"relationships"`
+	Nincond  []Nincond   `json:"Nincond" jsonapi:"relationships"`
+	Fmcond   Fmcond      `json:"Fmcond" jsonapi:"relationships"`
+	Upcond   []Upcond    `json:"Upcond" jsonapi:"relationships"`
+	Sortcond []Sortcond  `json:"Sortcond" jsonapi:"relationships"`
 }
 
 func (req Request) SetConnect(tag string, v interface{}) interface{} {
@@ -86,6 +87,12 @@ func (req Request) SetConnect(tag string, v interface{}) interface{} {
 			rst = append(rst, item.(Upcond))
 		}
 		req.Upcond = rst
+	case "Sortcond":
+		var rst []Sortcond
+		for _, item := range v.([]interface{}) {
+			rst = append(rst, item.(Sortcond))
+		}
+		req.Sortcond = rst
 	}
 	return req
 }
@@ -114,6 +121,8 @@ func (req Request) QueryConnect(tag string) interface{} {
 		return req.Fmcond
 	case "Upcond":
 		return req.Upcond
+	case "Sortcond":
+		return req.Sortcond
 	}
 	return req
 
@@ -237,4 +246,18 @@ func (req Request) CondiQueryVal(ky string, cat string) interface{} {
 		}
 	}
 	return nil
+}
+
+func (req Request) Cond2SortObj(cate string) []string {
+	var result []string
+	for _, cond := range req.Sortcond {
+		tmp := cond.Cond2SortObj(cate)
+		if tmp != "" {
+			result = append(result, tmp)
+		}
+	}
+	//如果Sortcond有参数，优先对其进行排序，最后再按create_time倒序排序
+	//记得手动对需要排序的实体创建CreateTime
+	result = append(result, "-create_time")
+	return result
 }

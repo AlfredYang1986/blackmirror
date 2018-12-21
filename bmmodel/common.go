@@ -166,10 +166,9 @@ func FindMutil(req request.Request, ptr interface{}) error {
 
 	c := session.DB(bmMongoConfig.Database).C(req.Res)
 	if fmu.Take == 0 {
-		//TODO:需要手动在数据库中对需要排序的资源进行createIndex({sortIndex : 1})
-		err = c.Find(req.Cond2QueryObj(req.Res)).Sort("-sortIndex").All(ptr)
+		err = c.Find(req.Cond2QueryObj(req.Res)).Sort(req.Cond2SortObj(req.Res)...).All(ptr)
 	} else {
-		err = c.Find(req.Cond2QueryObj(req.Res)).Skip(skip).Limit(fmu.Take).Sort("-sortIndex").All(ptr)
+		err = c.Find(req.Cond2QueryObj(req.Res)).Skip(skip).Limit(fmu.Take).Sort(req.Cond2SortObj(req.Res)...).All(ptr)
 	}
 
 	return err
