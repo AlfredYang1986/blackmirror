@@ -80,6 +80,7 @@ func (e *tBMError) ErrorReval(ec int, w http.ResponseWriter) {
 		enode = e.m[-9999]
 	}
 	enode.Id = eid
+	enode.Status = 500
 	errobjs = append(errobjs, enode)
 	tmp := BMErrorObject{
 		Errors:errobjs,

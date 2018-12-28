@@ -95,6 +95,7 @@ func initEPipeline() {
 	t["maxjobpushpanel"] = []string{"PHMaxJobPushPanelBrick"}
 	t["maxjobsend"] = []string{"PHMaxJobSendBrick"}
 	t["samplecheckselecter"] = []string{"PHSampleCheckSelecterForwardBrick"}
+	t["marketselecter"] = []string{"PhSelecterForMarketBrick"}
 	t["samplecheckbody"] = []string{"PHSampleCheckBodyForwardBrick"}
 	t["resultcheck"] = []string{"PHResultCheckForwardBrick"}
 	t["exportmaxresult"] = []string{"PHExportMaxResultForwardBrick"}

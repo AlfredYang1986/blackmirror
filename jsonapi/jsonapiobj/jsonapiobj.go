@@ -82,11 +82,9 @@ func (o *JsResult) struct2jsonAcc(v reflect.Value) (interface{}, error) {
 		rships[ky] = tmp
 	}
 
-	//TODO:临时解决解析出的实体id为空的问题
+	//TODO:待解决空的关联实体问题.
 	//if rst["id"] == "" {
-	//	result["id"],_ = uuid.GenerateUUID()
-	//} else {
-	//	result["id"] = rst["id"]
+	//	return make(map[string]interface{}), nil
 	//}
 
 	result["id"] = rst["id"]
