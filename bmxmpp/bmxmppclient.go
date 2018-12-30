@@ -14,6 +14,9 @@ import (
 )
 var bmXmppConfig bmconfig.BmXmppConfig
 
+var server string
+var username string
+var password string
 var status = flag.String("status", "xa", "status")
 var statusMessage = flag.String("status-msg", "status-msg", "status message")
 var notls = flag.Bool("notls", true, "No TLS")
@@ -27,9 +30,9 @@ func serverName(host string) string {
 
 func Forward(userjid string, msg string) error {
 	bmXmppConfig.GenerateConfig()
-	var server = bmXmppConfig.Host + ":" + bmXmppConfig.Port
-	var username = bmXmppConfig.LoginUser + "@" + bmXmppConfig.HostName
-	var password = bmXmppConfig.LoginUserPwd
+	server = bmXmppConfig.Host + ":" + bmXmppConfig.Port
+	username = bmXmppConfig.LoginUser + "@" + bmXmppConfig.HostName
+	password = bmXmppConfig.LoginUserPwd
 
 	flag.Usage = func() {
 		fmt.Fprintf(os.Stderr, "usage: example [options]\n")
