@@ -5,16 +5,15 @@ import (
 	"crypto/tls"
 	"flag"
 	"fmt"
+	"github.com/alfredyang1986/blackmirror/bmconfighandle"
 	"github.com/mattn/go-xmpp"
 	"io"
 	"log"
 	"os"
 	"strings"
 )
+var bmXmppConfig bmconfig.BmXmppConfig
 
-var server = flag.String("server", "192.168.100.172:5222", "server")
-var username = flag.String("username", "jeorch@192.168.100.172", "username")
-var password = flag.String("password", "jeorch", "password")
 var status = flag.String("status", "xa", "status")
 var statusMessage = flag.String("status-msg", "status-msg", "status message")
 var notls = flag.Bool("notls", true, "No TLS")
@@ -27,6 +26,11 @@ func serverName(host string) string {
 }
 
 func Forward(userjid string, msg string) error {
+	bmXmppConfig.GenerateConfig()
+	var server = flag.String("server", bmXmppConfig.Host + ":" + bmXmppConfig.Port, "server")
+	var username = flag.String("username", bmXmppConfig.LoginUser + "@" + bmXmppConfig.Host, "username")
+	var password = flag.String("password", bmXmppConfig.LoginUserPwd, "password")
+
 	flag.Usage = func() {
 		fmt.Fprintf(os.Stderr, "usage: example [options]\n")
 		flag.PrintDefaults()
