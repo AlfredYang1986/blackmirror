@@ -27,9 +27,9 @@ func serverName(host string) string {
 
 func Forward(userjid string, msg string) error {
 	bmXmppConfig.GenerateConfig()
-	var server = flag.String("server", bmXmppConfig.Host + ":" + bmXmppConfig.Port, "server")
-	var username = flag.String("username", bmXmppConfig.LoginUser + "@" + bmXmppConfig.Host, "username")
-	var password = flag.String("password", bmXmppConfig.LoginUserPwd, "password")
+	var server = bmXmppConfig.Host + ":" + bmXmppConfig.Port
+	var username = bmXmppConfig.LoginUser + "@" + bmXmppConfig.HostName
+	var password = bmXmppConfig.LoginUserPwd
 
 	flag.Usage = func() {
 		fmt.Fprintf(os.Stderr, "usage: example [options]\n")
@@ -37,16 +37,16 @@ func Forward(userjid string, msg string) error {
 		os.Exit(2)
 	}
 	flag.Parse()
-	if *username == "" || *password == "" {
-		if *debug && *username == "" && *password == "" {
+	if username == "" || password == "" {
+		if *debug && username == "" && password == "" {
 			fmt.Fprintf(os.Stderr, "no username or password were given; attempting ANONYMOUS auth\n")
-		} else if *username != "" || *password != "" {
+		} else if username != "" || password != "" {
 			flag.Usage()
 		}
 	}
 
 	xmpp.DefaultConfig = tls.Config{
-		ServerName:         serverName(*server),
+		ServerName:         serverName(server),
 		InsecureSkipVerify: true,
 	}
 
@@ -56,9 +56,9 @@ func Forward(userjid string, msg string) error {
 	//resource,_ := uuid.GenerateUUID()
 
 	options := xmpp.Options{
-		Host:          *server,
-		User:          *username,
-		Password:      *password,
+		Host:          server,
+		User:          username,
+		Password:      password,
 		NoTLS:         *notls,
 		StartTLS:      *starttls,
 		Debug:         *debug,
