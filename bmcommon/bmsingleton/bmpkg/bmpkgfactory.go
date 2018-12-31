@@ -42,9 +42,12 @@ func initEPipeline() {
 
 	t["pushteacher"] = []string{"BmTeacherPushBrick"}
 	t["findteacher"] = []string{"BmTeacherFindBrick"}
-	//t["findteacherprimary"] = []string{"BmPersonFindBrick", "BmPersonTeacherRS"}
 	t["findteachermulti"] = []string{"BmTeacherFindMultiBrick"}
-	t["updateteacher"] = []string{"BmTeacherUpdateBrick"}
+
+	t["pushroom"] = []string{"BmRoomPushBrick"}
+	t["findroom"] = []string{"BmRoomFindBrick"}
+	t["deleteroom"] = []string{"BmRoomDeleteBrick"}
+	t["findroommulti"] = []string{"BmRoomFindMultiBrick"}
 
 	t["pushsessioninfo"] = []string{"BmSessionInfoPushBrick", "BmSessionCatPushBrick", "BmSessionImgPushBrick", "BmSessionPushProp"}
 	t["findsessioninfo"] = []string{"BmFindSessionInfoBrick"}
@@ -52,10 +55,9 @@ func initEPipeline() {
 	t["updatesessioninfo"] = []string{"BmSessionInfoUpdateBrick"}
 	t["updatecategory"] = []string{"BmCategoryUpdateBrick"}
 
-	t["pushyard"] = []string{"BmYardPushBrick", "BmTagImgYardPushBrick", "BmYardRoomPushBrick", "BmYardPushCertificationBrick", "BmBindYardPropBrick"}
+	t["pushyard"] = []string{"BmYardPushBrick", "BmTagImgYardPushBrick", "BmYardPushCertificationBrick", "BmBindYardPropBrick"}
 	t["findyard"] = []string{"BmYardFindBrick"}
 	t["findyardmulti"] = []string{"BmYardFindMulti"}
-	t["updateyard"] = []string{"BmYardUpdateBrick"}
 	t["pushtagimg"] = []string{"BmTagImgPushBrick"}
 	t["tagimgbindyard"] = []string{"BmTagImgBindYard"}
 
