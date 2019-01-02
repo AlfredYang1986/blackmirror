@@ -3,13 +3,13 @@ package bmrouter
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/alfredyang1986/blackmirror/bmalioss"
 	"github.com/alfredyang1986/blackmirror/bmcommon/bmsingleton/bmpkg"
 	"github.com/alfredyang1986/blackmirror/bmrouter/bmoauth"
 	"github.com/alfredyang1986/blackmirror/jsonapi/jsonapiobj"
 	"io"
 	"io/ioutil"
 	"os"
-	//"github.com/alfredyang1986/blackmirror/bmser"
 	"errors"
 	"github.com/gorilla/mux"
 	"net/http"
@@ -18,7 +18,6 @@ import (
 	"sync"
 	"github.com/alfredyang1986/blackmirror/bmconfighandle"
 	"github.com/hashicorp/go-uuid"
-	"github.com/alfredyang1986/ddsaas/bmalioss"
 )
 
 var rt *mux.Router
