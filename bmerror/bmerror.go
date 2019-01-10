@@ -52,6 +52,7 @@ func ErrInstance() *tBMError {
 				-7:    BmErrorNode{Code: -7, Title: "No brand found!"},
 				-8:    BmErrorNode{Code: -8, Title: "This account already registered!"},
 				-9:    BmErrorNode{Code: -9, Title: "This applyee already registered! or Wrong wechat info!"},
+				-10:    BmErrorNode{Code: -10, Title: "No wechat_openid found!", Detail: "No wechat_openid found!"},
 				-101:  BmErrorNode{Code: -101, Title: "This user already registered"},
 				-102:  BmErrorNode{Code: -102, Title: "User not found!"},
 				-103:  BmErrorNode{Code: -103, Title: "Password error!"},
