@@ -5,6 +5,7 @@ import (
 	"crypto/sha1"
 	"encoding/base64"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"github.com/alfredyang1986/blackmirror/bmredis"
 	"github.com/hashicorp/go-uuid"
@@ -22,7 +23,7 @@ const appsec = "PcDzLSOE86DsnjQn8IEgbaIQmyBzt6"
 
 func QuerySTSToken() (BmSTS, error) {
 	reval, err := querySTSToken()
-	if err != nil {
+	if err == nil {
 		return reval, err
 	} else {
 		return queryRemoteSTSToken()
@@ -123,9 +124,10 @@ func querySTSToken () (BmSTS, error) {
 
 	var reval BmSTS
 	tmp, err := client.HGetAll("dongda-oss-key").Result()
-	if err != nil {
+	if err == nil && len(tmp) != 0 {
 		reval.ResetSecurityProp(tmp)
+		return reval, nil
 	}
 
-	return reval, err
+	return reval, errors.New("redis get dongda-oss-key error")
 }

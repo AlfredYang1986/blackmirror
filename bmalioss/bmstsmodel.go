@@ -19,8 +19,10 @@ func (b BmSTS) GetSecurityToken() string {
 }
 
 func (b *BmSTS) ResetSecurityProp(mp map[string]string) error {
+	tm := make(map[string]interface{}, 3)
 	for k, v := range mp {
-		b.Credentials[k] = v
+		tm[k] = v
 	}
+	b.Credentials = tm
 	return nil
 }
