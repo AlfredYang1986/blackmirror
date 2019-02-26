@@ -52,7 +52,8 @@ func ErrInstance() *tBMError {
 				-7:    BmErrorNode{Code: -7, Title: "No brand found!"},
 				-8:    BmErrorNode{Code: -8, Title: "This account already registered!"},
 				-9:    BmErrorNode{Code: -9, Title: "This applyee already registered! or Wrong wechat info!"},
-				-10:    BmErrorNode{Code: -10, Title: "No wechat_openid found!", Detail: "No wechat_openid found!"},
+				-10:   BmErrorNode{Code: -10, Title: "No wechat_openid found!", Detail: "No wechat_openid found!"},
+				-11:   BmErrorNode{Code: -11, Title: "Account not found!", Detail: "Account not found!"},
 				-101:  BmErrorNode{Code: -101, Title: "This user already registered"},
 				-102:  BmErrorNode{Code: -102, Title: "User not found!"},
 				-103:  BmErrorNode{Code: -103, Title: "Password error!"},
@@ -74,7 +75,7 @@ func (e *tBMError) IsErrorDefined(ec int) bool {
 
 func (e *tBMError) ErrorReval(ec int, w http.ResponseWriter) {
 	var errobjs []BmErrorNode
-	eid, _ :=uuid.GenerateUUID()
+	eid, _ := uuid.GenerateUUID()
 	enode := BmErrorNode{}
 	if e.IsErrorDefined(ec) {
 		enode = e.m[ec]
@@ -85,7 +86,7 @@ func (e *tBMError) ErrorReval(ec int, w http.ResponseWriter) {
 	enode.Status = 500
 	errobjs = append(errobjs, enode)
 	tmp := BMErrorObject{
-		Errors:errobjs,
+		Errors: errobjs,
 	}
 	jsonapi.ToJsonAPIForError(&tmp, w)
 }
