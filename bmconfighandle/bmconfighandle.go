@@ -50,7 +50,8 @@ func BMGetConfigMap(configPath string) map[string]interface{} {
 	var configMap map[string]interface{}
 	b, _ := ioutil.ReadFile(configPath)
 	if err := json.Unmarshal(b, &configMap); err != nil {
-		panic(err)
+		errstr := configPath + " => " + err.Error()
+		panic(errstr)
 	}
 	return configMap
 }
