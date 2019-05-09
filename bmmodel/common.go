@@ -101,7 +101,7 @@ func FindOne(req request.Request, ptr BMObject) error {
 	defer session.Close()
 
 	c := session.DB(bmMongoConfig.Database).C(req.Res)
-	err = c.Find(req.Cond2QueryObj(req.Res)).One(ptr)
+	err = c.Find(req.Cond2QueryObj(req.Res)).Sort(req.Cond2SortObj(req.Res)...).One(ptr)
 	if err != nil {
 		return err
 	}

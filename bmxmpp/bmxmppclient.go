@@ -49,7 +49,7 @@ func Forward(userjid string, msg string) error {
 	}
 
 	xmpp.DefaultConfig = tls.Config{
-		ServerName:         serverName(server),
+		ServerName:         bmXmppConfig.HostName,
 		InsecureSkipVerify: true,
 	}
 
