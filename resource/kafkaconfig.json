@@ -1,0 +1,7 @@
+{
+  "Broker":"59.110.31.50:9092",
+  "Group":"console-consumer-25919",
+  "Topics": [
+    "test"
+  ]
+}
