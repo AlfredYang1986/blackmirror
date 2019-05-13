@@ -26,7 +26,7 @@ func (bkc *bmKafkaConfig) GetProducerInstance() (*kafka.Producer, error) {
 	return producer, e
 }
 
-func (bkc *bmKafkaConfig) Produce(topic *string, value string)  {
+func (bkc *bmKafkaConfig) Produce(topic *string, value []byte)  {
 
 	p, err := bkc.GetProducerInstance()
 	panicError(err)
@@ -37,7 +37,7 @@ func (bkc *bmKafkaConfig) Produce(topic *string, value string)  {
 
 	msg := kafka.Message{
 		TopicPartition: kafka.TopicPartition{Topic: topic, Partition: kafka.PartitionAny},
-		Value:          []byte(value),
+		Value:          value,
 		Headers:        []kafka.Header{{Key: "myTestHeader", Value: []byte("header values are binary")}},
 	}
 

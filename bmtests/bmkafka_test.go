@@ -16,7 +16,7 @@ func TestKafkaProducer(t *testing.T) {
 		panic(err.Error())
 	}
 	topic := "test"
-	bkc.Produce(&topic, "Jeorch => TestKafkaProducer")
+	bkc.Produce(&topic, []byte("Su => TestKafkaProducer"))
 
 }
 
