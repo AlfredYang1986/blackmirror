@@ -7,6 +7,7 @@ import (
 	"os/signal"
 	"sync"
 	"syscall"
+	"time"
 )
 
 var consumer *kafka.Consumer
@@ -73,10 +74,70 @@ func (bkc *bmKafkaConfig) SubscribeTopics(topics []string, subscribeFunc func(in
 			case *kafka.Message:
 				fmt.Printf("%% Message on %s:\n%s\n",
 					e.TopicPartition, string(e.Value))
-				subscribeFunc(string(e.Value))
+				subscribeFunc(e.Value)
 				if e.Headers != nil {
 					fmt.Printf("%% Headers: %v\n", e.Headers)
 				}
+			case kafka.Error:
+				// Errors should generally be considered
+				// informational, the client will try to
+				// automatically recover.
+				// But in this example we choose to terminate
+				// the application if all brokers are down.
+				fmt.Fprintf(os.Stderr, "%% Error: %v: %v\n", e.Code(), e)
+				if e.Code() == kafka.ErrAllBrokersDown {
+					run = false
+				}
+			default:
+				fmt.Printf("Ignored %v\n", e)
+			}
+		}
+	}
+
+}
+
+func (bkc *bmKafkaConfig) SubscribeTopicsOnce(topics []string, duration time.Duration, subscribeFunc func(interface{})) {
+	if len(bkc.topics) == 0 {
+		panic("no topics in config")
+	}
+	c, err := bkc.GetConsumerInstance()
+	panicError(err)
+	if len(topics) == 0 {
+		err = c.SubscribeTopics(bkc.topics, nil)
+	} else {
+		err = c.SubscribeTopics(topics, nil)
+	}
+	panicError(err)
+
+	run := true
+	sigchan := make(chan os.Signal, 1)
+	signal.Notify(sigchan, syscall.SIGINT, syscall.SIGTERM)
+
+	timeout := time.After(duration)
+
+	for run == true {
+		select {
+		case sig := <-sigchan:
+			fmt.Printf("Caught signal %v: terminating\n", sig)
+			run = false
+		case <-timeout:
+			fmt.Printf("SubscribeTopicsOnce timeout ", duration)
+			run = false
+		default:
+			ev := c.Poll(100)
+			if ev == nil {
+				continue
+			}
+
+			switch e := ev.(type) {
+			case *kafka.Message:
+				fmt.Printf("%% Message on %s:\n%s\n",
+					e.TopicPartition, string(e.Value))
+				subscribeFunc(e.Value)
+				if e.Headers != nil {
+					fmt.Printf("%% Headers: %v\n", e.Headers)
+				}
+				run = false
 			case kafka.Error:
 				// Errors should generally be considered
 				// informational, the client will try to

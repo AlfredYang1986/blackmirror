@@ -5,6 +5,7 @@ import (
 	"github.com/alfredyang1986/blackmirror/bmkafka"
 	"os"
 	"testing"
+	"time"
 )
 
 func TestKafkaProducer(t *testing.T) {
@@ -16,7 +17,7 @@ func TestKafkaProducer(t *testing.T) {
 		panic(err.Error())
 	}
 	topic := "test"
-	bkc.Produce(&topic, []byte("Su => TestKafkaProducer"))
+	bkc.Produce(&topic, []byte("LaoDeng => TestKafkaProducer"))
 
 }
 
@@ -35,5 +36,7 @@ func TestKafkaConsumer(t *testing.T) {
 
 func subscribeFunc(a interface{}) {
 	fmt.Println("subscribeFunc => ", a)
+	time.Sleep(10 * time.Second)
+	fmt.Println("subscribeFunc DONE!")
 }
 
