@@ -26,10 +26,6 @@ func GetConfigInstance() (*BmXmppConfig, error) {
 	onceConfig.Do(func() {
 		configPath := os.Getenv("BM_XMPP_CONF_HOME")
 		profileItems := bmconfig.BMGetConfigMap(configPath)
-		topics := make([]string, 0)
-		for _, t := range profileItems["Topics"].([]interface{}) {
-			topics = append(topics, t.(string))
-		}
 		config = &BmXmppConfig{
 			Host:profileItems["Host"].(string),
 			Port:profileItems["Port"].(string),
