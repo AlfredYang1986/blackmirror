@@ -11,7 +11,7 @@ var onceProducer sync.Once
 
 func (bkc *bmKafkaConfig) GetProducerInstance() (*kafka.Producer, error) {
 	onceProducer.Do(func() {
-		p, err := kafka.NewProducer(&kafka.ConfigMap{"bootstrap.servers": bkc.broker})
+		p, err := kafka.NewProducer(&kafka.ConfigMap{"bootstrap.servers": bkc.Broker})
 
 		if err != nil {
 			fmt.Printf("Failed to create producer: %s\n", err)

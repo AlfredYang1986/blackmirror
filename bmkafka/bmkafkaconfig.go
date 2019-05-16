@@ -7,9 +7,10 @@ import (
 )
 
 type bmKafkaConfig struct {
-	broker string
-	group  string
-	topics []string
+	Broker              string
+	Group               string
+	Topics              []string
+	SchemaRepositoryUrl string
 }
 
 var e error
@@ -25,9 +26,10 @@ func GetConfigInstance() (*bmKafkaConfig, error) {
 			topics = append(topics, t.(string))
 		}
 		config = &bmKafkaConfig{
-			broker: profileItems["Broker"].(string),
-			group: profileItems["Group"].(string),
-			topics: topics,
+			Broker: profileItems["Broker"].(string),
+			SchemaRepositoryUrl: profileItems["SchemaRepositoryUrl"].(string),
+			Group:  profileItems["Group"].(string),
+			Topics: topics,
 		}
 		e = nil
 	})

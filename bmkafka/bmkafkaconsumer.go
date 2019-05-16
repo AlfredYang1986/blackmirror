@@ -16,14 +16,14 @@ var onceConsumer sync.Once
 func (bkc *bmKafkaConfig) GetConsumerInstance() (*kafka.Consumer, error) {
 	onceConsumer.Do(func() {
 		c, err := kafka.NewConsumer(&kafka.ConfigMap{
-			"bootstrap.servers": bkc.broker,
+			"bootstrap.servers": bkc.Broker,
 			// Avoid connecting to IPv6 brokers:
 			// This is needed for the ErrAllBrokersDown show-case below
 			// when using localhost brokers on OSX, since the OSX resolver
 			// will return the IPv6 addresses first.
 			// You typically don't need to specify this configuration property.
 			"broker.address.family": "v4",
-			"group.id":              bkc.group,
+			"group.id":              bkc.Group,
 			"session.timeout.ms":    6000,
 			"auto.offset.reset":     "earliest"})
 
@@ -36,20 +36,20 @@ func (bkc *bmKafkaConfig) GetConsumerInstance() (*kafka.Consumer, error) {
 			e = nil
 		}
 
-		//err = c.SubscribeTopics(bkc.topics, nil)
+		//err = c.SubscribeTopics(bkc.Topics, nil)
 
 	})
 	return consumer, e
 }
 
 func (bkc *bmKafkaConfig) SubscribeTopics(topics []string, subscribeFunc func(interface{})) {
-	if len(bkc.topics) == 0 {
-		panic("no topics in config")
+	if len(bkc.Topics) == 0 {
+		panic("no Topics in config")
 	}
 	c, err := bkc.GetConsumerInstance()
 	panicError(err)
 	if len(topics) == 0 {
-		err = c.SubscribeTopics(bkc.topics, nil)
+		err = c.SubscribeTopics(bkc.Topics, nil)
 	} else {
 		err = c.SubscribeTopics(topics, nil)
 	}
@@ -97,13 +97,13 @@ func (bkc *bmKafkaConfig) SubscribeTopics(topics []string, subscribeFunc func(in
 }
 
 func (bkc *bmKafkaConfig) SubscribeTopicsOnce(topics []string, duration time.Duration, subscribeFunc func(interface{})) {
-	if len(bkc.topics) == 0 {
-		panic("no topics in config")
+	if len(bkc.Topics) == 0 {
+		panic("no Topics in config")
 	}
 	c, err := bkc.GetConsumerInstance()
 	panicError(err)
 	if len(topics) == 0 {
-		err = c.SubscribeTopics(bkc.topics, nil)
+		err = c.SubscribeTopics(bkc.Topics, nil)
 	} else {
 		err = c.SubscribeTopics(topics, nil)
 	}

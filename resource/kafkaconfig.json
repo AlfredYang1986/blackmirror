@@ -1,6 +1,7 @@
 {
   "Broker":"59.110.31.50:9092",
-  "Group":"console-consumer-25919",
+  "SchemaRepositoryUrl":"http://59.110.31.50:8081",
+  "Group":"test20190516",
   "Topics": [
     "test"
   ]
