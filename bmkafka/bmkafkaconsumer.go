@@ -2,6 +2,7 @@ package bmkafka
 
 import (
 	"fmt"
+	"github.com/alfredyang1986/blackmirror/bmerror"
 	"github.com/confluentinc/confluent-kafka-go/kafka"
 	"os"
 	"os/signal"
@@ -47,13 +48,13 @@ func (bkc *bmKafkaConfig) SubscribeTopics(topics []string, subscribeFunc func(in
 		panic("no Topics in config")
 	}
 	c, err := bkc.GetConsumerInstance()
-	panicError(err)
+	bmerror.PanicError(err)
 	if len(topics) == 0 {
 		err = c.SubscribeTopics(bkc.Topics, nil)
 	} else {
 		err = c.SubscribeTopics(topics, nil)
 	}
-	panicError(err)
+	bmerror.PanicError(err)
 
 	run := true
 	sigchan := make(chan os.Signal, 1)
@@ -101,13 +102,13 @@ func (bkc *bmKafkaConfig) SubscribeTopicsOnce(topics []string, duration time.Dur
 		panic("no Topics in config")
 	}
 	c, err := bkc.GetConsumerInstance()
-	panicError(err)
+	bmerror.PanicError(err)
 	if len(topics) == 0 {
 		err = c.SubscribeTopics(bkc.Topics, nil)
 	} else {
 		err = c.SubscribeTopics(topics, nil)
 	}
-	panicError(err)
+	bmerror.PanicError(err)
 
 	run := true
 	sigchan := make(chan os.Signal, 1)

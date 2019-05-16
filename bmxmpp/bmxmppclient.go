@@ -5,14 +5,11 @@ import (
 	"crypto/tls"
 	"flag"
 	"fmt"
-	"github.com/alfredyang1986/blackmirror/bmconfighandle"
 	"github.com/mattn/go-xmpp"
 	"io"
 	"log"
 	"os"
-	"strings"
 )
-var bmXmppConfig bmconfig.BmXmppConfig
 
 var server string
 var username string
@@ -24,15 +21,10 @@ var starttls = flag.Bool("starttls", true, "Start TLS")
 var debug = flag.Bool("debug", false, "debug output")
 var session = flag.Bool("session", true, "use server session")
 
-func serverName(host string) string {
-	return strings.Split(host, ":")[0]
-}
-
-func Forward(userjid string, msg string) error {
-	bmXmppConfig.GenerateConfig()
-	server = bmXmppConfig.Host + ":" + bmXmppConfig.Port
-	username = bmXmppConfig.LoginUser + "@" + bmXmppConfig.HostName
-	password = bmXmppConfig.LoginUserPwd
+func (bxc *BmXmppConfig) Forward(userjid string, msg string) error {
+	server = bxc.Host + ":" + bxc.Port
+	username = bxc.LoginUser + "@" + bxc.HostName
+	password = bxc.LoginUserPwd
 
 	flag.Usage = func() {
 		fmt.Fprintf(os.Stderr, "usage: example [options]\n")
@@ -49,7 +41,7 @@ func Forward(userjid string, msg string) error {
 	}
 
 	xmpp.DefaultConfig = tls.Config{
-		ServerName:         bmXmppConfig.HostName,
+		ServerName:         bxc.HostName,
 		InsecureSkipVerify: true,
 	}
 

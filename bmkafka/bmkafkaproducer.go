@@ -2,6 +2,7 @@ package bmkafka
 
 import (
 	"fmt"
+	"github.com/alfredyang1986/blackmirror/bmerror"
 	"github.com/confluentinc/confluent-kafka-go/kafka"
 	"sync"
 )
@@ -29,7 +30,7 @@ func (bkc *bmKafkaConfig) GetProducerInstance() (*kafka.Producer, error) {
 func (bkc *bmKafkaConfig) Produce(topic *string, value []byte)  {
 
 	p, err := bkc.GetProducerInstance()
-	panicError(err)
+	bmerror.PanicError(err)
 
 	// Optional delivery channel, if not specified the Producer object's
 	// .Events channel is used.
@@ -42,7 +43,7 @@ func (bkc *bmKafkaConfig) Produce(topic *string, value []byte)  {
 	}
 
 	err = p.Produce(&msg, deliveryChan)
-	panicError(err)
+	bmerror.PanicError(err)
 
 	e := <-deliveryChan
 	m := e.(*kafka.Message)

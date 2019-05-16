@@ -103,3 +103,9 @@ func (e *tBMError) ErrorReval2(ec int, w http.ResponseWriter) {
 		//jsonapi.ToJsonAPIForError(&tmp, w)
 	}
 }
+
+func PanicError(err error) {
+	if err != nil {
+		panic(err.Error())
+	}
+}
