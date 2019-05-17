@@ -122,7 +122,7 @@ func (bkc *bmKafkaConfig) SubscribeTopicsOnce(topics []string, duration time.Dur
 			fmt.Printf("Caught signal %v: terminating\n", sig)
 			run = false
 		case <-timeout:
-			fmt.Printf("SubscribeTopicsOnce timeout ", duration)
+			fmt.Println("SubscribeTopicsOnce timeout ", duration)
 			run = false
 		default:
 			ev := c.Poll(100)

@@ -11,9 +11,9 @@ import (
 
 func TestPushObject(t *testing.T) {
 	os.Setenv("BM_OSS_CONF_HOME", "../resource/ossconfig.json")
-	os.Setenv("BM_OSS_TEMP_DIR", "/home/jeorch/work/test/temp")
 
 	bucketName := "pharbers-resources"
+
 	tempUUID,_ := uuid.GenerateUUID()
 	fmt.Println(tempUUID)
 	objectKey := tempUUID
