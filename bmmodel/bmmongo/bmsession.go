@@ -8,33 +8,40 @@ import (
 	"sync"
 )
 
-var e error
+type BmMongoConfig struct {
+	Host     string
+	Port     string
+	User     string
+	Pass     string
+	Database string
+}
+
 var onceConfig sync.Once
 var mgoSession *mgo.Session
-var databaseInUse string
+var bmMgoConfig *BmMongoConfig
 
-func GetSessionInstance() (*mgo.Session, string, error) {
+func GetSessionInstance() (*mgo.Session, *BmMongoConfig, error) {
 
 	onceConfig.Do(func() {
 		configPath := os.Getenv("BM_MONGO_CONF_HOME")
 		profileItems := bmconfig.BMGetConfigMap(configPath)
 
-		host := profileItems["Host"].(string)
-		port := profileItems["Port"].(string)
-		user := profileItems["User"].(string)
-		pass := profileItems["Pass"].(string)
-		database := profileItems["Database"].(string)
-
-		url := fmt.Sprint(host, ":", port, "/", database)
-		if user != "" && pass != "" {
-			url = fmt.Sprint("mongodb://", user, ":", pass, "@", host, ":", port, "/", database)
-		}
-
-		session, err := mgo.Dial(url)
-		mgoSession = session
-		databaseInUse = database
-		e = err
+		tempConfig := BmMongoConfig{}
+		tempConfig.Host = profileItems["Host"].(string)
+		tempConfig.Port = profileItems["Port"].(string)
+		tempConfig.User = profileItems["User"].(string)
+		tempConfig.Pass = profileItems["Pass"].(string)
+		tempConfig.Database = profileItems["Database"].(string)
+		bmMgoConfig = &tempConfig
 	})
 
-	return mgoSession, databaseInUse, e
+	url := fmt.Sprint(bmMgoConfig.Host, ":", bmMgoConfig.Port, "/", bmMgoConfig.Database)
+	if bmMgoConfig.User != "" && bmMgoConfig.Pass != "" {
+		url = fmt.Sprint("mongodb://", bmMgoConfig.User, ":", bmMgoConfig.Pass, "@", bmMgoConfig.Host, ":", bmMgoConfig.Port, "/", bmMgoConfig.Database)
+	}
+
+	session, err := mgo.Dial(url)
+	mgoSession = session
+
+	return mgoSession, bmMgoConfig, err
 }
