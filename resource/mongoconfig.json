@@ -1,5 +1,7 @@
 {
   "Host":"localhost",
   "Port":"27017",
-  "Database":"test"
+  "User":"jeorch",
+  "Pass":"jeorch",
+  "Database":"pharbers-max-repository"
 }

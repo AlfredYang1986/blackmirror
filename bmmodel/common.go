@@ -3,16 +3,12 @@ package bmmodel
 import (
 	"errors"
 	"fmt"
-	"github.com/alfredyang1986/blackmirror/bmconfighandle"
-	"reflect"
-	"strings"
-	"sync"
-
 	"github.com/alfredyang1986/blackmirror/bmmate"
 	"github.com/alfredyang1986/blackmirror/bmmodel/bmmongo"
 	"github.com/alfredyang1986/blackmirror/bmmodel/request"
-	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
+	"reflect"
+	"strings"
 )
 
 type BMObject interface {
@@ -29,9 +25,6 @@ type BMObject interface {
 
 type NoPtr struct {
 }
-
-var once sync.Once
-var bmMongoConfig bmconfig.BMMongoConfig
 
 const (
 	BMJson    string = "json"
@@ -66,8 +59,7 @@ func ResetId_WithID(ptr BMObject) {
 }
 
 func InsertBMObject(ptr BMObject) error {
-	once.Do(bmMongoConfig.GenerateConfig)
-	session, err := mgo.Dial(bmMongoConfig.Host + ":" + bmMongoConfig.Port)
+	session, bmMgoConfig, err := bmmongo.GetSessionInstance()
 	if err != nil {
 		return errors.New("dial db error")
 	}
@@ -75,7 +67,7 @@ func InsertBMObject(ptr BMObject) error {
 
 	v := reflect.ValueOf(ptr).Elem()
 	cn := v.Type().Name()
-	c := session.DB(bmMongoConfig.Database).C(cn)
+	c := session.DB(bmMgoConfig.Database).C(cn)
 	ptr.ResetId_WithID()
 
 	//nExist, _ := c.FindId(ptr.Id_).Count()
@@ -93,14 +85,13 @@ func InsertBMObject(ptr BMObject) error {
 }
 
 func FindOne(req request.Request, ptr BMObject) error {
-	once.Do(bmMongoConfig.GenerateConfig)
-	session, err := mgo.Dial(bmMongoConfig.Host + ":" + bmMongoConfig.Port)
+	session, bmMgoConfig, err := bmmongo.GetSessionInstance()
 	if err != nil {
 		return errors.New("dial db error")
 	}
 	defer session.Close()
 
-	c := session.DB(bmMongoConfig.Database).C(req.Res)
+	c := session.DB(bmMgoConfig.Database).C(req.Res)
 	err = c.Find(req.Cond2QueryObj(req.Res)).Sort(req.Cond2SortObj(req.Res)...).One(ptr)
 	if err != nil {
 		return err
@@ -111,14 +102,13 @@ func FindOne(req request.Request, ptr BMObject) error {
 }
 
 func DeleteOne(req request.Request, ptr BMObject) error {
-	once.Do(bmMongoConfig.GenerateConfig)
-	session, err := mgo.Dial(bmMongoConfig.Host + ":" + bmMongoConfig.Port)
+	session, bmMgoConfig, err := bmmongo.GetSessionInstance()
 	if err != nil {
 		return errors.New("dial db error")
 	}
 	defer session.Close()
 
-	c := session.DB(bmMongoConfig.Database).C(req.Res)
+	c := session.DB(bmMgoConfig.Database).C(req.Res)
 	err = c.Find(req.Cond2QueryObj(req.Res)).One(ptr)
 	if err != nil {
 		return err
@@ -132,14 +122,13 @@ func DeleteOne(req request.Request, ptr BMObject) error {
 }
 
 func DeleteAll(req request.Request) error {
-	once.Do(bmMongoConfig.GenerateConfig)
-	session, err := mgo.Dial(bmMongoConfig.Host + ":" + bmMongoConfig.Port)
+	session, bmMgoConfig, err := bmmongo.GetSessionInstance()
 	if err != nil {
 		return errors.New("dial db error")
 	}
 	defer session.Close()
 
-	c := session.DB(bmMongoConfig.Database).C(req.Res)
+	c := session.DB(bmMgoConfig.Database).C(req.Res)
 	info, err := c.RemoveAll(req.Cond2QueryObj(req.Res))
 	if err != nil {
 		return err
@@ -151,8 +140,7 @@ func DeleteAll(req request.Request) error {
 }
 
 func FindMutil(req request.Request, ptr interface{}) error {
-	once.Do(bmMongoConfig.GenerateConfig)
-	session, err := mgo.Dial(bmMongoConfig.Host + ":" + bmMongoConfig.Port)
+	session, bmMgoConfig, err := bmmongo.GetSessionInstance()
 	if err != nil {
 		return errors.New("dial db error")
 	}
@@ -164,7 +152,7 @@ func FindMutil(req request.Request, ptr interface{}) error {
 	}
 	skip := fmu.Page * fmu.Take
 
-	c := session.DB(bmMongoConfig.Database).C(req.Res)
+	c := session.DB(bmMgoConfig.Database).C(req.Res)
 	if fmu.Take == 0 {
 		err = c.Find(req.Cond2QueryObj(req.Res)).Sort(req.Cond2SortObj(req.Res)...).All(ptr)
 	} else {
@@ -175,28 +163,26 @@ func FindMutil(req request.Request, ptr interface{}) error {
 }
 
 func FindCount(req request.Request) (int, error) {
-	once.Do(bmMongoConfig.GenerateConfig)
-	session, err := mgo.Dial(bmMongoConfig.Host + ":" + bmMongoConfig.Port)
+	session, bmMgoConfig, err := bmmongo.GetSessionInstance()
 	if err != nil {
 		return 0, errors.New("dial db error")
 	}
 	defer session.Close()
 
 
-	c := session.DB(bmMongoConfig.Database).C(req.Res)
+	c := session.DB(bmMgoConfig.Database).C(req.Res)
 	n, err := c.Find(req.Cond2QueryObj(req.Res)).Count()
 
 	return n, err
 }
 
 func FindMutilWithBson(coll string, condi bson.M, ptr interface{}) error {
-	once.Do(bmMongoConfig.GenerateConfig)
-	session, err := mgo.Dial(bmMongoConfig.Host + ":" + bmMongoConfig.Port)
+	session, bmMgoConfig, err := bmmongo.GetSessionInstance()
 	if err != nil {
 		return errors.New("dial db error")
 	}
 	defer session.Close()
-	c := session.DB(bmMongoConfig.Database).C(coll)
+	c := session.DB(bmMgoConfig.Database).C(coll)
 
 	err = c.Find(condi).All(ptr)
 
@@ -204,13 +190,12 @@ func FindMutilWithBson(coll string, condi bson.M, ptr interface{}) error {
 }
 
 func DeleteMutilWithBson(coll string, condi bson.M) error {
-	once.Do(bmMongoConfig.GenerateConfig)
-	session, err := mgo.Dial(bmMongoConfig.Host + ":" + bmMongoConfig.Port)
+	session, bmMgoConfig, err := bmmongo.GetSessionInstance()
 	if err != nil {
 		return errors.New("dial db error")
 	}
 	defer session.Close()
-	c := session.DB(bmMongoConfig.Database).C(coll)
+	c := session.DB(bmMgoConfig.Database).C(coll)
 
 	info, err := c.RemoveAll(condi)
 
@@ -224,14 +209,13 @@ func DeleteMutilWithBson(coll string, condi bson.M) error {
 }
 
 func UpdateOne(req request.Request, ptr BMObject) error {
-	once.Do(bmMongoConfig.GenerateConfig)
-	session, err := mgo.Dial(bmMongoConfig.Host + ":" + bmMongoConfig.Port)
+	session, bmMgoConfig, err := bmmongo.GetSessionInstance()
 	if err != nil {
 		return errors.New("dial db error")
 	}
 	defer session.Close()
 
-	c := session.DB(bmMongoConfig.Database).C(req.Res)
+	c := session.DB(bmMgoConfig.Database).C(req.Res)
 
 	err = c.Find(req.Cond2QueryObj(req.Res)).One(ptr)
 	if err != nil {
@@ -267,8 +251,7 @@ func UpdateOne(req request.Request, ptr BMObject) error {
 }
 
 func CoverOne(ptr BMObject) error {
-	once.Do(bmMongoConfig.GenerateConfig)
-	session, err := mgo.Dial(bmMongoConfig.Host + ":" + bmMongoConfig.Port)
+	session, bmMgoConfig, err := bmmongo.GetSessionInstance()
 	if err != nil {
 		return errors.New("dial db error")
 	}
@@ -280,7 +263,7 @@ func CoverOne(ptr BMObject) error {
 	rst, err := Struct2map(v)
 	rst["_id"] = ptr.QueryObjectId()
 
-	c := session.DB(bmMongoConfig.Database).C(cn)
+	c := session.DB(bmMgoConfig.Database).C(cn)
 	err = c.Update(bson.M{"_id": ptr.QueryObjectId()}, rst)
 
 	return err
