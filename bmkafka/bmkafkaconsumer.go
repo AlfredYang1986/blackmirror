@@ -14,7 +14,8 @@ import (
 var consumer *kafka.Consumer
 var onceConsumer sync.Once
 
-func (bkc *bmKafkaConfig) GetConsumerInstance() (*kafka.Consumer, error) {
+// GetConsumerInstance get one KafkaConsumerInstance.
+func (bkc *BmKafkaConfig) GetConsumerInstance() (*kafka.Consumer, error) {
 	onceConsumer.Do(func() {
 		c, err := kafka.NewConsumer(&kafka.ConfigMap{
 			"bootstrap.servers": bkc.Broker,
@@ -23,10 +24,16 @@ func (bkc *bmKafkaConfig) GetConsumerInstance() (*kafka.Consumer, error) {
 			// when using localhost brokers on OSX, since the OSX resolver
 			// will return the IPv6 addresses first.
 			// You typically don't need to specify this configuration property.
-			"broker.address.family": "v4",
-			"group.id":              bkc.Group,
-			"session.timeout.ms":    6000,
-			"auto.offset.reset":     "earliest"})
+			"broker.address.family":    "v4",
+			"group.id":                 bkc.Group,
+			"session.timeout.ms":       6000,
+			"auto.offset.reset":        "earliest",
+			"security.protocol":        "SSL", //默认使用SSL
+			"ssl.ca.location":          bkc.CaLocation,
+			"ssl.certificate.location": bkc.CaSignedLocation,
+			"ssl.key.location":         bkc.SslKeyLocation,
+			"ssl.key.password":         bkc.Pass,
+		})
 
 		if err != nil {
 			fmt.Printf("Failed to create consumer: %s\n", err)
@@ -43,7 +50,8 @@ func (bkc *bmKafkaConfig) GetConsumerInstance() (*kafka.Consumer, error) {
 	return consumer, e
 }
 
-func (bkc *bmKafkaConfig) SubscribeTopics(topics []string, subscribeFunc func(interface{})) {
+// SubscribeTopics subscribe some topics from args or config.
+func (bkc *BmKafkaConfig) SubscribeTopics(topics []string, subscribeFunc func(interface{})) {
 	if len(bkc.Topics) == 0 {
 		panic("no Topics in config")
 	}
@@ -97,7 +105,9 @@ func (bkc *bmKafkaConfig) SubscribeTopics(topics []string, subscribeFunc func(in
 
 }
 
-func (bkc *bmKafkaConfig) SubscribeTopicsOnce(topics []string, duration time.Duration, subscribeFunc func(interface{})) {
+// SubscribeTopicsOnce subscribe some topics from args or config.
+// Only once!
+func (bkc *BmKafkaConfig) SubscribeTopicsOnce(topics []string, duration time.Duration, subscribeFunc func(interface{})) {
 	if len(bkc.Topics) == 0 {
 		panic("no Topics in config")
 	}

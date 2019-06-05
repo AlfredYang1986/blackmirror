@@ -10,9 +10,17 @@ import (
 var producer *kafka.Producer
 var onceProducer sync.Once
 
-func (bkc *bmKafkaConfig) GetProducerInstance() (*kafka.Producer, error) {
+// GetProducerInstance get one KafkaProducerInstance.
+func (bkc *BmKafkaConfig) GetProducerInstance() (*kafka.Producer, error) {
 	onceProducer.Do(func() {
-		p, err := kafka.NewProducer(&kafka.ConfigMap{"bootstrap.servers": bkc.Broker})
+		p, err := kafka.NewProducer(&kafka.ConfigMap{
+			"bootstrap.servers": bkc.Broker,
+			"security.protocol": "SSL",	//默认使用SSL
+			"ssl.ca.location": bkc.CaLocation,
+			"ssl.certificate.location": bkc.CaSignedLocation,
+			"ssl.key.location": bkc.SslKeyLocation,
+			"ssl.key.password": bkc.Pass,
+		})
 
 		if err != nil {
 			fmt.Printf("Failed to create producer: %s\n", err)
@@ -26,8 +34,8 @@ func (bkc *bmKafkaConfig) GetProducerInstance() (*kafka.Producer, error) {
 	})
 	return producer, e
 }
-
-func (bkc *bmKafkaConfig) Produce(topic *string, value []byte)  {
+// Produce use to produce kafka msg.
+func (bkc *BmKafkaConfig) Produce(topic *string, value []byte)  {
 
 	p, err := bkc.GetProducerInstance()
 	bmerror.PanicError(err)

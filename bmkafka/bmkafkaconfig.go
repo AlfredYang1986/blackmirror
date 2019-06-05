@@ -1,3 +1,4 @@
+// Package bmkafka is kafka-interfaces in BlackMirror's GoLib
 package bmkafka
 
 import (
@@ -6,18 +7,25 @@ import (
 	"sync"
 )
 
-type bmKafkaConfig struct {
+// BmKafkaConfig is BlackMirror's KafkaConfig.
+// SSL used by default.
+type BmKafkaConfig struct {
 	Broker              string
 	Group               string
+	CaLocation          string
+	CaSignedLocation    string
+	SslKeyLocation      string
+	Pass                string
 	Topics              []string
 	SchemaRepositoryUrl string
 }
 
 var e error
 var onceConfig sync.Once
-var config *bmKafkaConfig
+var config *BmKafkaConfig
 
-func GetConfigInstance() (*bmKafkaConfig, error) {
+// GetConfigInstance get the KafkaConfigInstance from config file.
+func GetConfigInstance() (*BmKafkaConfig, error) {
 	onceConfig.Do(func() {
 		configPath := os.Getenv("BM_KAFKA_CONF_HOME")
 		profileItems := bmconfig.BMGetConfigMap(configPath)
@@ -25,11 +33,15 @@ func GetConfigInstance() (*bmKafkaConfig, error) {
 		for _, t := range profileItems["Topics"].([]interface{}) {
 			topics = append(topics, t.(string))
 		}
-		config = &bmKafkaConfig{
-			Broker: profileItems["Broker"].(string),
+		config = &BmKafkaConfig{
+			Broker:              profileItems["Broker"].(string),
 			SchemaRepositoryUrl: profileItems["SchemaRepositoryUrl"].(string),
-			Group:  profileItems["Group"].(string),
-			Topics: topics,
+			Group:               profileItems["Group"].(string),
+			CaLocation:          profileItems["CaLocation"].(string),
+			CaSignedLocation:    profileItems["CaSignedLocation"].(string),
+			SslKeyLocation:      profileItems["SslKeyLocation"].(string),
+			Pass:                profileItems["Pass"].(string),
+			Topics:              topics,
 		}
 		e = nil
 	})
