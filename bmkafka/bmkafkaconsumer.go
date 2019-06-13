@@ -96,7 +96,7 @@ func (bkc *BmKafkaConfig) SubscribeTopics(topics []string, subscribeFunc func(in
 					run = false
 				}
 			default:
-				fmt.Printf("Ignored %v\n", e)
+				continue
 			}
 		}
 	}
