@@ -81,8 +81,6 @@ func (bkc *BmKafkaConfig) SubscribeTopics(topics []string, subscribeFunc func(in
 
 			switch e := ev.(type) {
 			case *kafka.Message:
-				fmt.Printf("%% Message on %s:\n%s\n",
-					e.TopicPartition, string(e.Value))
 				subscribeFunc(e.Value)
 				if e.Headers != nil {
 					fmt.Printf("%% Headers: %v\n", e.Headers)
