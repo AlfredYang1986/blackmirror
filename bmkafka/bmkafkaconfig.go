@@ -1,4 +1,4 @@
-// Package bmkafka is kafka-interfaces in BlackMirror's GoLib
+// Package bmkafka is kafka-lib in BlackMirror's GoLibs
 package bmkafka
 
 import (

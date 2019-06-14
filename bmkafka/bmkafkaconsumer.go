@@ -56,6 +56,7 @@ func (bkc *BmKafkaConfig) SubscribeTopics(topics []string, subscribeFunc func(in
 		panic("no Topics in config")
 	}
 	c, err := bkc.GetConsumerInstance()
+	//defer c.Close()
 	bmerror.PanicError(err)
 	if len(topics) == 0 {
 		err = c.SubscribeTopics(bkc.Topics, nil)
@@ -101,6 +102,9 @@ func (bkc *BmKafkaConfig) SubscribeTopics(topics []string, subscribeFunc func(in
 		}
 	}
 
+	fmt.Printf("Closing consumer\n")
+	c.Close()
+
 }
 
 // SubscribeTopicsOnce subscribe some topics from args or config.
@@ -110,6 +114,7 @@ func (bkc *BmKafkaConfig) SubscribeTopicsOnce(topics []string, duration time.Dur
 		panic("no Topics in config")
 	}
 	c, err := bkc.GetConsumerInstance()
+	//defer c.Close()
 	bmerror.PanicError(err)
 	if len(topics) == 0 {
 		err = c.SubscribeTopics(bkc.Topics, nil)
@@ -162,5 +167,8 @@ func (bkc *BmKafkaConfig) SubscribeTopicsOnce(topics []string, duration time.Dur
 			}
 		}
 	}
+
+	fmt.Printf("Closing consumer\n")
+	c.Close()
 
 }
