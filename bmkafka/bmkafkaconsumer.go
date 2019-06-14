@@ -27,7 +27,8 @@ func (bkc *BmKafkaConfig) GetConsumerInstance() (*kafka.Consumer, error) {
 			"broker.address.family":    "v4",
 			"group.id":                 bkc.Group,
 			"session.timeout.ms":       6000,
-			"auto.offset.reset":        "earliest",
+			//"auto.offset.reset":        "earliest",
+			"auto.offset.reset":        "beginning",
 			"security.protocol":        "SSL", //默认使用SSL
 			"ssl.ca.location":          bkc.CaLocation,
 			"ssl.certificate.location": bkc.CaSignedLocation,

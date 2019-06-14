@@ -38,7 +38,7 @@ func TestKafkaConsumer(t *testing.T) {
 }
 
 func subscribeFunc(a interface{}) {
-	fmt.Println("subscribeFunc => ", a)
+	fmt.Println("subscribeFunc => ", string(a.([]byte)))
 	//time.Sleep(10 * time.Second)
 	fmt.Println("subscribeFunc DONE!")
 }
