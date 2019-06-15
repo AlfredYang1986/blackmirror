@@ -60,6 +60,7 @@ func TestKafkaProduceToXmpp(t *testing.T) {
 	record.Set("reportUser", "test@max.logic")
 	record.Set("msg", "hello!!!")
 	recordByteArr, err := encoder.Encode(record)
+	bmerror.PanicError(err)
 
 	bkc, err := GetConfigInstance()
 	if err != nil {
