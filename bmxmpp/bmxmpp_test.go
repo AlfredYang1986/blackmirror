@@ -9,10 +9,9 @@ import (
 func TestBmXmppConfig_Forward(t *testing.T) {
 
 	os.Setenv("BM_XMPP_CONF_HOME", "../resource/xmppconfig.json")
-
 	bxc, err := GetConfigInstance()
 	bmerror.PanicError(err)
-	err = bxc.Forward("test@max.logic", "test func 123")
+	err = bxc.Forward("test@max.logic", "user forward")
 	bmerror.PanicError(err)
 
 }
@@ -21,6 +20,6 @@ func TestBmXmppConfig_Forward2Group(t *testing.T) {
 	os.Setenv("BM_XMPP_CONF_HOME", "../resource/xmppconfig.json")
 	bxc, err := GetConfigInstance()
 	bmerror.PanicError(err)
-	err = bxc.Forward2Group("troom@conference.max.logic", "test-group func 1")
+	err = bxc.Forward2Group("troom@conference.max.logic", "TestBmXmppConfig_Forward2Group 123")
 	bmerror.PanicError(err)
 }

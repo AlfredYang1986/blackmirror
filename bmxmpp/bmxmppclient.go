@@ -5,6 +5,7 @@ import (
 	"crypto/tls"
 	"flag"
 	"fmt"
+	"github.com/alfredyang1986/blackmirror/bmerror"
 	"github.com/mattn/go-xmpp"
 	"io"
 	"log"
@@ -48,7 +49,6 @@ func (bxc *BmXmppConfig) Forward(userjid string, msg string) error {
 	h := md5.New()
 	io.WriteString(h, userjid)
 	resource := fmt.Sprintf("%x", h.Sum(nil))
-	//resource,_ := uuid.GenerateUUID()
 
 	options := xmpp.Options{
 		Host:          server,
@@ -123,12 +123,10 @@ func (bxc *BmXmppConfig) Forward2Group(jid string, msg string) error {
 		return err
 	}
 
-	//connect := xmpp.Contact{
-	//	Group: []string{"test-group"},
-	//}
-	//roster := []xmpp.Contact{connect}
-	//_, err = talk.Send(xmpp.Chat{Roster: roster, Type: "groupchat", Text: msg})
-
+	_, err = talk.JoinMUCNoHistory(jid, username)
+	bmerror.PanicError(err)
 	_, err = talk.Send(xmpp.Chat{Remote: jid, Type: "groupchat", Text: msg})
+	bmerror.PanicError(err)
+	_, err = talk.LeaveMUC(jid)
 	return err
 }
