@@ -73,3 +73,62 @@ func (bxc *BmXmppConfig) Forward(userjid string, msg string) error {
 	_, err = talk.Send(xmpp.Chat{Remote: userjid, Type: "chat", Text: msg})
 	return err
 }
+
+func (bxc *BmXmppConfig) Forward2Group(jid string, msg string) error {
+	server = bxc.Host + ":" + bxc.Port
+	username = bxc.LoginUser + "@" + bxc.HostName
+	password = bxc.LoginUserPwd
+
+	flag.Usage = func() {
+		fmt.Fprintf(os.Stderr, "usage: example [options]\n")
+		flag.PrintDefaults()
+		os.Exit(2)
+	}
+	flag.Parse()
+	if username == "" || password == "" {
+		if *debug && username == "" && password == "" {
+			fmt.Fprintf(os.Stderr, "no username or password were given; attempting ANONYMOUS auth\n")
+		} else if username != "" || password != "" {
+			flag.Usage()
+		}
+	}
+
+	xmpp.DefaultConfig = tls.Config{
+		ServerName:         bxc.HostName,
+		InsecureSkipVerify: true,
+	}
+
+	h := md5.New()
+	io.WriteString(h, jid)
+	resource := fmt.Sprintf("%x", h.Sum(nil))
+
+	options := xmpp.Options{
+		Host:          server,
+		User:          username,
+		Password:      password,
+		NoTLS:         *notls,
+		StartTLS:      *starttls,
+		Debug:         *debug,
+		Session:       *session,
+		Resource:      resource,
+		Status:        *status,
+		StatusMessage: *statusMessage,
+	}
+
+	var talk *xmpp.Client
+	var err error
+	talk, err = options.NewClient()
+	if err != nil {
+		log.Fatal(err)
+		return err
+	}
+
+	//connect := xmpp.Contact{
+	//	Group: []string{"test-group"},
+	//}
+	//roster := []xmpp.Contact{connect}
+	//_, err = talk.Send(xmpp.Chat{Roster: roster, Type: "groupchat", Text: msg})
+
+	_, err = talk.Send(xmpp.Chat{Remote: jid, Type: "groupchat", Text: msg})
+	return err
+}
