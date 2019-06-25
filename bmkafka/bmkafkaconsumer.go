@@ -6,17 +6,27 @@ import (
 	"github.com/confluentinc/confluent-kafka-go/kafka"
 	"os"
 	"os/signal"
-	"sync"
+	"strings"
 	"syscall"
 	"time"
 )
 
-var consumer *kafka.Consumer
-var onceConsumer sync.Once
+var consumerMap map[string]*kafka.Consumer
 
-// GetConsumerInstance get one KafkaConsumerInstance.
-func (bkc *BmKafkaConfig) GetConsumerInstance() (*kafka.Consumer, error) {
-	onceConsumer.Do(func() {
+func init() {
+	consumerMap = nil
+}
+
+// GetConsumerInstanceByTopics get one KafkaConsumerInstance by topics.
+func (bkc *BmKafkaConfig) GetConsumerInstanceByTopics(topics []string) (*kafka.Consumer, error) {
+
+	topicsStr := strings.Join(topics, "##")
+
+	if consumerMap == nil {
+		consumerMap = make(map[string]*kafka.Consumer, 0)
+	}
+
+	if consumerMap[topicsStr] == nil {
 		c, err := kafka.NewConsumer(&kafka.ConfigMap{
 			"bootstrap.servers": bkc.Broker,
 			// Avoid connecting to IPv6 brokers:
@@ -24,9 +34,9 @@ func (bkc *BmKafkaConfig) GetConsumerInstance() (*kafka.Consumer, error) {
 			// when using localhost brokers on OSX, since the OSX resolver
 			// will return the IPv6 addresses first.
 			// You typically don't need to specify this configuration property.
-			"broker.address.family":    "v4",
-			"group.id":                 bkc.Group,
-			"session.timeout.ms":       6000,
+			"broker.address.family": "v4",
+			"group.id":              bkc.Group + "_" + topicsStr,
+			"session.timeout.ms":    6000,
 			//"auto.offset.reset":        "earliest",
 			"auto.offset.reset":        "latest",
 			"security.protocol":        "SSL", //默认使用SSL
@@ -41,14 +51,17 @@ func (bkc *BmKafkaConfig) GetConsumerInstance() (*kafka.Consumer, error) {
 			e = err
 		} else {
 			fmt.Printf("Created Consumer %v\n", c)
-			consumer = c
+			consumerMap[topicsStr] = c
 			e = nil
 		}
 
-		//err = c.SubscribeTopics(bkc.Topics, nil)
 
-	})
-	return consumer, e
+		return c, e
+
+	} else {
+		return consumerMap[topicsStr], e
+	}
+
 }
 
 // SubscribeTopics subscribe some topics from args or config.
@@ -56,14 +69,17 @@ func (bkc *BmKafkaConfig) SubscribeTopics(topics []string, subscribeFunc func(in
 	if len(bkc.Topics) == 0 {
 		panic("no Topics in config")
 	}
-	c, err := bkc.GetConsumerInstance()
+	var topicsTmp []string
+	if len(topics) == 0 {
+		topicsTmp = bkc.Topics
+	} else {
+		topicsTmp = topics
+	}
+
+	c, err := bkc.GetConsumerInstanceByTopics(topicsTmp)
 	//defer c.Close()
 	bmerror.PanicError(err)
-	if len(topics) == 0 {
-		err = c.SubscribeTopics(bkc.Topics, nil)
-	} else {
-		err = c.SubscribeTopics(topics, nil)
-	}
+	err = c.SubscribeTopics(topicsTmp, nil)
 	bmerror.PanicError(err)
 
 	run := true
@@ -114,14 +130,17 @@ func (bkc *BmKafkaConfig) SubscribeTopicsOnce(topics []string, duration time.Dur
 	if len(bkc.Topics) == 0 {
 		panic("no Topics in config")
 	}
-	c, err := bkc.GetConsumerInstance()
+	var topicsTmp []string
+	if len(topics) == 0 {
+		topicsTmp = bkc.Topics
+	} else {
+		topicsTmp = topics
+	}
+
+	c, err := bkc.GetConsumerInstanceByTopics(topicsTmp)
 	//defer c.Close()
 	bmerror.PanicError(err)
-	if len(topics) == 0 {
-		err = c.SubscribeTopics(bkc.Topics, nil)
-	} else {
-		err = c.SubscribeTopics(topics, nil)
-	}
+	err = c.SubscribeTopics(topicsTmp, nil)
 	bmerror.PanicError(err)
 
 	run := true
