@@ -10,7 +10,10 @@ import (
 
 func TestGetRedisClient(t *testing.T) {
 
-	os.Setenv("BM_REDIS_CONF_HOME", "../resource/redisconfig.json")
+	_ = os.Setenv("BM_REDIS_HOST", "192.168.100.176")
+	_ = os.Setenv("BM_REDIS_PORT", "6379")
+	_ = os.Setenv("BM_REDIS_PASS", "")
+	_ = os.Setenv("BM_REDIS_DB", "0")
 
 	c := GetRedisClient()
 	c.Set("HELLO", "3Q VERY MUCH", 10 * time.Minute)

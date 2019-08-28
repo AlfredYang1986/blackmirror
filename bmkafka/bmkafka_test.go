@@ -14,13 +14,13 @@ import (
 
 func TestKafkaProducer(t *testing.T) {
 
-	os.Setenv("BM_KAFKA_BROKER", "123.56.179.133:9092")
-	os.Setenv("BM_KAFKA_SCHEMA_REGISTRY_URL", "http://123.56.179.133:8081")
-	os.Setenv("BM_KAFKA_CONSUMER_GROUP", "test20190828")
-	os.Setenv("BM_KAFKA_CA_LOCATION", "/Users/jeorch/kit/kafka-secrets/snakeoil-ca-1.crt")
-	os.Setenv("BM_KAFKA_CA_SIGNED_LOCATION", "/Users/jeorch/kit/kafka-secrets/kafkacat-ca1-signed.pem")
-	os.Setenv("BM_KAFKA_SSL_KEY_LOCATION", "/Users/jeorch/kit/kafka-secrets/kafkacat.client.key")
-	os.Setenv("BM_KAFKA_SSL_PASS", "pharbers")
+	_ = os.Setenv("BM_KAFKA_BROKER", "123.56.179.133:9092")
+	_ = os.Setenv("BM_KAFKA_SCHEMA_REGISTRY_URL", "http://123.56.179.133:8081")
+	_ = os.Setenv("BM_KAFKA_CONSUMER_GROUP", "test20190828")
+	_ = os.Setenv("BM_KAFKA_CA_LOCATION", "/Users/jeorch/kit/kafka-secrets/snakeoil-ca-1.crt")
+	_ = os.Setenv("BM_KAFKA_CA_SIGNED_LOCATION", "/Users/jeorch/kit/kafka-secrets/kafkacat-ca1-signed.pem")
+	_ = os.Setenv("BM_KAFKA_SSL_KEY_LOCATION", "/Users/jeorch/kit/kafka-secrets/kafkacat.client.key")
+	_ = os.Setenv("BM_KAFKA_SSL_PASS", "pharbers")
 
 	bkc, err := GetConfigInstance()
 	if err != nil {
@@ -33,7 +33,13 @@ func TestKafkaProducer(t *testing.T) {
 
 func TestKafkaConsumer(t *testing.T) {
 
-	os.Setenv("BM_KAFKA_CONF_HOME", "../resource/kafkaconfig.json")
+	_ = os.Setenv("BM_KAFKA_BROKER", "123.56.179.133:9092")
+	_ = os.Setenv("BM_KAFKA_SCHEMA_REGISTRY_URL", "http://123.56.179.133:8081")
+	_ = os.Setenv("BM_KAFKA_CONSUMER_GROUP", "test20190828")
+	_ = os.Setenv("BM_KAFKA_CA_LOCATION", "/Users/jeorch/kit/kafka-secrets/snakeoil-ca-1.crt")
+	_ = os.Setenv("BM_KAFKA_CA_SIGNED_LOCATION", "/Users/jeorch/kit/kafka-secrets/kafkacat-ca1-signed.pem")
+	_ = os.Setenv("BM_KAFKA_SSL_KEY_LOCATION", "/Users/jeorch/kit/kafka-secrets/kafkacat.client.key")
+	_ = os.Setenv("BM_KAFKA_SSL_PASS", "pharbers")
 
 	bkc, err := GetConfigInstance()
 	if err != nil {
@@ -54,7 +60,13 @@ func subscribeFunc(a interface{}) {
 
 func TestKafkaConsumerMap(t *testing.T) {
 
-	os.Setenv("BM_KAFKA_CONF_HOME", "../resource/kafkaconfig.json")
+	_ = os.Setenv("BM_KAFKA_BROKER", "123.56.179.133:9092")
+	_ = os.Setenv("BM_KAFKA_SCHEMA_REGISTRY_URL", "http://123.56.179.133:8081")
+	_ = os.Setenv("BM_KAFKA_CONSUMER_GROUP", "test20190828")
+	_ = os.Setenv("BM_KAFKA_CA_LOCATION", "/Users/jeorch/kit/kafka-secrets/snakeoil-ca-1.crt")
+	_ = os.Setenv("BM_KAFKA_CA_SIGNED_LOCATION", "/Users/jeorch/kit/kafka-secrets/kafkacat-ca1-signed.pem")
+	_ = os.Setenv("BM_KAFKA_SSL_KEY_LOCATION", "/Users/jeorch/kit/kafka-secrets/kafkacat.client.key")
+	_ = os.Setenv("BM_KAFKA_SSL_PASS", "pharbers")
 
 	bkc, err := GetConfigInstance()
 	if err != nil {
@@ -83,7 +95,13 @@ func subscribeFunc2(a interface{}) {
 
 func TestKafkaAvroProducer(t *testing.T) {
 
-	os.Setenv("BM_KAFKA_CONF_HOME", "../resource/kafkaconfig.json")
+	_ = os.Setenv("BM_KAFKA_BROKER", "123.56.179.133:9092")
+	_ = os.Setenv("BM_KAFKA_SCHEMA_REGISTRY_URL", "http://123.56.179.133:8081")
+	_ = os.Setenv("BM_KAFKA_CONSUMER_GROUP", "test20190828")
+	_ = os.Setenv("BM_KAFKA_CA_LOCATION", "/Users/jeorch/kit/kafka-secrets/snakeoil-ca-1.crt")
+	_ = os.Setenv("BM_KAFKA_CA_SIGNED_LOCATION", "/Users/jeorch/kit/kafka-secrets/kafkacat-ca1-signed.pem")
+	_ = os.Setenv("BM_KAFKA_SSL_KEY_LOCATION", "/Users/jeorch/kit/kafka-secrets/kafkacat.client.key")
+	_ = os.Setenv("BM_KAFKA_SSL_PASS", "pharbers")
 
 	var schemaRepositoryUrl = "http://192.168.100.176:8881"
 	var rawMetricsSchema = `{"type": "record","name": "myrecordtemp1","fields": [{"name": "id", "type": "string"},{"name": "reportUser",  "type": "string" },{"name": "msg",  "type": "string" }]}`
@@ -113,7 +131,13 @@ func TestKafkaAvroProducer(t *testing.T) {
 
 func TestKafkaProduceToXmpp(t *testing.T) {
 
-	os.Setenv("BM_KAFKA_CONF_HOME", "../resource/kafkaconfig.json")
+	_ = os.Setenv("BM_KAFKA_BROKER", "123.56.179.133:9092")
+	_ = os.Setenv("BM_KAFKA_SCHEMA_REGISTRY_URL", "http://123.56.179.133:8081")
+	_ = os.Setenv("BM_KAFKA_CONSUMER_GROUP", "test20190828")
+	_ = os.Setenv("BM_KAFKA_CA_LOCATION", "/Users/jeorch/kit/kafka-secrets/snakeoil-ca-1.crt")
+	_ = os.Setenv("BM_KAFKA_CA_SIGNED_LOCATION", "/Users/jeorch/kit/kafka-secrets/kafkacat-ca1-signed.pem")
+	_ = os.Setenv("BM_KAFKA_SSL_KEY_LOCATION", "/Users/jeorch/kit/kafka-secrets/kafkacat.client.key")
+	_ = os.Setenv("BM_KAFKA_SSL_PASS", "pharbers")
 
 	var schemaRepositoryUrl = "http://59.110.31.50:8081"
 	var rawMetricsSchema = `{"namespace": "net.elodina.kafka.metrics","type": "record","name": "XmppCmd","fields": [{"name": "id", "type": "string"},{"name": "reportUser",  "type": "string" },{"name": "msg",  "type": "string" }]}`
@@ -141,7 +165,13 @@ func TestKafkaProduceToXmpp(t *testing.T) {
 
 func TestKafkaProduceToOss(t *testing.T) {
 
-	os.Setenv("BM_KAFKA_CONF_HOME", "../resource/kafkaconfig.json")
+	_ = os.Setenv("BM_KAFKA_BROKER", "123.56.179.133:9092")
+	_ = os.Setenv("BM_KAFKA_SCHEMA_REGISTRY_URL", "http://123.56.179.133:8081")
+	_ = os.Setenv("BM_KAFKA_CONSUMER_GROUP", "test20190828")
+	_ = os.Setenv("BM_KAFKA_CA_LOCATION", "/Users/jeorch/kit/kafka-secrets/snakeoil-ca-1.crt")
+	_ = os.Setenv("BM_KAFKA_CA_SIGNED_LOCATION", "/Users/jeorch/kit/kafka-secrets/kafkacat-ca1-signed.pem")
+	_ = os.Setenv("BM_KAFKA_SSL_KEY_LOCATION", "/Users/jeorch/kit/kafka-secrets/kafkacat.client.key")
+	_ = os.Setenv("BM_KAFKA_SSL_PASS", "pharbers")
 
 	var schemaRepositoryUrl = "http://59.110.31.50:8081"
 	var rawMetricsSchema = `{"namespace": "net.elodina.kafka.metrics","type": "record","name": "OssCmd","fields": [{"name": "id", "type": "string"},{"name": "bucketName",  "type": "string" },{"name": "objectKey",  "type": "string" },{"name": "objectValue",  "type": "bytes" }]}`
