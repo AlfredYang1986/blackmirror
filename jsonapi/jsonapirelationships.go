@@ -3,9 +3,9 @@ package jsonapi
 import (
 	"errors"
 	//"fmt"
-	"github.com/alfredyang1986/blackmirror/bmmate"
-	//"github.com/alfredyang1986/blackmirror/bmmodel/brand"
-	"github.com/alfredyang1986/blackmirror/bmmodel/relationships"
+	"blackmirror/bmmate"
+	//"blackmirror/bmmodel/brand"
+	"blackmirror/bmmodel/relationships"
 )
 
 func map2Object(m map[string]interface{}) (interface{}, error) {

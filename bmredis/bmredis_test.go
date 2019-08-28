@@ -2,7 +2,7 @@ package bmredis
 
 import (
 	"fmt"
-	"github.com/alfredyang1986/blackmirror/bmerror"
+	"blackmirror/bmerror"
 	"os"
 	"testing"
 	"time"

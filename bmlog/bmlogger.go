@@ -2,7 +2,7 @@
 package bmlog
 
 import (
-	"github.com/alfredyang1986/blackmirror/bmerror"
+	"blackmirror/bmerror"
 	"github.com/sirupsen/logrus"
 	"os"
 	"sync"

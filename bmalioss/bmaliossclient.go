@@ -2,8 +2,8 @@ package bmalioss
 
 import (
 	"bytes"
-	"github.com/alfredyang1986/blackmirror/bmconfighandle"
-	"github.com/alfredyang1986/blackmirror/bmerror"
+	"blackmirror/bmconfighandle"
+	"blackmirror/bmerror"
 	"github.com/aliyun/aliyun-oss-go-sdk/oss"
 	"os"
 	"sync"

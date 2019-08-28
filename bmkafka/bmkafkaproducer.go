@@ -2,7 +2,7 @@ package bmkafka
 
 import (
 	"fmt"
-	"github.com/alfredyang1986/blackmirror/bmerror"
+	"blackmirror/bmerror"
 	"github.com/confluentinc/confluent-kafka-go/kafka"
 	"sync"
 )
@@ -11,7 +11,7 @@ var producer *kafka.Producer
 var onceProducer sync.Once
 
 // GetProducerInstance get one KafkaProducerInstance.
-func (bkc *BmKafkaConfig) GetProducerInstance() (*kafka.Producer, error) {
+func (bkc *Config) GetProducerInstance() (*kafka.Producer, error) {
 	onceProducer.Do(func() {
 		p, err := kafka.NewProducer(&kafka.ConfigMap{
 			"bootstrap.servers": bkc.Broker,
@@ -19,7 +19,7 @@ func (bkc *BmKafkaConfig) GetProducerInstance() (*kafka.Producer, error) {
 			"ssl.ca.location": bkc.CaLocation,
 			"ssl.certificate.location": bkc.CaSignedLocation,
 			"ssl.key.location": bkc.SslKeyLocation,
-			"ssl.key.password": bkc.Pass,
+			"ssl.key.password": bkc.SslPass,
 		})
 
 		if err != nil {
@@ -35,7 +35,7 @@ func (bkc *BmKafkaConfig) GetProducerInstance() (*kafka.Producer, error) {
 	return producer, e
 }
 // Produce use to produce kafka msg.
-func (bkc *BmKafkaConfig) Produce(topic *string, value []byte)  {
+func (bkc *Config) Produce(topic *string, value []byte)  {
 
 	p, err := bkc.GetProducerInstance()
 	bmerror.PanicError(err)

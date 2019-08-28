@@ -5,7 +5,7 @@ import (
 	"crypto/tls"
 	"flag"
 	"fmt"
-	"github.com/alfredyang1986/blackmirror/bmerror"
+	"blackmirror/bmerror"
 	"github.com/mattn/go-xmpp"
 	"io"
 	"log"

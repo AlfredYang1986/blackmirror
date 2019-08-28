@@ -1,7 +1,7 @@
 package bmredis
 
 import (
-	"github.com/alfredyang1986/blackmirror/bmconfighandle"
+	"blackmirror/bmconfighandle"
 	"github.com/go-redis/redis"
 	"os"
 	"sync"

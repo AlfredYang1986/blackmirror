@@ -2,7 +2,7 @@ package bmkafka
 
 import (
 	"fmt"
-	"github.com/alfredyang1986/blackmirror/bmerror"
+	"blackmirror/bmerror"
 	"github.com/elodina/go-avro"
 	kafkaAvro "github.com/elodina/go-kafka-avro"
 	"github.com/hashicorp/go-uuid"
@@ -14,14 +14,20 @@ import (
 
 func TestKafkaProducer(t *testing.T) {
 
-	os.Setenv("BM_KAFKA_CONF_HOME", "../resource/kafkaconfig.json")
+	os.Setenv("BM_KAFKA_BROKER", "123.56.179.133:9092")
+	os.Setenv("BM_KAFKA_SCHEMA_REGISTRY_URL", "http://123.56.179.133:8081")
+	os.Setenv("BM_KAFKA_CONSUMER_GROUP", "test20190828")
+	os.Setenv("BM_KAFKA_CA_LOCATION", "/Users/jeorch/kit/kafka-secrets/snakeoil-ca-1.crt")
+	os.Setenv("BM_KAFKA_CA_SIGNED_LOCATION", "/Users/jeorch/kit/kafka-secrets/kafkacat-ca1-signed.pem")
+	os.Setenv("BM_KAFKA_SSL_KEY_LOCATION", "/Users/jeorch/kit/kafka-secrets/kafkacat.client.key")
+	os.Setenv("BM_KAFKA_SSL_PASS", "pharbers")
 
 	bkc, err := GetConfigInstance()
 	if err != nil {
 		panic(err.Error())
 	}
 	topic := "test"
-	bkc.Produce(&topic, []byte("LaoDeng => TestKafkaProducer"))
+	bkc.Produce(&topic, []byte("NEW BLOOD!!!"))
 
 }
 
@@ -33,7 +39,7 @@ func TestKafkaConsumer(t *testing.T) {
 	if err != nil {
 		panic(err.Error())
 	}
-	topics := []string{"test", "test2"}
+	topics := []string{"test"}
 	bkc.SubscribeTopics(topics, subscribeFunc)
 
 	time.Sleep(10 * time.Minute)

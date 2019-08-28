@@ -1,7 +1,7 @@
 package bmxmpp
 
 import (
-	"github.com/alfredyang1986/blackmirror/bmerror"
+	"blackmirror/bmerror"
 	"os"
 	"testing"
 )

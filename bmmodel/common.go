@@ -3,9 +3,9 @@ package bmmodel
 import (
 	"errors"
 	"fmt"
-	"github.com/alfredyang1986/blackmirror/bmmate"
-	"github.com/alfredyang1986/blackmirror/bmmodel/bmmongo"
-	"github.com/alfredyang1986/blackmirror/bmmodel/request"
+	"blackmirror/bmmate"
+	"blackmirror/bmmodel/bmmongo"
+	"blackmirror/bmmodel/request"
 	"gopkg.in/mgo.v2/bson"
 	"reflect"
 	"strings"

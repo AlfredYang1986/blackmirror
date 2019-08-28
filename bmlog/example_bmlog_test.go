@@ -1,7 +1,7 @@
 package bmlog_test
 
 import (
-	"github.com/alfredyang1986/blackmirror/bmlog"
+	"blackmirror/bmlog"
 	"os"
 )
 

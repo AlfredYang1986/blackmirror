@@ -2,7 +2,7 @@ package bmmongo
 
 import (
 	"fmt"
-	"github.com/alfredyang1986/blackmirror/bmconfighandle"
+	"blackmirror/bmconfighandle"
 	"gopkg.in/mgo.v2"
 	"os"
 	"sync"
@@ -30,7 +30,7 @@ func GetSessionInstance() (*mgo.Session, *BmMongoConfig, error) {
 		tempConfig.Host = profileItems["Host"].(string)
 		tempConfig.Port = profileItems["Port"].(string)
 		tempConfig.User = profileItems["User"].(string)
-		tempConfig.Pass = profileItems["Pass"].(string)
+		tempConfig.Pass = profileItems["SslPass"].(string)
 		tempConfig.Database = profileItems["Database"].(string)
 		bmMgoConfig = &tempConfig
 	})

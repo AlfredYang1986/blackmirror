@@ -2,7 +2,7 @@ package bmalioss
 
 import (
 	"fmt"
-	"github.com/alfredyang1986/blackmirror/bmerror"
+	"blackmirror/bmerror"
 	"github.com/hashicorp/go-uuid"
 	"io/ioutil"
 	"os"

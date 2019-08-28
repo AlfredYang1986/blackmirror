@@ -3,15 +3,15 @@ package jsonapi
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/alfredyang1986/blackmirror/adt"
-	"github.com/alfredyang1986/blackmirror/bmcommon/bmsingleton"
-	"github.com/alfredyang1986/blackmirror/bmmodel"
+	"blackmirror/adt"
+	"blackmirror/bmcommon/bmsingleton"
+	"blackmirror/bmmodel"
 	"gopkg.in/mgo.v2/bson"
 	"io"
 	"log"
 	"reflect"
 	"strings"
-	//"github.com/alfredyang1986/blackmirror/bmmate"
+	//"blackmirror/bmmate"
 )
 
 const (

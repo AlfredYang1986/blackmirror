@@ -1,8 +1,9 @@
 package bmkafka
 
 import (
+	"blackmirror/bmerror"
+	"blackmirror/bmlog"
 	"fmt"
-	"github.com/alfredyang1986/blackmirror/bmerror"
 	"github.com/confluentinc/confluent-kafka-go/kafka"
 	"os"
 	"os/signal"
@@ -18,7 +19,7 @@ func init() {
 }
 
 // GetConsumerInstanceByTopics get one KafkaConsumerInstance by topics.
-func (bkc *BmKafkaConfig) GetConsumerInstanceByTopics(topics []string) (*kafka.Consumer, error) {
+func (bkc *Config) GetConsumerInstanceByTopics(topics []string) (*kafka.Consumer, error) {
 
 	topicsStr := strings.Join(topics, "##")
 
@@ -43,7 +44,7 @@ func (bkc *BmKafkaConfig) GetConsumerInstanceByTopics(topics []string) (*kafka.C
 			"ssl.ca.location":          bkc.CaLocation,
 			"ssl.certificate.location": bkc.CaSignedLocation,
 			"ssl.key.location":         bkc.SslKeyLocation,
-			"ssl.key.password":         bkc.Pass,
+			"ssl.key.password":         bkc.SslPass,
 		})
 
 		if err != nil {
@@ -55,7 +56,6 @@ func (bkc *BmKafkaConfig) GetConsumerInstanceByTopics(topics []string) (*kafka.C
 			e = nil
 		}
 
-
 		return c, e
 
 	} else {
@@ -65,13 +65,10 @@ func (bkc *BmKafkaConfig) GetConsumerInstanceByTopics(topics []string) (*kafka.C
 }
 
 // SubscribeTopics subscribe some topics from args or config.
-func (bkc *BmKafkaConfig) SubscribeTopics(topics []string, subscribeFunc func(interface{})) {
-	if len(bkc.Topics) == 0 {
-		panic("no Topics in config")
-	}
+func (bkc *Config) SubscribeTopics(topics []string, subscribeFunc func(interface{})) {
 	var topicsTmp []string
 	if len(topics) == 0 {
-		topicsTmp = bkc.Topics
+		bmlog.StandardLogger().Error("no topic set")
 	} else {
 		topicsTmp = topics
 	}
@@ -126,13 +123,10 @@ func (bkc *BmKafkaConfig) SubscribeTopics(topics []string, subscribeFunc func(in
 
 // SubscribeTopicsOnce subscribe some topics from args or config.
 // Only once!
-func (bkc *BmKafkaConfig) SubscribeTopicsOnce(topics []string, duration time.Duration, subscribeFunc func(interface{})) {
-	if len(bkc.Topics) == 0 {
-		panic("no Topics in config")
-	}
+func (bkc *Config) SubscribeTopicsOnce(topics []string, duration time.Duration, subscribeFunc func(interface{})) {
 	var topicsTmp []string
 	if len(topics) == 0 {
-		topicsTmp = bkc.Topics
+		bmlog.StandardLogger().Error("no topic set")
 	} else {
 		topicsTmp = topics
 	}
