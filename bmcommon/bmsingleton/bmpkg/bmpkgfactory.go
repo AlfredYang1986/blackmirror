@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"sync"
 
-	"blackmirror/bmcommon/bmsingleton/bmconf"
-	"blackmirror/bmpipe"
+	"github.com/alfredyang1986/blackmirror/bmcommon/bmsingleton/bmconf"
+	"github.com/alfredyang1986/blackmirror/bmpipe"
 )
 
 var t map[string][]string = make(map[string][]string)

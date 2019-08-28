@@ -7,7 +7,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"blackmirror/bmredis"
+	"github.com/alfredyang1986/blackmirror/bmredis"
 	"github.com/hashicorp/go-uuid"
 	"io/ioutil"
 	"log"

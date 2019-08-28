@@ -3,10 +3,10 @@ package bmrouter
 import (
 	"encoding/json"
 	"fmt"
-	"blackmirror/bmalioss"
-	"blackmirror/bmcommon/bmsingleton/bmpkg"
-	"blackmirror/bmrouter/bmoauth"
-	"blackmirror/jsonapi/jsonapiobj"
+	"github.com/alfredyang1986/blackmirror/bmalioss"
+	"github.com/alfredyang1986/blackmirror/bmcommon/bmsingleton/bmpkg"
+	"github.com/alfredyang1986/blackmirror/bmrouter/bmoauth"
+	"github.com/alfredyang1986/blackmirror/jsonapi/jsonapiobj"
 	"io"
 	"io/ioutil"
 	"os"
@@ -16,7 +16,7 @@ import (
 	"strconv"
 	"strings"
 	"sync"
-	"blackmirror/bmconfighandle"
+	"github.com/alfredyang1986/blackmirror/bmconfighandle"
 	"github.com/hashicorp/go-uuid"
 )
 

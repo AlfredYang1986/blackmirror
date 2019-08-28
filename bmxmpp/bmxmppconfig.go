@@ -1,7 +1,7 @@
 package bmxmpp
 
 import (
-	"blackmirror/bmconfighandle"
+	"github.com/alfredyang1986/blackmirror/bmconfighandle"
 	"os"
 	"sync"
 )

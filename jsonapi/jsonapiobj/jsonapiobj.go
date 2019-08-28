@@ -3,8 +3,8 @@ package jsonapiobj
 import (
 	"errors"
 	//"fmt"
-	"blackmirror/bmmate"
-	"blackmirror/bmmodel"
+	"github.com/alfredyang1986/blackmirror/bmmate"
+	"github.com/alfredyang1986/blackmirror/bmmodel"
 	"reflect"
 	"strings"
 )

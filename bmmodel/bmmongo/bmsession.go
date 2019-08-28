@@ -2,7 +2,7 @@ package bmmongo
 
 import (
 	"fmt"
-	"blackmirror/bmconfighandle"
+	"github.com/alfredyang1986/blackmirror/bmconfighandle"
 	"gopkg.in/mgo.v2"
 	"os"
 	"sync"

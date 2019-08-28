@@ -1,8 +1,8 @@
 package bmkafka
 
 import (
-	"blackmirror/bmerror"
-	"blackmirror/bmlog"
+	"github.com/alfredyang1986/blackmirror/bmerror"
+	"github.com/alfredyang1986/blackmirror/bmlog"
 	"fmt"
 	"github.com/confluentinc/confluent-kafka-go/kafka"
 	"os"

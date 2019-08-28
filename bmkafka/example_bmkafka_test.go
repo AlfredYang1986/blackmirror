@@ -3,7 +3,7 @@ package bmkafka_test
 
 import (
 	"fmt"
-	"blackmirror/bmkafka"
+	"github.com/alfredyang1986/blackmirror/bmkafka"
 	"os"
 )
 

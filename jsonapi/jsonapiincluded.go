@@ -2,7 +2,7 @@ package jsonapi
 
 import (
 	//"fmt"
-	"blackmirror/bmmodel/relationships"
+	"github.com/alfredyang1986/blackmirror/bmmodel/relationships"
 )
 
 func remapIncluded(inc []interface{}) ([]interface{}, error) {

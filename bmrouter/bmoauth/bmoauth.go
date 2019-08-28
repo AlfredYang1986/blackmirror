@@ -3,7 +3,7 @@ package bmoauth
 import (
 	"errors"
 	"fmt"
-	"blackmirror/bmredis"
+	"github.com/alfredyang1986/blackmirror/bmredis"
 	"github.com/go-redis/redis"
 	"time"
 )

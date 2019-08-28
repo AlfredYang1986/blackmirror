@@ -1,7 +1,7 @@
 package bmerror
 
 import (
-	"blackmirror/jsonapi"
+	"github.com/alfredyang1986/blackmirror/jsonapi"
 	"github.com/hashicorp/go-uuid"
 	"net/http"
 	"sync"

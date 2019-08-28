@@ -1,4 +1,4 @@
-module blackmirror
+module github.com/alfredyang1986/blackmirror
 
 go 1.12
 

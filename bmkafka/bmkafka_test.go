@@ -2,7 +2,7 @@ package bmkafka
 
 import (
 	"fmt"
-	"blackmirror/bmerror"
+	"github.com/alfredyang1986/blackmirror/bmerror"
 	"github.com/elodina/go-avro"
 	kafkaAvro "github.com/elodina/go-kafka-avro"
 	"github.com/hashicorp/go-uuid"

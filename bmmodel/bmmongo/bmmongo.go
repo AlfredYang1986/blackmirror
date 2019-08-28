@@ -1,7 +1,7 @@
 package bmmongo
 
 import (
-	"blackmirror/bmmodel/request"
+	"github.com/alfredyang1986/blackmirror/bmmodel/request"
 )
 
 type BMMongo interface {

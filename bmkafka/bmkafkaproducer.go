@@ -2,7 +2,7 @@ package bmkafka
 
 import (
 	"fmt"
-	"blackmirror/bmerror"
+	"github.com/alfredyang1986/blackmirror/bmerror"
 	"github.com/confluentinc/confluent-kafka-go/kafka"
 	"sync"
 )
