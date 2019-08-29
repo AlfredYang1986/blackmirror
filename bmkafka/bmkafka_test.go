@@ -103,8 +103,8 @@ func TestKafkaAvroProducer(t *testing.T) {
 	_ = os.Setenv("BM_KAFKA_SSL_KEY_LOCATION", "/Users/jeorch/kit/kafka-secrets/kafkacat.client.key")
 	_ = os.Setenv("BM_KAFKA_SSL_PASS", "pharbers")
 
-	var schemaRepositoryUrl = "http://192.168.100.176:8881"
-	var rawMetricsSchema = `{"type": "record","name": "myrecordtemp1","fields": [{"name": "id", "type": "string"},{"name": "reportUser",  "type": "string" },{"name": "msg",  "type": "string" }]}`
+	var schemaRepositoryUrl = os.Getenv("BM_KAFKA_SCHEMA_REGISTRY_URL")
+	var rawMetricsSchema = `{"type": "record","name": "RecordDemo","namespace": "com.pharbers.kafka.schema","fields": [{"name": "id", "type": "string"},{"name": "name",  "type": "string" }]}`
 
 	encoder := kafkaAvro.NewKafkaAvroEncoder(schemaRepositoryUrl)
 	schema, err := avro.ParseSchema(rawMetricsSchema)
@@ -113,10 +113,9 @@ func TestKafkaAvroProducer(t *testing.T) {
 	tmpUUID, err := uuid.GenerateUUID()
 	bmerror.PanicError(err)
 	record.Set("id", tmpUUID)
-	record.Set("reportUser", "test@max.logic")
+	record.Set("name", "test@max.logic")
 	//record.Set("msg", "hello1")
 	//record.Set("msg", "hello2")
-	record.Set("msg", "hello3")
 	recordByteArr, err := encoder.Encode(record)
 	bmerror.PanicError(err)
 
@@ -124,9 +123,40 @@ func TestKafkaAvroProducer(t *testing.T) {
 	if err != nil {
 		panic(err.Error())
 	}
-	topic := "sink2hdfstest4-value"
+	topic := "test6"
 	bkc.Produce(&topic, recordByteArr)
 
+}
+
+func TestKafkaConsumerWithAvro(t *testing.T) {
+
+	_ = os.Setenv("BM_KAFKA_BROKER", "123.56.179.133:9092")
+	_ = os.Setenv("BM_KAFKA_SCHEMA_REGISTRY_URL", "http://123.56.179.133:8081")
+	_ = os.Setenv("BM_KAFKA_CONSUMER_GROUP", "test20190828")
+	_ = os.Setenv("BM_KAFKA_CA_LOCATION", "/Users/jeorch/kit/kafka-secrets/snakeoil-ca-1.crt")
+	_ = os.Setenv("BM_KAFKA_CA_SIGNED_LOCATION", "/Users/jeorch/kit/kafka-secrets/kafkacat-ca1-signed.pem")
+	_ = os.Setenv("BM_KAFKA_SSL_KEY_LOCATION", "/Users/jeorch/kit/kafka-secrets/kafkacat.client.key")
+	_ = os.Setenv("BM_KAFKA_SSL_PASS", "pharbers")
+
+	bkc, err := GetConfigInstance()
+	if err != nil {
+		panic(err.Error())
+	}
+	topics := []string{"test7"}
+	bkc.SubscribeTopics(topics, subscribeAvroFunc)
+
+	time.Sleep(10 * time.Minute)
+
+}
+
+func subscribeAvroFunc(a interface{}) {
+	fmt.Println("subscribeFunc => ", a)
+	var schemaRepositoryUrl = os.Getenv("BM_KAFKA_SCHEMA_REGISTRY_URL")
+	decoder := kafkaAvro.NewKafkaAvroDecoder(schemaRepositoryUrl)
+	record, err := decoder.Decode(a.([]byte))
+	bmerror.PanicError(err)
+	fmt.Println("MonitorResponse => ", record.(*avro.GenericRecord))
+	fmt.Println("subscribeFunc DONE!")
 }
 
 func TestKafkaProduceToXmpp(t *testing.T) {
