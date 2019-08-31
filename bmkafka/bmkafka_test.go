@@ -6,7 +6,6 @@ import (
 	"github.com/elodina/go-avro"
 	kafkaAvro "github.com/elodina/go-kafka-avro"
 	"github.com/hashicorp/go-uuid"
-	"io/ioutil"
 	"os"
 	"testing"
 	"time"
@@ -62,7 +61,7 @@ func TestKafkaConsumerMap(t *testing.T) {
 
 	_ = os.Setenv("BM_KAFKA_BROKER", "123.56.179.133:9092")
 	_ = os.Setenv("BM_KAFKA_SCHEMA_REGISTRY_URL", "http://123.56.179.133:8081")
-	_ = os.Setenv("BM_KAFKA_CONSUMER_GROUP", "test20190828")
+	_ = os.Setenv("BM_KAFKA_CONSUMER_GROUP", "test20190830")
 	_ = os.Setenv("BM_KAFKA_CA_LOCATION", "/Users/jeorch/kit/kafka-secrets/snakeoil-ca-1.crt")
 	_ = os.Setenv("BM_KAFKA_CA_SIGNED_LOCATION", "/Users/jeorch/kit/kafka-secrets/kafkacat-ca1-signed.pem")
 	_ = os.Setenv("BM_KAFKA_SSL_KEY_LOCATION", "/Users/jeorch/kit/kafka-secrets/kafkacat.client.key")
@@ -132,7 +131,7 @@ func TestKafkaConsumerWithAvro(t *testing.T) {
 
 	_ = os.Setenv("BM_KAFKA_BROKER", "123.56.179.133:9092")
 	_ = os.Setenv("BM_KAFKA_SCHEMA_REGISTRY_URL", "http://123.56.179.133:8081")
-	_ = os.Setenv("BM_KAFKA_CONSUMER_GROUP", "test20190828")
+	_ = os.Setenv("BM_KAFKA_CONSUMER_GROUP", "test20190830")
 	_ = os.Setenv("BM_KAFKA_CA_LOCATION", "/Users/jeorch/kit/kafka-secrets/snakeoil-ca-1.crt")
 	_ = os.Setenv("BM_KAFKA_CA_SIGNED_LOCATION", "/Users/jeorch/kit/kafka-secrets/kafkacat-ca1-signed.pem")
 	_ = os.Setenv("BM_KAFKA_SSL_KEY_LOCATION", "/Users/jeorch/kit/kafka-secrets/kafkacat.client.key")
@@ -142,10 +141,8 @@ func TestKafkaConsumerWithAvro(t *testing.T) {
 	if err != nil {
 		panic(err.Error())
 	}
-	topics := []string{"test7"}
+	topics := []string{"ConnectResponse"}
 	bkc.SubscribeTopics(topics, subscribeAvroFunc)
-
-	time.Sleep(10 * time.Minute)
 
 }
 
@@ -155,85 +152,7 @@ func subscribeAvroFunc(a interface{}) {
 	decoder := kafkaAvro.NewKafkaAvroDecoder(schemaRepositoryUrl)
 	record, err := decoder.Decode(a.([]byte))
 	bmerror.PanicError(err)
-	fmt.Println("MonitorResponse => ", record.(*avro.GenericRecord))
+	fmt.Println("ConnectResponse => ", record.(*avro.GenericRecord))
 	fmt.Println("subscribeFunc DONE!")
-}
-
-func TestKafkaProduceToXmpp(t *testing.T) {
-
-	_ = os.Setenv("BM_KAFKA_BROKER", "123.56.179.133:9092")
-	_ = os.Setenv("BM_KAFKA_SCHEMA_REGISTRY_URL", "http://123.56.179.133:8081")
-	_ = os.Setenv("BM_KAFKA_CONSUMER_GROUP", "test20190828")
-	_ = os.Setenv("BM_KAFKA_CA_LOCATION", "/Users/jeorch/kit/kafka-secrets/snakeoil-ca-1.crt")
-	_ = os.Setenv("BM_KAFKA_CA_SIGNED_LOCATION", "/Users/jeorch/kit/kafka-secrets/kafkacat-ca1-signed.pem")
-	_ = os.Setenv("BM_KAFKA_SSL_KEY_LOCATION", "/Users/jeorch/kit/kafka-secrets/kafkacat.client.key")
-	_ = os.Setenv("BM_KAFKA_SSL_PASS", "pharbers")
-
-	var schemaRepositoryUrl = "http://59.110.31.50:8081"
-	var rawMetricsSchema = `{"namespace": "net.elodina.kafka.metrics","type": "record","name": "XmppCmd","fields": [{"name": "id", "type": "string"},{"name": "reportUser",  "type": "string" },{"name": "msg",  "type": "string" }]}`
-
-	encoder := kafkaAvro.NewKafkaAvroEncoder(schemaRepositoryUrl)
-	schema, err := avro.ParseSchema(rawMetricsSchema)
-	bmerror.PanicError(err)
-	record := avro.NewGenericRecord(schema)
-	tmpUUID, err := uuid.GenerateUUID()
-	bmerror.PanicError(err)
-	record.Set("id", tmpUUID)
-	record.Set("reportUser", "test@max.logic")
-	record.Set("msg", "hello!!!")
-	recordByteArr, err := encoder.Encode(record)
-	bmerror.PanicError(err)
-
-	bkc, err := GetConfigInstance()
-	if err != nil {
-		panic(err.Error())
-	}
-	topic := "xmpp-topic"
-	bkc.Produce(&topic, recordByteArr)
-
-}
-
-func TestKafkaProduceToOss(t *testing.T) {
-
-	_ = os.Setenv("BM_KAFKA_BROKER", "123.56.179.133:9092")
-	_ = os.Setenv("BM_KAFKA_SCHEMA_REGISTRY_URL", "http://123.56.179.133:8081")
-	_ = os.Setenv("BM_KAFKA_CONSUMER_GROUP", "test20190828")
-	_ = os.Setenv("BM_KAFKA_CA_LOCATION", "/Users/jeorch/kit/kafka-secrets/snakeoil-ca-1.crt")
-	_ = os.Setenv("BM_KAFKA_CA_SIGNED_LOCATION", "/Users/jeorch/kit/kafka-secrets/kafkacat-ca1-signed.pem")
-	_ = os.Setenv("BM_KAFKA_SSL_KEY_LOCATION", "/Users/jeorch/kit/kafka-secrets/kafkacat.client.key")
-	_ = os.Setenv("BM_KAFKA_SSL_PASS", "pharbers")
-
-	var schemaRepositoryUrl = "http://59.110.31.50:8081"
-	var rawMetricsSchema = `{"namespace": "net.elodina.kafka.metrics","type": "record","name": "OssCmd","fields": [{"name": "id", "type": "string"},{"name": "bucketName",  "type": "string" },{"name": "objectKey",  "type": "string" },{"name": "objectValue",  "type": "bytes" }]}`
-
-	encoder := kafkaAvro.NewKafkaAvroEncoder(schemaRepositoryUrl)
-	schema, err := avro.ParseSchema(rawMetricsSchema)
-	bmerror.PanicError(err)
-	record := avro.NewGenericRecord(schema)
-	tmpUUID, err := uuid.GenerateUUID()
-	bmerror.PanicError(err)
-	fmt.Println(tmpUUID)
-	record.Set("id", tmpUUID)
-	record.Set("bucketName", "pharbers-resources")
-	record.Set("objectKey", tmpUUID)
-
-	localDir := "/home/jeorch/work/test/temp/test.jpeg"
-	f, err := os.Open(localDir)
-	bmerror.PanicError(err)
-	defer f.Close()
-
-	objectValue, err := ioutil.ReadAll(f)
-	bmerror.PanicError(err)
-	record.Set("objectValue", objectValue)
-
-	recordByteArr, err := encoder.Encode(record)
-
-	bkc, err := GetConfigInstance()
-	if err != nil {
-		panic(err.Error())
-	}
-	topic := "oss-topic"
-	bkc.Produce(&topic, recordByteArr)
-
 }
 
