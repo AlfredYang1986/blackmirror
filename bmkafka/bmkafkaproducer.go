@@ -66,3 +66,37 @@ func (bkc *Config) Produce(topic *string, value []byte)  {
 	close(deliveryChan)
 
 }
+
+// Produce use to produce kafka msg.
+func (bkc *Config) ProduceKV(topic *string, key []byte, value []byte)  {
+
+	p, err := bkc.GetProducerInstance()
+	bmerror.PanicError(err)
+
+	// Optional delivery channel, if not specified the Producer object's
+	// .Events channel is used.
+	deliveryChan := make(chan kafka.Event)
+
+	msg := kafka.Message{
+		TopicPartition: kafka.TopicPartition{Topic: topic, Partition: kafka.PartitionAny},
+		Key:         	key,
+		Value:          value,
+		Headers:        []kafka.Header{{Key: "myTestHeader", Value: []byte("header values are binary")}},
+	}
+
+	err = p.Produce(&msg, deliveryChan)
+	bmerror.PanicError(err)
+
+	e := <-deliveryChan
+	m := e.(*kafka.Message)
+
+	if m.TopicPartition.Error != nil {
+		fmt.Printf("Delivery failed: %v\n", m.TopicPartition.Error)
+	} else {
+		fmt.Printf("Delivered message to topic %s [%d] at offset %v\n",
+			*m.TopicPartition.Topic, m.TopicPartition.Partition, m.TopicPartition.Offset)
+	}
+
+	close(deliveryChan)
+
+}
